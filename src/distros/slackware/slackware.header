@@ -1,0 +1,8 @@
+label slackware
+    MENU LABEL Slackware Linux
+    MENU DISABLE
+    TEXT HELP
+    Slackware is a Linux distribution created by Patrick Volkerding in 1993.
+    Slackware has been the basis for many other Linux distributions and is
+    the oldest distribution that is still maintained.
+    ENDTEXT

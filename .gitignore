@@ -1,0 +1,11 @@
+*.swp
+/.git.old
+/Makefile.config
+/boot/
+/images/
+/isolinux/
+/pxelinux.0
+/pxelinux.cfg/
+/src/config/
+/syslinux/
+/tmp/

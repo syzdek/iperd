@@ -1,0 +1,4 @@
+debian                'Debian Linux'                 @debian@
+   debian-8-jessie    'Debian 8 "jessie"'            @debian-8-jessie@
+   debian-7-wheezy    'Debian 7 "wheezy"'            @debian-7-wheezy@
+   debian-6-squeeze   'Debian 6 "squeeze"'           @debian-6-squeeze@

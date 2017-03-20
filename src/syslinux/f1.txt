@@ -1,0 +1,17 @@
+
+                     Syzdek's Utility Disk and Scripts
+
+Type one of the following:
+----------------------------------------------------------------------------
+dban            - Darik's Boot And Nuke 2.2.8
+freedos         - FreeDOS 1.1
+memtest         - Memtest86+ 5.01
+slackware32     - Slackware Linux 14.1 Net Install (32 bit)
+slackware64     - Slackware Linux 14.1 Net Install (64 bit)
+rescue32        - SystemRescueCD 4.4.0 (32 bit)
+rescue64        - SystemRescueCD 4.4.0 (64 bit)
+reboot          - reboot computer
+menu            - enter menu system
+----------------------------------------------------------------------------
+Press F1 for menu or F2 for help.
+

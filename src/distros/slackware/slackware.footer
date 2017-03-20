@@ -1,0 +1,3 @@
+label slackwarehelp
+MENU LABEL Slackware Help
+MENU HELP /help.txt
