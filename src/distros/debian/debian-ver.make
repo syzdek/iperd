@@ -1,7 +1,7 @@
 
 DEBIAN_FILES		+= \
-			   boot/deb@VERSION@/vmlinuz \
-			   boot/deb@VERSION@/initrd
+			   boot/debian@VERSION@/vmlinuz \
+			   boot/debian@VERSION@/initrd
 DEBIAN_CFG           += \
 			   $(CONFIGDIR)/debian/debian@VERSION@.cfg
 
@@ -13,7 +13,7 @@ $(CONFIGDIR)/debian/debian@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/d
 	   $(do_subst_dt)
 
 
-boot/deb@VERSION@/vmlinuz:
+boot/debian@VERSION@/vmlinuz:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
@@ -23,7 +23,7 @@ boot/deb@VERSION@/vmlinuz:
 	@touch "$(@)"
 
 
-boot/deb@VERSION@/initrd:
+boot/debian@VERSION@/initrd:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
