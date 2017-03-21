@@ -9,7 +9,7 @@ SLACKWARE_CFG           += \
 
 $(CONFIGDIR)/slackware/slackware@ARCH@-@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/slackware/slackware.cfg
 	SRCFILE="$(DISTRODIR)/slackware/slackware.cfg"; \
-	   DISTRO_CODENAME="@VERSION@"; \
+	   DISTRO_CODENAME="@CODENAME@"; \
 	   DISTRO_VERSION="@VERSION@"; \
 	   DISTRO_ARCH="@ARCH@"; \
 	   $(do_subst_dt)
