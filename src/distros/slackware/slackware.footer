@@ -1,3 +1,4 @@
 label slackwarehelp
 MENU LABEL Slackware Help
-MENU HELP /help.txt
+MENU HELP /README.md
+MENU END
