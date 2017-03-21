@@ -1,5 +1,5 @@
-#MENU BEGIN centos
-#MENU TITLE CentOS Linux
-label centos
-    MENU LABEL CentoOS Linux
-    MENU DISABLE
+MENU BEGIN centos
+MENU TITLE CentOS Linux Installers
+#label centos
+#    MENU LABEL CentoOS Linux
+#    MENU DISABLE
