@@ -15,6 +15,10 @@ Missing OS/Utilities
    [ ] OpenSUSE
    [ ] FreeBSD
    [ ] OpenBSD
+   [ ] clonezilla (tychotithonus)
+   [ ] grml (tychotithonus)
+   [ ] TinyCore (tychotithonus)
+   [ ] LWP/lightweight portable security (tychotithonus)
 
 
 Missing Features
