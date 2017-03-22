@@ -1,4 +1,6 @@
 slackware             'Slackware Linux'                   @slackware@
+   slackware-14.0-32-   'Slackware Linux 14.0'            @slackware-14.0-32-@
+   slackware-14.0-64-64 'Slackware Linux 14.0 (x86_64)'   @slackware-14.0-64-64@
    slackware-14.1-32-   'Slackware Linux 14.1'            @slackware-14.1-32-@
    slackware-14.1-64-64 'Slackware Linux 14.1 (x86_64)'   @slackware-14.1-64-64@
    slackware-14.2-32-   'Slackware Linux 14.2'            @slackware-14.2-32-@
