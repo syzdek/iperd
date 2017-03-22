@@ -1,0 +1,2 @@
+rhel                'Red Hat Enterprise Linux (experimental)'   @rhel@
+   rhel-6.8--x86_64 'Red Hat Enterprise Linux 5 (x86_64)'       @rhel-6.8--x86_64@
