@@ -7,6 +7,7 @@ DOWNLOAD_FILES          += $(DEBIAN_FILES)
 
 
 $(CONFIGDIR)/debian/debian.cfg: $(DISTRODIR)/debian/debian.header $(DISTRODIR)/debian/debian.footer $(DEBIAN_CFG)
+	@mkdir -p "$$(dirname "$(@)")"
 	cat \
 	   $(DISTRODIR)/debian/debian.header \
 	   $(DEBIAN_CFG) \

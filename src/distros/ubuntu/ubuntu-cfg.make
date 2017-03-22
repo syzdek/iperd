@@ -7,6 +7,7 @@ DOWNLOAD_FILES          += $(UBUNTU_FILES)
 
 
 $(CONFIGDIR)/ubuntu/ubuntu.cfg: $(DISTRODIR)/ubuntu/ubuntu.header $(DISTRODIR)/ubuntu/ubuntu.footer $(UBUNTU_CFG)
+	@mkdir -p "$$(dirname "$(@)")"
 	cat \
 	   $(DISTRODIR)/ubuntu/ubuntu.header \
 	   $(UBUNTU_CFG) \

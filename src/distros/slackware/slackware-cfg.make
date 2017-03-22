@@ -7,6 +7,7 @@ DOWNLOAD_FILES          += $(SLACKWARE_FILES)
 
 
 $(CONFIGDIR)/slackware/slackware.cfg: $(DISTRODIR)/slackware/slackware.header $(DISTRODIR)/slackware/slackware.footer $(SLACKWARE_CFG)
+	@mkdir -p "$$(dirname "$(@)")"
 	cat \
 	   $(DISTRODIR)/slackware/slackware.header \
 	   $(SLACKWARE_CFG) \

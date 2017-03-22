@@ -6,6 +6,7 @@ DOWNLOAD_FILES		+= $(CENTOS_FILES)
 
 
 $(CONFIGDIR)/centos/centos.cfg: $(CENTOS_CFG) $(DISTRODIR)/centos/centos.header $(DISTRODIR)/centos/centos.footer
+	@mkdir -p "$$(dirname "$(@)")"
 	cat \
 	   $(DISTRODIR)/centos/centos.header \
 	   $(CENTOS_CFG) \
