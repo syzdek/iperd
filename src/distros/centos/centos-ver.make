@@ -15,22 +15,12 @@ $(CONFIGDIR)/centos/centos@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/c
 
 
 boot/centos/@VERSION@/initrd:
-	@rm -f $(@)
-	@mkdir -p $$(dirname "$(@)")
-	wget \
-	   -O "$(@)" \
-	   "$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/initrd.img" \
-	   || { rm -f "$(@)}"; exit 1; }
-	@touch "$(@)"
+	URL="$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/initrd.img"; \
+	   $(download_file)
 
 
 boot/centos/@VERSION@/vmlinuz:
-	@rm -f $(@)
-	@mkdir -p $$(dirname "$(@)")
-	wget \
-	   -O "$(@)" \
-	   "$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/vmlinuz" \
-	   || { rm -f "$(@)}"; exit 1; }
-	@touch "$(@)"
+	URL="$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/vmlinuz"; \
+	   $(download_file)
 
 

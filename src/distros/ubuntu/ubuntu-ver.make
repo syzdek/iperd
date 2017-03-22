@@ -14,22 +14,12 @@ $(CONFIGDIR)/ubuntu/ubuntu@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/u
 
 
 boot/ubuntu/@VERSION@/vmlinuz:
-	@rm -f $(@)
-	@mkdir -p $$(dirname "$(@)")
-	wget \
-	   -O "$(@)" \
-           "$(MIRROR_UBUNTU)/dists/@CODENAME@/main/installer-amd64/current/images/cdrom/vmlinuz" \
-	   || { rm -f "$(@)}"; exit 1; }
-	@touch "$(@)"
+	URL="$(MIRROR_UBUNTU)/dists/@CODENAME@/main/installer-amd64/current/images/cdrom/vmlinuz"; \
+	   $(download_file)
 
 
 boot/ubuntu/@VERSION@/initrd:
-	@rm -f $(@)
-	@mkdir -p $$(dirname "$(@)")
-	wget \
-	   -O "$(@)" \
-           "$(MIRROR_UBUNTU)/dists/@CODENAME@/main/installer-amd64/current/images/cdrom/initrd.gz" \
-	   || { rm -f "$(@)}"; exit 1; }
-	@touch "$(@)"
+	URL="$(MIRROR_UBUNTU)/dists/@CODENAME@/main/installer-amd64/current/images/cdrom/initrd.gz"; \
+	   $(download_file)
 
 
