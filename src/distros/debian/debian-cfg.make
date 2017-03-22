@@ -16,5 +16,5 @@ $(CONFIGDIR)/debian/debian.cfg: $(DISTRODIR)/debian/debian.header $(DISTRODIR)/d
 
 .PHONY: debian
 
-debian: $(DEBIAN_FILES) $(CONFIGDIR)/debian.cfg
+debian: $(DEBIAN_FILES) $(CONFIGDIR)/debian/debian.cfg
 
