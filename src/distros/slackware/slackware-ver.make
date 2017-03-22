@@ -1,8 +1,8 @@
 
 SLACKWARE_FILES		+= \
-			   boot/slack@VERSION@@ARCH@/COPYING \
-			   boot/slack@VERSION@@ARCH@/bzImage \
-			   boot/slack@VERSION@@ARCH@/initrd
+			   boot/slack@ARCH@/@VERSION@/COPYING \
+			   boot/slack@ARCH@/@VERSION@/bzImage \
+			   boot/slack@ARCH@/@VERSION@/initrd
 SLACKWARE_CFG           += \
 			   $(CONFIGDIR)/slackware/slackware@ARCH@-@VERSION@.cfg
 
@@ -14,7 +14,7 @@ $(CONFIGDIR)/slackware/slackware@ARCH@-@VERSION@.cfg: Makefile Makefile.config $
 	   DISTRO_ARCH="@ARCH@"; \
 	   $(do_subst_dt)
 
-boot/slack@VERSION@@ARCH@/COPYING:
+boot/slack@ARCH@/@VERSION@/COPYING:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
@@ -24,7 +24,7 @@ boot/slack@VERSION@@ARCH@/COPYING:
 	@touch "$(@)"
 
 
-boot/slack@VERSION@@ARCH@/bzImage:
+boot/slack@ARCH@/@VERSION@/bzImage:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
@@ -34,7 +34,7 @@ boot/slack@VERSION@@ARCH@/bzImage:
 	@touch "$(@)"
 
 
-boot/slack@VERSION@@ARCH@/initrd:
+boot/slack@ARCH@/@VERSION@/initrd:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \

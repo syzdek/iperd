@@ -16,5 +16,5 @@ $(CONFIGDIR)/slackware/slackware.cfg: $(DISTRODIR)/slackware/slackware.header $(
 
 .PHONY: slackware
 
-slackware: $(SLACKWARE_FILES) $(CONFIGDIR)/slackware.cfg
+slackware: $(SLACKWARE_FILES) $(CONFIGDIR)/slackware/slackware.cfg
 
