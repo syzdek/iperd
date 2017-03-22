@@ -69,6 +69,8 @@ do_subst = sed \
 	-e "s,[@]VERSION[@],$${DISTRO_VERSION},g" \
 	-e "s,[@]LABEL[@],$${DISTRO_LABEL},g" \
 	-e "s,[@]ARCH[@],$${DISTRO_ARCH},g" \
+        -e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
+        -e 's,[@]DATE[@],$(DATE),g' \
 	$(SUBST_EXPRESSIONS)
 do_subst_fn = \
 	echo "do_subst > $(@)"; \
@@ -167,26 +169,24 @@ syslinux/syslinux.com:
 isolinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@rm -f "$(@)"
 	@mkdir -p isolinux
-	@sed \
-	   -e 's/@IPERD_VERSION@/$(IPERD_VERSION)/g' \
-	   -e 's/@DATE@/$(DATE)/g' \
-	   $(SYSLINDIR)/common.cfg \
-           $(PXELINUX_CFG) \
-	   > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(ISOLINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(ISOLINUX_CFG) > "$(@)"
 	@touch "$(@)"
 
 
 pxelinux.cfg/default: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@rm -f "$(@)"
 	@mkdir -p pxelinux.cfg
-	cat $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(PXELINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
 	@touch "$(@)"
 
 
 syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@rm -f "$(@)"
 	@mkdir -p syslinux
-	cat $(SYSLINDIR)/common.cfg $(SYSLINUX_CFG) > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(SYSLINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(SYSLINUX_CFG) > "$(@)"
 	@touch "$(@)"
 
 
