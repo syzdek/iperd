@@ -141,7 +141,7 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 	   -boot-info-table \
 	   -b isolinux/isolinux.bin.mod \
 	   -c isolinux/isolinux.boot \
-	   -V "IPERD_BOOT" \
+	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./
 	@touch "$(@)"
