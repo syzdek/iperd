@@ -63,18 +63,18 @@ dd \
 
 
 # set up loop block device
-LOOPDEV=$(losetup -P -f --show "${OUTPUT}")
+LOOPDEV=$(sudo losetup -P -f --show "${OUTPUT}")
 if test -z "${LOOPDEV}";then
    rm -f "${OUTPUT}"
    exit 1
 fi
 
 
-bash "${SOURCE}/src/scripts/thumbdrive.sh" "${SOURCE}" "${LOOPDEV}" \
+sudo bash "${SOURCE}/src/scripts/thumbdrive.sh" "${SOURCE}" "${LOOPDEV}" \
    || { rm -f "${OUTPUT}"; exit 1; }
 
 
-losetup -d "${LOOPDEV}"
+sudo losetup -d "${LOOPDEV}"
 
 
 # end of script
