@@ -16,5 +16,5 @@ $(CONFIGDIR)/ubuntu/ubuntu.cfg: $(DISTRODIR)/ubuntu/ubuntu.header $(DISTRODIR)/u
 
 .PHONY: ubuntu
 
-ubuntu: $(UBUNTU_FILES) $(CONFIGDIR)/ubuntu.cfg
+ubuntu: $(UBUNTU_FILES) $(CONFIGDIR)/ubuntu/ubuntu.cfg
 

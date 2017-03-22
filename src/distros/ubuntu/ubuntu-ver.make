@@ -1,7 +1,7 @@
 
 UBUNTU_FILES		+= \
-			   boot/ubnt@VERSION@/vmlinuz \
-			   boot/ubnt@VERSION@/initrd
+			   boot/ubuntu/@VERSION@/vmlinuz \
+			   boot/ubuntu/@VERSION@/initrd
 UBUNTU_CFG		+= \
 			   $(CONFIGDIR)/ubuntu/ubuntu@VERSION@.cfg
 
@@ -13,7 +13,7 @@ $(CONFIGDIR)/ubuntu/ubuntu@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/u
 	   $(do_subst_dt)
 
 
-boot/ubnt@VERSION@/vmlinuz:
+boot/ubuntu/@VERSION@/vmlinuz:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
@@ -23,7 +23,7 @@ boot/ubnt@VERSION@/vmlinuz:
 	@touch "$(@)"
 
 
-boot/ubnt@VERSION@/initrd:
+boot/ubuntu/@VERSION@/initrd:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
