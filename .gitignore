@@ -1,6 +1,7 @@
 *.swp
 /.git.old
 /Makefile.config
+/Makefile.local
 /boot/
 /images/
 /isolinux/

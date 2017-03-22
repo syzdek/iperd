@@ -104,11 +104,15 @@ all:
 	@echo " "
 
 
+Makefile.local:
+	@touch "$(@)"
+
 Makefile.config: $(SCRIPTDIR)/configure.sh
 	bash ./$(SCRIPTDIR)/configure.sh configure
-	touch "$(@)"
+	@touch "$(@)"
 
 
+-include Makefile.local
 -include Makefile.config
 
 
