@@ -41,13 +41,13 @@ fi
 SOURCE="${1}"
 DEVICE="${2}"
 
+
 SCRIPTDIR=src/scripts
-
-
 DIRS="boot isolinux pxelinux.cfg src syslinux"
 FILES="COPYING Makefile Makefile.config"
 
 
+# check for required files/directories/devices
 if test ! -b "${DEVICE}";then
    echo "${PROG_NAME}: device not found"
    exit 1
@@ -64,6 +64,13 @@ for FILE in ${FILES};do
       exit 1
    fi
 done
+
+
+# create mount points
+mkdir -p tmp || exit 1
+
+
+set -x
 
 
 # wipe MBR partition table on USB device
@@ -83,42 +90,40 @@ parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
 
 
 partprobe "${DEVICE}" || exit 1
-
-
 DEVPART="$(basename "${DEVICE}")"
 DEVPART="$(grep "[0-9] ${DEVPART}[a-zA-Z0-9]\{1,\}$" /proc/partitions|awk '{print$4}')"
-
 if test -z "${DEVPART}";then
    echo "${PROG_NAME}: partition is not detected"
    exit 1
 fi
 
 
+# make vFAT file systems
 mkfs.vfat -F 32 /dev/${DEVPART} || exit 1
-fatlabel /dev/${DEVPART} USBBOOT || exit 1
+fatlabel /dev/${DEVPART} IP_ENG_BOOT || exit 1
 parted -a optimal -s "${DEVICE}" print
 
 
-mkdir -p tmp || exit 1
+# mount disk image
 mount -o rw /dev/${DEVPART} "${SOURCE}/tmp" || exit 1
 
 
-for DIR in ${DIRS};do
-   mkdir -p "${SOURCE}/tmp/${DIR}"
-   echo rsync -r "${SOURCE}/${DIR}/" "${SOURCE}/tmp/${DIR}"
-   rsync -r "${SOURCE}/${DIR}/" "${SOURCE}/tmp/${DIR}" \
-      || { umount "${SOURCE}/tmp"; exit 1; }
-done
-for FILE in ${FILES};do
-   echo cp "${SOURCE}/${FILE}" "${SOURCE}/tmp/${FILE}"
-   cp "${SOURCE}/${FILE}" "${SOURCE}/tmp/${FILE}" \
-      || { umount "${SOURCE}/tmp"; exit 1; }
-done
+# install files
+rsync \
+   --exclude=/images/ \
+   --exclude=/tmp/ \
+   --prune-empty-dirs \
+   --recursive \
+   "${SOURCE}/" \
+   "${SOURCE}/tmp" \
+   || { umount "${SOURCE}/tmp"; exit 1; }
 
 
+#umount disk image
 umount "${SOURCE}/tmp" || exit 1
 
 
+# install syslinux
 syslinux -i /dev/${DEVPART} || exit 1
 
 
