@@ -1,8 +1,8 @@
 
 
 CENTOS_FILES		+= \
-			    boot/centos@VERSION@/initrd \
-			    boot/centos@VERSION@/vmlinuz
+			    boot/centos/@VERSION@/initrd \
+			    boot/centos/@VERSION@/vmlinuz
 CENTOS_CFG		+= \
 			   $(CONFIGDIR)/centos/centos@VERSION@.cfg
 
@@ -14,7 +14,7 @@ $(CONFIGDIR)/centos/centos@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/c
 	   $(do_subst_dt)
 
 
-boot/centos@VERSION@/initrd:
+boot/centos/@VERSION@/initrd:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \
@@ -24,7 +24,7 @@ boot/centos@VERSION@/initrd:
 	@touch "$(@)"
 
 
-boot/centos@VERSION@/vmlinuz:
+boot/centos/@VERSION@/vmlinuz:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	wget \

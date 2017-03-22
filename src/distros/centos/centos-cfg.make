@@ -15,5 +15,5 @@ $(CONFIGDIR)/centos/centos.cfg: $(CENTOS_CFG) $(DISTRODIR)/centos/centos.header 
 
 .PHONY: centos
 
-centos: $(CENTOS_FILES) $(CONFIGDIR)/centos.cfg
+centos: $(CENTOS_FILES) $(CONFIGDIR)/centos/centos.cfg
 
