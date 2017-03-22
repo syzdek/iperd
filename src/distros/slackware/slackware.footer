@@ -1,4 +1,1 @@
-label slackwarehelp
-MENU LABEL Slackware Help
-MENU HELP /README.md
 MENU END
