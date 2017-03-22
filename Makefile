@@ -150,9 +150,8 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 images: images/iperdboot.img images/iperdboot.iso
 
 
-isolinux/isolinux.bin:
-	rsync -ra "$(SYSLINUX_SRC)/" isolinux
-	@cp /usr/share/hwdata/pci.ids isolinux/
+isolinux/isolinux.bin: syslinux/syslinux.com
+	rsync -ra syslinux/ isolinux
 	@touch "$(@)"
 
 
@@ -161,7 +160,7 @@ syslinux/syslinux.com:
 	cp $(SYSLINDIR)/f1.txt syslinux/
 	cp $(SYSLINDIR)/f2.txt syslinux/
 	cp syslinux/pxelinux.0 pxelinux.0
-	cp /usr/share/hwdata/pci.ids isolinux/
+	cp /usr/share/hwdata/pci.ids syslinux/
 	@touch "$(@)"
 
 
