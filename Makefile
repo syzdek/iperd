@@ -161,7 +161,12 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 	@touch "$(@)"
 
 
+thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
+	bash src/scripts/thumbdrive.sh . $(DISK)
+
+
 images: images/iperdboot.img images/iperdboot.iso
+
 
 compress: images/iperdboot.img.gz
 
