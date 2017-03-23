@@ -17,7 +17,7 @@ Missing OS/Utilities
    [ ] OpenBSD
    [ ] clonezilla (tychotithonus)
    [ ] grml (tychotithonus)
-   [ ] TinyCore (tychotithonus)
+   [X] TinyCore (tychotithonus)
    [ ] LWP/lightweight portable security (tychotithonus)
 
 

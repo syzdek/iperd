@@ -53,6 +53,12 @@ PREREQ_CNF		= \
 PREREQ_BIN		= \
 			  isolinux/isolinux.bin \
 			  syslinux/syslinux.com
+CLEANFILES		= \
+			  images \
+			  isolinux \
+			  pxelinux.0 \
+			  pxelinux.cfg \
+			  syslinux
 
 
 download_file = \
@@ -205,15 +211,14 @@ deps:
 
 
 clean:
-	rm -Rf syslinux isolinux pxelinux.0 pxelinux.cfg
-	rm -Rf images
-	rm -Rf tmp
+	rm -Rf $(CLEANFILES)
 
 
 distclean: clean
 	rm -Rf boot
 	rm -f  Makefile.config
 	rm -Rf src/config
+	rm -Rf tmp
 
 
 # end of makefile

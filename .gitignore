@@ -3,6 +3,7 @@
 /Makefile.config
 /Makefile.local
 /boot/
+/cde/
 /images/
 /isolinux/
 /pxelinux.0
