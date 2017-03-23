@@ -110,6 +110,7 @@ mount -o rw /dev/${DEVPART} "${SOURCE}/tmp" || exit 1
 
 # install files
 rsync \
+   --exclude=/.git/ \
    --exclude=/images/ \
    --exclude=/tmp/ \
    --prune-empty-dirs \

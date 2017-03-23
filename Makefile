@@ -135,6 +135,7 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 	mkisofs \
 	   -o "$(@)" \
 	   -R -J -v -d -N \
+	   -x '.git' \
 	   -m 'images' \
 	   -m 'tmp' \
 	   -hide-rr-moved \
