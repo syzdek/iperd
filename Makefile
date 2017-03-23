@@ -48,7 +48,7 @@ DATE			= $(shell date +%Y-%m-%d)
 
 PREREQ_CNF		= \
 			  isolinux/isolinux.cfg \
-			  pxelinux.cfg/default \
+			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
 PREREQ_BIN		= \
 			  isolinux/isolinux.bin \
@@ -56,7 +56,6 @@ PREREQ_BIN		= \
 CLEANFILES		= \
 			  images \
 			  isolinux \
-			  pxelinux.0 \
 			  pxelinux.cfg \
 			  syslinux
 
@@ -180,7 +179,6 @@ syslinux/syslinux.com:
 	rsync -ra "$(SYSLINUX_SRC)/" syslinux
 	cp $(SYSLINDIR)/f1.txt syslinux/
 	cp $(SYSLINDIR)/f2.txt syslinux/
-	cp syslinux/pxelinux.0 pxelinux.0
 	cp /usr/share/hwdata/pci.ids syslinux/
 	@touch "$(@)"
 
@@ -193,9 +191,9 @@ isolinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR
 	@touch "$(@)"
 
 
-pxelinux.cfg/default: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/pxelinux.cfg: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@rm -f "$(@)"
-	@mkdir -p pxelinux.cfg
+	@mkdir -p "$$(dirname "$(@)")"
 	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(PXELINUX_CFG) > $(@)'
 	@$(do_subst) $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
 	@touch "$(@)"

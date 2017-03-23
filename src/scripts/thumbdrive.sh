@@ -43,8 +43,8 @@ DEVICE="${2}"
 
 
 SCRIPTDIR=src/scripts
-DIRS="boot isolinux pxelinux.cfg src syslinux"
-FILES="COPYING Makefile Makefile.config"
+DIRS="boot isolinux src syslinux"
+FILES="COPYING Makefile Makefile.config Makefile.local syslinux/pxelinux.cfg"
 
 
 # check for required files/directories/devices
