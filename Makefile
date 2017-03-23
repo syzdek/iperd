@@ -61,7 +61,7 @@ download_file = \
 	wget \
 	   -O "$(@)" \
 	   "$${URL}" \
-	   || { rm -f "$(@)}"; exit 1; }; \
+	   || { rm -f "$(@)"; exit 1; }; \
 	touch "$(@)";
 do_subst = sed \
 	-e "s,[@]DISTRO[@],$${DISTRO},g" \
