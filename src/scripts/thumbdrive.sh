@@ -43,7 +43,7 @@ DEVICE="${2}"
 
 
 SCRIPTDIR=src/scripts
-DIRS="boot isolinux src syslinux"
+DIRS="boot src syslinux"
 FILES="COPYING Makefile Makefile.config Makefile.local syslinux/pxelinux.cfg"
 
 
