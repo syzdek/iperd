@@ -9,6 +9,7 @@ DOWNLOAD_FILES          += boot/sysrescd/sysrcd.dat \
 			   boot/sysrescd/initrd.cgz \
 			   boot/sysrescd/initram.igz \
 			   boot/sysrescd/scsi.cgz
+CLEANFILES		+= boot/sysrescd tmp/sysrescd-@VERSION@
 
 
 $(CONFIGDIR)/sysrescd/sysrescd.cfg: Makefile $(DISTRODIR)/sysrescd/sysrescd.cfg
