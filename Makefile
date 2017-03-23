@@ -131,9 +131,14 @@ images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh 
 	@touch "$(@)"
 
 
+images/iperdboot.img.gz: images/iperdboot.img
+	gzip --keep images/iperdboot.img
+
+
 isolinux/isolinux.bin.mod: $(PREREQ_CNF)
 	cp isolinux/isolinux.bin "$(@)"
 	@touch "$(@)"
+
 
 images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 	@mkdir -p $$(dirname "$(@)")
@@ -157,6 +162,8 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 
 
 images: images/iperdboot.img images/iperdboot.iso
+
+compress: images/iperdboot.img.gz
 
 
 isolinux/isolinux.bin: syslinux/syslinux.com
