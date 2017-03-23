@@ -8,9 +8,9 @@ Missing OS/Utilities
    [ ] FreeDOS
    [X] Ubuntu Linux
    [X] SystemRescueCD
-   [ ] Darik's Boot and Nuke - DBAN
+   [X] Darik's Boot and Nuke - DBAN
    [ ] Fedora
-   [ ] Red Hat Enterprise Linux
+   [-] Red Hat Enterprise Linux
    [ ] SUSE Linux Enterprise Server
    [ ] OpenSUSE
    [ ] FreeBSD
