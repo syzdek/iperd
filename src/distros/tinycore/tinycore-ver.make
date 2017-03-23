@@ -32,6 +32,7 @@ tmp/tinycore-@VERSION@/boot/vmlinuz: tmp/tinycore-@VERSION@.iso
 
 cde/onboot.lst: tmp/tinycore-@VERSION@/boot/vmlinuz
 	rsync -ra tmp/tinycore-@VERSION@/cde/ cde
+	@chmod -R u+w cde
 	@test -f "$(@)" && touch "$(@)"
 
 
