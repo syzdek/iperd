@@ -47,16 +47,13 @@ DATE			= $(shell date +%Y-%m-%d)
 
 
 PREREQ_CNF		= \
-			  isolinux/isolinux.cfg \
+			  syslinux/isolinux.cfg \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
 PREREQ_BIN		= \
-			  isolinux/isolinux.bin \
 			  syslinux/syslinux.com
 CLEANFILES		= \
 			  images \
-			  isolinux \
-			  pxelinux.cfg \
 			  syslinux
 
 
@@ -134,12 +131,12 @@ images/iperdboot.img.gz: images/iperdboot.img
 	gzip --keep images/iperdboot.img
 
 
-isolinux/isolinux.bin.mod: $(PREREQ_CNF)
-	cp isolinux/isolinux.bin "$(@)"
+syslinux/isolinux.bin.mod: $(PREREQ_CNF)
+	cp syslinux/isolinux.bin "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
+images/iperdboot.iso: $(DOWNLOAD_FILES) syslinux/isolinux.bin.mod
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
 	mkisofs \
@@ -152,8 +149,8 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) isolinux/isolinux.bin.mod
 	   -no-emul-boot \
 	   -boot-load-size 4 \
 	   -boot-info-table \
-	   -b isolinux/isolinux.bin.mod \
-	   -c isolinux/isolinux.boot \
+	   -b syslinux/isolinux.bin.mod \
+	   -c syslinux/isolinux.boot \
 	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./
@@ -170,11 +167,6 @@ images: images/iperdboot.img images/iperdboot.iso
 compress: images/iperdboot.img.gz
 
 
-isolinux/isolinux.bin: syslinux/syslinux.com
-	rsync -ra syslinux/ isolinux
-	@touch "$(@)"
-
-
 syslinux/syslinux.com:
 	rsync -ra "$(SYSLINUX_SRC)/" syslinux
 	cp $(SYSLINDIR)/f1.txt syslinux/
@@ -183,9 +175,9 @@ syslinux/syslinux.com:
 	@touch "$(@)"
 
 
-isolinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@rm -f "$(@)"
-	@mkdir -p isolinux
+	@mkdir -p "$$(dirname "$(@)")"
 	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(ISOLINUX_CFG) > $(@)'
 	@$(do_subst) $(SYSLINDIR)/common.cfg $(ISOLINUX_CFG) > "$(@)"
 	@touch "$(@)"
