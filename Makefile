@@ -126,9 +126,25 @@ Makefile.config: $(SCRIPTDIR)/configure.sh
 	@touch "$(@)"
 
 
-include Makefile.local
-include Makefile.defaults
-include Makefile.config
+-include Makefile.local
+SYSLINUX_SRC		?= /usr/share/syslinux
+NETBOOT_HOST            ?= 10.0.109.254
+NETBOOT_PATH            ?= /pub/iperd/iperd-current/
+NETBOOT_HTTP_SCHEME     ?= http
+NETBOOT_HTTP_HOST       ?= $(NETBOOT_HOST)
+NETBOOT_HTTP_PATH       ?= $(NETBOOT_PATH)
+NETBOOT_HTTP            ?= $(NETBOOT_HTTP_SCHEME)://$(NETBOOT_HTTP_HOST)$(NETBOOT_HTTP_PATH)
+NETBOOT_NBD_HOST        ?= $(NETBOOT_HOST)
+NETBOOT_NBD_PATH        ?= $(NETBOOT_PATH)
+NETBOOT_NBD             ?= nbd://$(NETBOOT_NBD_HOST)$(NETBOOT_NBD_PATH)
+NETBOOT_NFS_HOST        ?= $(NETBOOT_HOST)
+NETBOOT_NFS_PATH        ?= $(NETBOOT_PATH)
+NETBOOT_NFS             ?= nfs://$(NETBOOT_NFS_HOST)$(NETBOOT_NFS_HOST)
+NETBOOT_TFTP_HOST       ?= $(NETBOOT_HOST)
+NETBOOT_TFTP_PATH       ?= /
+NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
+NETBOOT                 ?= $(NETBOOT_HTTP)
+-include Makefile.config
 
 
 images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
