@@ -84,4 +84,8 @@ sudo mount -o ro "${LOOPDEV}" "${MKTEMP}" || exit 1
 rsync -ra "${MKTEMP}/" "${OUTPUT}" || exit 1
 
 
+# make files user writeable
+chmod -R u+rw "${OUTPUT}" || exit 1
+
+
 # end of script
