@@ -1,12 +1,21 @@
 
 
 VYOS_FILES		+= boot/vyos/@VERSION@/@ARCH@/iperd.dep
-VYOS_CFG		+= $(CONFIGDIR)/vyos/vyos@VERSION@@ARCH@.cfg
+VYOS_CFG		+= $(CONFIGDIR)/vyos/vyos-@VERSION@-@ARCH@.cfg
+VYOS_PXE		+= $(CONFIGDIR)/vyos/vyos-@VERSION@-@ARCH@.pxe.cfg
 CLEANFILES		+= vyos-@VERSION@-@ARCH@
 
 
-$(CONFIGDIR)/vyos/vyos@VERSION@@ARCH@.cfg: Makefile Makefile.config $(DISTRODIR)/vyos/vyos.cfg
+$(CONFIGDIR)/vyos/vyos-@VERSION@-@ARCH@.cfg: Makefile Makefile.config $(DISTRODIR)/vyos/vyos.cfg
 	@SRCFILE="$(DISTRODIR)/vyos/vyos.cfg"; \
+	   DISTRO_ARCH="@ARCH@"; \
+	   DISTRO_CODENAME="@CODENAME@"; \
+	   DISTRO_VERSION="@VERSION@"; \
+	   $(do_subst_dt)
+
+
+$(CONFIGDIR)/vyos/vyos-@VERSION@-@ARCH@.pxe.cfg: Makefile Makefile.config $(DISTRODIR)/vyos/vyos.cfg
+	@SRCFILE="$(DISTRODIR)/vyos/vyos.pxe.cfg"; \
 	   DISTRO_ARCH="@ARCH@"; \
 	   DISTRO_CODENAME="@CODENAME@"; \
 	   DISTRO_VERSION="@VERSION@"; \
