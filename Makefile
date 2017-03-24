@@ -126,9 +126,9 @@ Makefile.config: $(SCRIPTDIR)/configure.sh
 	@touch "$(@)"
 
 
--include Makefile.local
--include Makefile.defaults
--include Makefile.config
+include Makefile.local
+include Makefile.defaults
+include Makefile.config
 
 
 images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
