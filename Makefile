@@ -39,6 +39,10 @@ SCRIPTDIR		= src/scripts
 SYSLINDIR		= src/syslinux
 
 
+SYSLINUX_VERSION	?= 6.03
+MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/6.xx/syslinux-$(SYSLINUX_VERSION).tar.xz
+
+
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
 DATE			= $(shell date +%Y-%m-%d)
 
@@ -48,7 +52,7 @@ PREREQ_CNF		= \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
 PREREQ_BIN		= \
-			  syslinux/syslinux.com
+			  syslinux/iperd.dep
 CLEANFILES		= \
 			  images \
 			  syslinux
@@ -194,8 +198,26 @@ images: images/iperdboot.img images/iperdboot.iso
 compress: images/iperdboot.img.gz
 
 
-syslinux/syslinux.com:
-	rsync -ra "$(SYSLINUX_SRC)/" syslinux
+tmp/syslinux-$(SYSLINUX_VERSION).tar.xz:
+	@rm -Rf tmp/syslinux-$(SYSLINUX_VERSION)
+	URL="$(MIRROR_SYSLINUX)"; \
+	   $(download_file)
+
+
+tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION).tar.xz
+	@rm -Rf "tmp/syslinux-$(SYSLINUX_VERSION)"
+	tar -C tmp -xf tmp/syslinux-$(SYSLINUX_VERSION).tar.xz
+	@touch "$(@)"
+
+
+syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
+	rm -Rf syslinux
+	cd tmp/syslinux-$(SYSLINUX_VERSION); \
+	   make -s install INSTALLROOT="$(PWD)/tmp/syslinux" \
+	   || { rm -Rf tmp/syslinux-$(SYSLINUX_VERSION); exit 1; }
+	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
+	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
+	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
 	cp $(SYSLINDIR)/f1.txt syslinux/
 	cp $(SYSLINDIR)/f2.txt syslinux/
 	cp /usr/share/hwdata/pci.ids syslinux/
@@ -234,6 +256,7 @@ download: $(PREREQ_CNF) $(DOWNLOAD_FILES)
 
 configure:
 	bash ./$(SCRIPTDIR)/configure.sh configure
+
 
 deps:
 	bash ./$(SCRIPTDIR)/configure.sh deps
