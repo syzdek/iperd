@@ -1,0 +1,5 @@
+vyos                      'VyOS'                    @vyos@
+   vyos-1.1.6-116-i586    'VyOS 1.1.6 (i586)'       @vyos-1.1.6-116-i586@
+   vyos-1.1.6-116-amd64   'VyOS 1.1.6 (amd64)'      @vyos-1.1.6-116-amd64@
+   vyos-1.1.7-117-i586    'VyOS 1.1.7 (i586)'       @vyos-1.1.7-117-i586@
+   vyos-1.1.7-117-amd64   'VyOS 1.1.7 (amd64)'      @vyos-1.1.7-117-amd64@
