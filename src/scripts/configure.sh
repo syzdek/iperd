@@ -42,8 +42,8 @@ BASEDIR="${2:-$(pwd)}"
 PROG_NAME="$(basename "${0}")"
 DISTRODIR="${DISTRODIR:-${BASEDIR}/src/distros}"
 CONFIGDIR="${CONFIGDIR:-${BASEDIR}/src/config}"
-CONFIG="${CONFIG:-${CONFIGDIR}/wizard.conf}"
-OPTIONS="${OPTIONS:-${CONFIGDIR}/wizard.opts}"
+CONFIG="${CONFIG:-${CONFIGDIR}/iperd.conf}"
+OPTIONS="${OPTIONS:-${CONFIGDIR}/iperd.opts}"
 
 
 cleanup()
