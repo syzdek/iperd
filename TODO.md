@@ -29,8 +29,8 @@ Features
 --------
 
    - [ ] Licensing compliance (for distributing re-built images)
-   - [ ] DHCP config for BIOS PXE Boot
-   - [ ] BIOS PXE Boot
+   - [X] DHCP config for BIOS PXE Boot
+   - [X] BIOS PXE Boot
    - [X] BIOS Bootable ISO
    - [X] BIOS Bootable Disk Image
    - [ ] UEFI PXE Boot
