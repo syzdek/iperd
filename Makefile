@@ -32,7 +32,7 @@
 #   @SYZDEK_BSD_LICENSE_END@
 #
 
-MIRROR_FREEDOS		?= http://www.freedos.org/download/download/
+
 SYSLINUX_SRC		?= /usr/share/syslinux
 
 
