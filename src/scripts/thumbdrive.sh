@@ -47,6 +47,9 @@ DIRS="boot src syslinux"
 FILES="COPYING Makefile Makefile.config Makefile.local syslinux/pxelinux.cfg"
 
 
+unset MKTEMP
+
+
 # check for required files/directories/devices
 if test ! -b "${DEVICE}";then
    echo "${PROG_NAME}: device not found"
@@ -66,8 +69,16 @@ for FILE in ${FILES};do
 done
 
 
-# create mount points
-mkdir -p tmp || exit 1
+cleanup()
+{
+   if test ! -z "${MKTEMP}";then
+      mount \
+         | grep "${MKTEMP}" \
+         && sudo umount -f "${MKTEMP}"
+      rm -Rf "${MKTEMP}"
+   fi
+}
+trap cleanup EXIT
 
 
 set -x
@@ -104,8 +115,16 @@ fatlabel /dev/${DEVPART} IP_ENG_BOOT || exit 1
 parted -a optimal -s "${DEVICE}" print
 
 
+# install syslinux
+"${SOURCE}/syslinux/bin/syslinux" -i /dev/${DEVPART} || exit 1
+
+
 # mount disk image
-mount -o rw /dev/${DEVPART} "${SOURCE}/tmp" || exit 1
+MKTEMP="$(mktemp -d -p tmp/ thumbdrive.XXXXXX)"
+if test -z "${MKTEMP}";then
+   exit 1
+fi
+mount -o rw /dev/${DEVPART} "${SOURCE}/${MKTEMP}" || exit 1
 
 
 # install files
@@ -116,16 +135,8 @@ rsync \
    --prune-empty-dirs \
    --recursive \
    "${SOURCE}/" \
-   "${SOURCE}/tmp" \
-   || { umount "${SOURCE}/tmp"; exit 1; }
-
-
-#umount disk image
-umount "${SOURCE}/tmp" || exit 1
-
-
-# install syslinux
-syslinux -i /dev/${DEVPART} || exit 1
+   "${SOURCE}/${MKTEMP}" \
+   || exit 1
 
 
 # end of script

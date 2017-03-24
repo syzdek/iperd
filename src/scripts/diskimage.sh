@@ -52,6 +52,19 @@ if test -f "${OUTPUT}";then
 fi
 
 
+cleanup()
+{
+   test -z "${LOOPDEV}" || sudo losetup -d "${LOOPDEV}"
+}
+catchsig()
+{
+   rm -f "${OUTPUT}"
+   exit 1
+}
+trap catchsig SIGHUP SIGINT SIGTERM
+trap cleanup EXIT
+
+
 # create empty 1900MB disk image
 dd \
    if=/dev/zero \
@@ -72,9 +85,6 @@ fi
 
 sudo bash "${SOURCE}/src/scripts/thumbdrive.sh" "${SOURCE}" "${LOOPDEV}" \
    || { rm -f "${OUTPUT}"; exit 1; }
-
-
-sudo losetup -d "${LOOPDEV}"
 
 
 # end of script
