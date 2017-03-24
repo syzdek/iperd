@@ -1,0 +1,64 @@
+#
+#   IP Engineering Rescue Disk
+#   Copyright (C) 2017 David M. Syzdek <david@syzdek.net>.
+#
+#   @SYZDEK_BSD_LICENSE_START@
+#
+#   Redistribution and use in source and binary forms, with or without
+#   modification, are permitted provided that the following conditions are
+#   met:
+#
+#      * Redistributions of source code must retain the above copyright
+#        notice, this list of conditions and the following disclaimer.
+#      * Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#      * Neither the name of David M. Syzdek nor the
+#        names of its contributors may be used to endorse or promote products
+#        derived from this software without specific prior written permission.
+#
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+#   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DAVID M. SYZDEK BE LIABLE FOR
+#   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+#   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+#   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+#   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+#   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+#   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+#   SUCH DAMAGE.
+#
+#   @SYZDEK_BSD_LICENSE_END@
+#
+#   Global Makefile defaults.  Override default values by either using the CLI
+#   or by adding them to Makefile.local
+#
+#   Example:
+#      make NETBOOT_HOST=192.168.1.1 download
+#
+
+SYSLINUX_SRC		?= /usr/share/syslinux
+
+NETBOOT                 ?= $(NETBOOT_HTTP)
+NETBOOT_HOST            ?= 10.0.109.254
+NETBOOT_PATH            ?= /pub/iperd/iperd-current/
+
+NETBOOT_HTTP            ?= $(NETBOOT_HTTP_SCHEME)://$(NETBOOT_HTTP_HOST)$(NETBOOT_HTTP_PATH)
+NETBOOT_HTTP_SCHEME     ?= http
+NETBOOT_HTTP_HOST       ?= $(NETBOOT_HOST)
+NETBOOT_HTTP_PATH       ?= $(NETBOOT_PATH)
+
+NETBOOT_NBD             ?= nbd://$(NETBOOT_NBD_HOST)$(NETBOOT_NBD_PATH)
+NETBOOT_NBD_HOST        ?= $(NETBOOT_HOST)
+NETBOOT_NBD_PATH        ?= $(NETBOOT_PATH)
+
+NETBOOT_NFS             ?= nfs://$(NETBOOT_NFS_HOST)$(NETBOOT_NFS_HOST)
+NETBOOT_NFS_HOST        ?= $(NETBOOT_HOST)
+NETBOOT_NFS_PATH        ?= $(NETBOOT_PATH)
+
+NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
+NETBOOT_TFTP_HOST       ?= $(NETBOOT_HOST)
+NETBOOT_TFTP_PATH       ?= /
+
+

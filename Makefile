@@ -33,9 +33,6 @@
 #
 
 
-SYSLINUX_SRC		?= /usr/share/syslinux
-
-
 DISTRODIR		= src/distros
 CONFIGDIR		= src/config
 SCRIPTDIR		= src/scripts
@@ -73,6 +70,19 @@ do_subst = sed \
 	-e "s,[@]ARCH[@],$${DISTRO_ARCH},g" \
         -e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
         -e 's,[@]DATE[@],$(DATE),g' \
+        -e 's,[@]NETBOOT[@],$(NETBOOT),g' \
+        -e 's,[@]NETBOOT_HOST[@],$(NETBOOT_HOST),g' \
+        -e 's,[@]NETBOOT_PATH[@],$(NETBOOT_PATH),g' \
+        -e 's,[@]NETBOOT_HTTP[@],$(NETBOOT_HTTP),g' \
+        -e 's,[@]NETBOOT_HTTP_SCHEME[@],$(NETBOOT_HTTP_SCHEME),g' \
+        -e 's,[@]NETBOOT_HTTP_HOST[@],$(NETBOOT_HTTP_HOST),g' \
+        -e 's,[@]NETBOOT_HTTP_PATH[@],$(NETBOOT_HTTP_PATH),g' \
+        -e 's,[@]NETBOOT_NFS[@],$(NETBOOT_NFS),g' \
+        -e 's,[@]NETBOOT_NFS_HOST[@],$(NETBOOT_NFS_HOST),g' \
+        -e 's,[@]NETBOOT_NFS_PATH[@],$(NETBOOT_NFS_PATH),g' \
+        -e 's,[@]NETBOOT_TFTP[@],$(NETBOOT_TFTP),g' \
+        -e 's,[@]NETBOOT_TFTP_HOST[@],$(NETBOOT_TFTP_HOST),g' \
+        -e 's,[@]NETBOOT_TFTP_PATH[@],$(NETBOOT_TFTP_PATH),g' \
 	$(SUBST_EXPRESSIONS)
 do_subst_fn = \
 	echo "do_subst > $(@)"; \
@@ -117,6 +127,7 @@ Makefile.config: $(SCRIPTDIR)/configure.sh
 
 
 -include Makefile.local
+-include Makefile.defaults
 -include Makefile.config
 
 
