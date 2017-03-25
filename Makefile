@@ -221,7 +221,7 @@ syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
 	cp $(SYSLINDIR)/f1.txt syslinux/
 	cp $(SYSLINDIR)/f2.txt syslinux/
 	cp /usr/share/hwdata/pci.ids syslinux/
-	cp /lib/modules/$(uname -r)/modules.alias syslinux/modules.als
+	cp /lib/modules/$$(uname -r)/modules.alias syslinux/modules.als
 	@touch "$(@)"
 
 
