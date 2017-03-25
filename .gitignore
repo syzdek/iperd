@@ -11,3 +11,5 @@
 /src/config/
 /syslinux/
 /tmp/
+/ldlinux.c32
+/ldlinux.sys

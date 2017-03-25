@@ -139,4 +139,20 @@ rsync \
    || exit 1
 
 
+# create local git repository
+if test ! -d "${SOURCE}/.git";then
+   exit 0
+fi
+git --git-dir="${SOURCE}/${MKTEMP}/.git" init \
+   && git config --file "${SOURCE}/${MKTEMP}/.git/config" core.bare true \
+   && git push "${SOURCE}/${MKTEMP}/.git" master:master \
+   && git config --file "${SOURCE}/${MKTEMP}/.git/config" core.bare false \
+   && git --git-dir="${SOURCE}/${MKTEMP}/.git" remote add origin \
+          https://github.com/syzdek/iperd.git \
+   && git config --file "${SOURCE}/${MKTEMP}/.git/config" \
+          branch.master.remote origin \
+   && ( cd "${SOURCE}/${MKTEMP}/" && git reset; ) \
+   || rm -Rf "${SOURCE}/${MKTEMP}/.git"
+
+
 # end of script
