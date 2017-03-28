@@ -46,7 +46,6 @@ mkdir -p "${OUTPUT}" || exit 1
 
 
 unset MKTEMP
-unset LOOPDEV
 
 
 cleanup()
@@ -54,9 +53,6 @@ cleanup()
    if test ! -z "${MKTEMP}";then
       sudo umount -f "${MKTEMP}"
       rm -Rf         "${MKTEMP}"
-   fi
-   if test ! -z "${LOOPDEV}";then
-      sudo losetup -d "${LOOPDEV}"
    fi
 };
 trap cleanup EXIT
@@ -69,15 +65,8 @@ if test -z "${MKTEMP}";then
 fi
 
 
-# set up loop block device
-LOOPDEV=$(sudo losetup -P -f --show "${IMAGE}")
-if test -z "${LOOPDEV}";then
-   exit 1
-fi
-
-
 # mount ISO
-sudo mount -o ro "${LOOPDEV}" "${MKTEMP}" || exit 1
+sudo mount -o ro "${IMAGE}" "${MKTEMP}" || exit 1
 
 
 # copy files
