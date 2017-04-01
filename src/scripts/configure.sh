@@ -143,25 +143,25 @@ deps()
 {
    # build Makefile configuration
    for DISTRO in $(cat "${CONFIG}.dist");do
-      if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-vars.make";then
-         cat "${DISTRODIR}/${DISTRO}/${DISTRO}-vars.make"
+      if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-header.make";then
+         cat "${DISTRODIR}/${DISTRO}/${DISTRO}-header.make"
       fi
       for VERS in $(egrep "^${DISTRO}-" "${CONFIG}.vers");do
          VERSION=$(echo "${VERS}" |cut -d- -f2)
          CODENAME=$(echo "${VERS}" |cut -d- -f3)
          ARCH=$(echo "${VERS}" |cut -d- -f4)
-         if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-ver.make";then
+         if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-boot.make";then
             sed \
                -e "s/@VERSION@/${VERSION}/g" \
                -e "s/@CODENAME@/${CODENAME}/g" \
                -e "s/@DISTRO@/${DISTRO}/g" \
                -e "s/@ARCH@/${ARCH}/g" \
                -e "s/@LABEL@/${LABEL}/g" \
-               "${DISTRODIR}/${DISTRO}/${DISTRO}-ver.make"
+               "${DISTRODIR}/${DISTRO}/${DISTRO}-boot.make"
          fi
       done
-      if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-cfg.make";then
-         cat "${DISTRODIR}/${DISTRO}/${DISTRO}-cfg.make"
+      if test -f "${DISTRODIR}/${DISTRO}/${DISTRO}-footer.make";then
+         cat "${DISTRODIR}/${DISTRO}/${DISTRO}-footer.make"
       fi
    done > ${BASEDIR}/Makefile.config
 }
