@@ -65,6 +65,14 @@ configure()
    # prepare options
    mkdir -p "$(dirname "${OPTIONS}")"
    cat ${DISTRODIR}/*/*.opts |sort > "${OPTIONS}" || exit 1
+   sed -i \
+      -e 's/[[:space:]]\{2,\}/ /g' \
+      -e 's/^ //g' \
+      -e 's/ $//g' \
+      -e 's/ @[[:alnum:][:punct:]]\{1,\}@$//g' \
+      -e 's/^\(\([[:alnum:][:punct:]]\{1,\}\) [[:print:]]\{1,\}$\)/\1 @\2@/g' \
+      "${OPTIONS}" \
+      || exit 1
    if test -f "${CONFIG}";then
       for IMAGE in $(cat "${CONFIG}");do
          sed -i -e "s/@${IMAGE}@/on/g" "${OPTIONS}"
