@@ -64,7 +64,12 @@ configure()
 
    # prepare options
    mkdir -p "$(dirname "${OPTIONS}")"
-   cat ${DISTRODIR}/*/*.opts |sort > "${OPTIONS}" || exit 1
+   cat \
+      ${DISTRODIR}/*/*.opts \
+      ${DISTRODIR}/*/*.opt \
+      |sort \
+      > "${OPTIONS}" \
+      || exit 1
    sed -i \
       -e 's/[[:space:]]\{2,\}/ /g' \
       -e 's/^ //g' \
@@ -111,6 +116,16 @@ configure()
          egrep "^${DISTRO}-" "${OPTIONS}" \
             |awk '{print$1}' \
             >> "${CONFIG}.vers.new"
+      elif test -f ${DISTRODIR}/${DISTRO}/${DISTRO}.opt;then
+         egrep "^${DISTRO}-" "${OPTIONS}" \
+            |xargs dialog \
+               --no-tags \
+               --title "Boot Image" \
+               --backtitle "Select image to install." \
+               --radiolist "Choose image to install:" \
+               20 70 13 \
+               2>> "${CONFIG}.vers.new" \
+               || { echo " "; exit 1; }
       else
          egrep "^${DISTRO}-" "${OPTIONS}" \
             |xargs dialog \
