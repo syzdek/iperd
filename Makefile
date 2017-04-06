@@ -218,8 +218,13 @@ syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
 	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
 	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
+	cp syslinux/efi32/ldlinux.e32                       syslinux/
+	cp syslinux/efi64/ldlinux.e64                       syslinux/
 	cp $(SYSLINDIR)/f1.txt syslinux/
 	cp $(SYSLINDIR)/f2.txt syslinux/
+	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/efi32/
+	cp $(SYSLINDIR)/efi32/pxelinux.cfg                  syslinux/efi32/
+	cp $(SYSLINDIR)/efi64/pxelinux.cfg                  syslinux/efi32/
 	cp /usr/share/hwdata/pci.ids syslinux/
 	cp /lib/modules/$$(uname -r)/modules.alias syslinux/modules.als
 	@touch "$(@)"
