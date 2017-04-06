@@ -6,10 +6,10 @@
 /cde/
 /images/
 /isolinux/
+/ldlinux.e32
+/ldlinux.e64
 /pxelinux.0
 /pxelinux.cfg/
 /src/config/
 /syslinux/
 /tmp/
-/ldlinux.c32
-/ldlinux.sys
