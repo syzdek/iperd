@@ -218,8 +218,10 @@ syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
 	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
 	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
+	cp syslinux/efi32/syslinux.efi                      syslinux/efi32/syslinux.efi.0
 	cp syslinux/efi32/ldlinux.e32                       syslinux/
 	cp syslinux/efi64/ldlinux.e64                       syslinux/
+	cp syslinux/efi64/syslinux.efi                      syslinux/efi64/syslinux.efi.0
 	cp $(SYSLINDIR)/f1.txt                              syslinux/
 	cp $(SYSLINDIR)/f2.txt                              syslinux/
 	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/efi32/
