@@ -55,6 +55,7 @@ PREREQ_BIN		= \
 			  ldlinux.e32 \
 			  ldlinux.e64
 CLEANFILES		= \
+			  $(PREREQ_BIN) \
 			  images \
 			  syslinux
 
