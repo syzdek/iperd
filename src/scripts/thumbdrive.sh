@@ -52,6 +52,10 @@ unset MKTEMP
 
 
 # check for required files/directories/devices
+if test -z "${DEVICE}";then
+   echo "${PROG_NAME}: invalid device name"
+   exit 1
+fi
 if test ! -b "${DEVICE}";then
    echo "${PROG_NAME}: device not found"
    exit 1
