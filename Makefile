@@ -120,7 +120,7 @@ all:
 	@echo "   make images"
 	@echo "   make images/iperdboot.iso"
 	@echo "   make images/iperdboot.img"
-	@echo "   make thumbdrive DISK=/dev/sdb"
+	@echo "   make thumbdrive DISK=/dev/sdb PARTSIZE=1900M"
 	@echo " "
 
 
@@ -156,7 +156,7 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh "." "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh "." "$(@)" $(PARTSIZE)
 	@touch "$(@)"
 
 
