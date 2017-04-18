@@ -120,7 +120,7 @@ all:
 	@echo "   make images"
 	@echo "   make images/iperdboot.iso"
 	@echo "   make images/iperdboot.img"
-	@echo "   make thumbdrive DISK=/dev/sdb"
+	@echo "   make thumbdrive DISK=/dev/sdb PARTSIZE=1900M"
 	@echo " "
 
 
@@ -191,7 +191,7 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) syslinux/isolinux.bin.mod
 
 
 thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
-	bash src/scripts/thumbdrive.sh . $(DISK)
+	bash src/scripts/thumbdrive.sh . "$(DISK)" $(PARTSIZE)
 
 
 images: images/iperdboot.img images/iperdboot.iso
