@@ -4,8 +4,7 @@ PXELINUX_CFG		+= $(CONFIGDIR)/alpine/alpine.pxe.cfg
 SYSLINUX_CFG		+= $(CONFIGDIR)/alpine/alpine.cfg
 DOWNLOAD_FILES		+= $(ALPINE_FILES)
 
-ALPINE_CFG_ALL		 = $(ALPINE_CFG)
-ALPINE_CFG_ALL		 = $(ALPINE_PXE_CFG)
+ALPINE_CFG_ALL		 = $(ALPINE_CFG) $(ALPINE_PXE_CFG)
 ALPINE_CFG_ALL		+= $(DISTRODIR)/alpine/alpine-header.cfg
 ALPINE_CFG_ALL		+= $(DISTRODIR)/alpine/alpine-footer.cfg
 
