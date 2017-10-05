@@ -89,32 +89,32 @@ trap cleanup EXIT
 set -x
 
 
-## wipe MBR partition table on USB device
-#parted -a optimal -s "${DEVICE}" mktable msdos || exit 1
-#
-## create DOS partition on USB device
-#parted -a optimal -s "${DEVICE}" mkpart primary fat32 0% 100% || exit 1
-#
-## restore valid master boot record
-#dd conv=notrunc bs=440 count=1 if="${SOURCE}/syslinux/mbr.bin" of="${DEVICE}" || exit 1
-#
-## set DOS partition as boot partition
-#parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
+# wipe MBR partition table on USB device
+parted -a optimal -s "${DEVICE}" mktable msdos || exit 1
+
+# create DOS partition on USB device
+parted -a optimal -s "${DEVICE}" mkpart primary fat32 0% 100% || exit 1
+
+# restore valid master boot record
+dd conv=notrunc bs=440 count=1 if="${SOURCE}/syslinux/mbr.bin" of="${DEVICE}" || exit 1
+
+# set DOS partition as boot partition
+parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
 
 
-sgdisk "${DEVICE}" --zap-all                       || exit 1
-sgdisk "${DEVICE}" --new=1:0:+${PARTSIZE}          || exit 1
-sgdisk "${DEVICE}" --typecode=1:ef00               || exit 1
-sgdisk "${DEVICE}" --change-name=1:'BIOS/EFI Boot' || exit 1
-sgdisk "${DEVICE}" --gpttombr=1                    || exit 1
-sfdisk "${DEVICE}" --activate 1                    || exit 1
-dd \
-   if="${SOURCE}/syslinux/gptmbr.bin" \
-   of="${DEVICE}" \
-   bs=440 \
-   conv=notrunc \
-   count=1 \
-   || exit 1
+#sgdisk "${DEVICE}" --zap-all                       || exit 1
+#sgdisk "${DEVICE}" --new=1:0:+${PARTSIZE}          || exit 1
+#sgdisk "${DEVICE}" --typecode=1:ef00               || exit 1
+#sgdisk "${DEVICE}" --change-name=1:'BIOS/EFI Boot' || exit 1
+#sgdisk "${DEVICE}" --gpttombr=1                    || exit 1
+#sfdisk "${DEVICE}" --activate 1                    || exit 1
+#dd \
+#   if="${SOURCE}/syslinux/gptmbr.bin" \
+#   of="${DEVICE}" \
+#   bs=440 \
+#   conv=notrunc \
+#   count=1 \
+#   || exit 1
 
 
 partprobe "${DEVICE}" || exit 1
