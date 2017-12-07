@@ -1,3 +1,4 @@
 debian                'Debian Linux'
+   debian-9-stretch   'Debian 9 "stretch"'
    debian-8-jessie    'Debian 8 "jessie"'
    debian-7-wheezy    'Debian 7 "wheezy"'
