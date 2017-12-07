@@ -1,3 +1,5 @@
 alpine                       'Alpine Linux'
-   alpine-3.5.2-v3.5-x86_64  'Alpine Linux 3.5.2 (x86_64)'
-   alpine-3.5.2-v3.5-x86     'Alpine Linux 3.5.2 (x86)'
+   alpine-3.6.2-v3.6-x86_64  'Alpine Linux 3.6.2 (x86_64)'
+   alpine-3.6.2-v3.6-x86     'Alpine Linux 3.6.2 (x86)'
+   alpine-3.7.0-v3.7-x86_64  'Alpine Linux 3.7.0 (x86_64)'
+   alpine-3.7.0-v3.7-x86     'Alpine Linux 3.7.0 (x86)'

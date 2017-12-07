@@ -44,21 +44,21 @@ tmp/alpine-@VERSION@-@ARCH@/.extracted: tmp/alpine-@VERSION@-@ARCH@.iso
 boot/alpine/@VERSION@/@ARCH@/vmlinuz: tmp/alpine-@VERSION@-@ARCH@/.extracted
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/vmlinuz-grsec "$(@)"
+	cp tmp/alpine-@VERSION@-@ARCH@/boot/vmlinuz-hardened "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
 boot/alpine/@VERSION@/@ARCH@/initrd: tmp/alpine-@VERSION@-@ARCH@/.extracted
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/initramfs-grsec "$(@)"
+	cp tmp/alpine-@VERSION@-@ARCH@/boot/initramfs-hardened "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
 boot/alpine/@VERSION@/@ARCH@/modloop: tmp/alpine-@VERSION@-@ARCH@/.extracted
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/modloop-grsec "$(@)"
+	cp tmp/alpine-@VERSION@-@ARCH@/boot/modloop-hardened "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
