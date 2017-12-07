@@ -28,7 +28,7 @@ $(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.pxe.cfg: Makefile Makefile.config $(DI
 
 
 tmp/alpine-@VERSION@-@ARCH@.iso:
-	URL="$(MIRROR_ALPINE)/@CODENAME@/releases/@ARCH@/alpine-extended-@VERSION@-@ARCH@.iso"; \
+	URL="$(MIRROR_ALPINE)/@CODENAME@/releases/@ARCH@/alpine-standard-@VERSION@-@ARCH@.iso"; \
 	   $(download_file)
 
 
