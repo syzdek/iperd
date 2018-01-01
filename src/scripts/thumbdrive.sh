@@ -35,7 +35,7 @@
 
 PROG_NAME="$(basename "${0}")"
 if test "x${2}" == "x";then
-   echo "Usage: ${PROG_NAME} <source> <device> [ <size> ]"
+   echo "Usage: ${PROG_NAME} <source> <device>"
    exit 1
 fi
 SOURCE="${1}"
@@ -79,7 +79,7 @@ cleanup()
    if test ! -z "${MKTEMP}";then
       mount \
          | grep "${MKTEMP}" \
-         && sudo umount -f "${MKTEMP}"
+         && umount -f "${MKTEMP}"
       rm -Rf "${MKTEMP}"
    fi
 }
@@ -89,37 +89,95 @@ trap cleanup EXIT
 set -x
 
 
-# wipe MBR partition table on USB device
-parted -a optimal -s "${DEVICE}" mktable msdos || exit 1
+## wipe MBR partition table on USB device
+#parted -a optimal -s "${DEVICE}" mktable msdos || exit 1
 
-# create DOS partition on USB device
-parted -a optimal -s "${DEVICE}" mkpart primary fat32 0% 100% || exit 1
+## create DOS partition on USB device
+#parted -a optimal -s "${DEVICE}" mkpart primary fat32 0% 100% || exit 1
 
-# restore valid master boot record
-dd conv=notrunc bs=440 count=1 if="${SOURCE}/syslinux/mbr.bin" of="${DEVICE}" || exit 1
+## restore valid master boot record
+#dd conv=notrunc bs=440 count=1 if="${SOURCE}/syslinux/mbr.bin" of="${DEVICE}" || exit 1
 
-# set DOS partition as boot partition
-parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
-
-
-#sgdisk "${DEVICE}" --zap-all                       || exit 1
-#sgdisk "${DEVICE}" --new=1:0:+${PARTSIZE}          || exit 1
-#sgdisk "${DEVICE}" --typecode=1:ef00               || exit 1
-#sgdisk "${DEVICE}" --change-name=1:'BIOS/EFI Boot' || exit 1
-#sgdisk "${DEVICE}" --gpttombr=1                    || exit 1
-#sfdisk "${DEVICE}" --activate 1                    || exit 1
-#dd \
-#   if="${SOURCE}/syslinux/gptmbr.bin" \
-#   of="${DEVICE}" \
-#   bs=440 \
-#   conv=notrunc \
-#   count=1 \
-#   || exit 1
+## set DOS partition as boot partition
+#parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
 
 
-partprobe "${DEVICE}" || exit 1
+##sgdisk "${DEVICE}" --zap-all                       || exit 1
+##sgdisk "${DEVICE}" --new=1:0:+${PARTSIZE}          || exit 1
+##sgdisk "${DEVICE}" --typecode=1:ef00               || exit 1
+##sgdisk "${DEVICE}" --change-name=1:'BIOS/EFI Boot' || exit 1
+##sgdisk "${DEVICE}" --gpttombr=1                    || exit 1
+##sfdisk "${DEVICE}" --activate 1                    || exit 1
+##dd \
+##   if="${SOURCE}/syslinux/gptmbr.bin" \
+##   of="${DEVICE}" \
+##   bs=440 \
+##   conv=notrunc \
+##   count=1 \
+##   || exit 1
+
+
+# partition disk
+   # clear existing MBR and/or GPT data
+   sgdisk "${DEVICE}" --zap-all || exit 1
+
+   # create 1st partition: EFI
+   sgdisk "${DEVICE}" --new=1:0:+1M     || exit 1
+   sgdisk "${DEVICE}" --typecode=1:EF02 || exit 1
+
+   # create 2nd parition
+   sgdisk "${DEVICE}" --new=2:0:0       || exit 1
+   sgdisk "${DEVICE}" --typecode=2:0700 || exit 1
+
+   # make hybrid
+   sgdisk "${DEVICE}" --hybrid=1:2 || exit 1
+
+   # convert to MBR and activate partition 2
+   sgdisk "${DEVICE}" --zap        || exit 1
+   sfdisk --activate "${DEVICE}" 2 || exit 1
+
+   # add boot code to MBR
+   dd \
+      bs=440 count=1 conv=notrunc \
+      if=~/syslinux-6.03/efi64/mbr/gptmbr.bin \
+      of="${DEVICE}" \
+      || exit 1
+
+   # backup MBR table
+   rm -f "${SOURCE}/tmp/mbr.backup"
+   dd bs=512 count=1 conv=notrunc \
+      if="${DEVICE}" \
+      of="${SOURCE}/tmp/mbr.backup" \
+      || exit 1
+
+   # convert back to GPT and adjust partition numbers
+   sgdisk "${DEVICE}" --mbrtogpt      || exit 1
+   sgdisk "${DEVICE}" --transpose=1:2 || exit 1
+   sgdisk "${DEVICE}" --transpose=2:3 || exit 1
+
+   # re-adjust partition 2 information for GPT
+   sgdisk "${DEVICE}" --typecode=2:EF00          || exit 1
+   sgdisk "${DEVICE}" --change-name=2:"BootDisk" || exit 1
+   sgdisk "${DEVICE}" --attributes=2:set:2       || exit 1
+
+    # convert GPT to hybrid GPT
+   sgdisk "${DEVICE}" --hybrid=1:2 || exit 1
+
+   # restore MBR with bootable partition 2
+   dd bs=512 count=1 conv=notrunc \
+      if="${SOURCE}/tmp/mbr.backup" \
+      of="${DEVICE}" \
+      || exit 1
+   rm -f "${SOURCE}/tmp/mbr.backup"
+
+   # refresh partition table in kernel memory
+   partprobe "${DEVICE}" || exit 1
+
+
+
+# calculate partition device name
 DEVPART="$(basename "${DEVICE}")"
-DEVPART="$(grep "[0-9] ${DEVPART}[a-zA-Z0-9]\{1,\}$" /proc/partitions|awk '{print$4}')"
+DEVPART="$(grep "[0-9] ${DEVPART}p\{0,1\}2$" /proc/partitions|awk '{print$4}')"
 if test -z "${DEVPART}";then
    echo "${PROG_NAME}: partition is not detected"
    exit 1
@@ -127,8 +185,8 @@ fi
 
 
 # make vFAT file systems
-mkfs.vfat -F 32 /dev/${DEVPART} || exit 1
-fatlabel /dev/${DEVPART} IP_ENG_BOOT || exit 1
+mkfs.vfat -F 32 -I -n "IP_ENG_BOOT" /dev/${DEVPART} || exit 1
+#fatlabel /dev/${DEVPART} IP_ENG_BOOT || exit 1
 parted -a optimal -s "${DEVICE}" print
 
 
