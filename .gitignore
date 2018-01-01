@@ -1,5 +1,6 @@
 *.swp
 /.git.old
+/EFI/
 /Makefile.config
 /Makefile.local
 /boot/

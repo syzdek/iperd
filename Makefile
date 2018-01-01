@@ -39,8 +39,9 @@ SCRIPTDIR		= src/scripts
 SYSLINDIR		= src/syslinux
 
 
-SYSLINUX_VERSION	?= 6.03
-MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/6.xx/syslinux-$(SYSLINUX_VERSION).tar.xz
+SYSLINUX_VERSION	?= 6.04-pre1
+#MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/6.xx/syslinux-$(SYSLINUX_VERSION).tar.xz
+MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
 
 
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
@@ -52,8 +53,12 @@ PREREQ_CNF		= \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
 PREREQ_BIN		= \
-			  ldlinux.e32 \
-			  ldlinux.e64
+			  EFI/BOOT/syslia32.cfg \
+			  EFI/BOOT/syslx64.cfg \
+			  EFI/BOOT/BOOTX64.EFI \
+			  EFI/BOOT/BOOTIA32.EFI \
+			  EFI/BOOT/ldlinux.e32 \
+			  EFI/BOOT/ldlinux.e64
 CLEANFILES		= \
 			  $(PREREQ_BIN) \
 			  images \
@@ -214,14 +219,13 @@ tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION).tar
 
 syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
 	rm -Rf syslinux
+	rm -Rf EFI
 	cd tmp/syslinux-$(SYSLINUX_VERSION); \
 	   make -s install INSTALLROOT="$(PWD)/tmp/syslinux" \
 	   || { rm -Rf tmp/syslinux-$(SYSLINUX_VERSION); exit 1; }
 	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
 	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
-	cp syslinux/efi32/syslinux.efi                      syslinux/efi32/syslinux.efi.0
-	cp syslinux/efi64/syslinux.efi                      syslinux/efi64/syslinux.efi.0
 	cp $(SYSLINDIR)/f1.txt                              syslinux/
 	cp $(SYSLINDIR)/f2.txt                              syslinux/
 	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/
@@ -232,13 +236,37 @@ syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
 	@touch "$(@)"
 
 
-ldlinux.e32: syslinux/iperd.dep
+EFI/BOOT/syslia32.cfg: src/syslinux/syslia32.cfg
+	@mkdir -p $$(dirname $(@))
+	cp src/syslinux/syslia32.cfg $(@)
+	@touch $(@)
+
+
+EFI/BOOT/syslx64.cfg: src/syslinux/syslx64.cfg
+	@mkdir -p $$(dirname $(@))
+	cp src/syslinux/syslx64.cfg $(@)
+	@touch $(@)
+
+
+EFI/BOOT/BOOTX64.EFI: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi64/syslinux.efi $(@)
+	@touch $(@)
+
+
+EFI/BOOT/BOOTIA32.EFI: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi32/syslinux.efi $(@)
+	@touch $(@)
+
+
+EFI/BOOT/ldlinux.e32: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi32/ldlinux.e32 $(@)
 	@touch $(@)
 
 
-ldlinux.e64: syslinux/iperd.dep
+EFI/BOOT/ldlinux.e64: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi64/ldlinux.e64 $(@)
 	@touch $(@)
