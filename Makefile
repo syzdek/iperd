@@ -56,9 +56,13 @@ PREREQ_BIN		= \
 			  EFI/BOOT/syslia32.cfg \
 			  EFI/BOOT/syslx64.cfg \
 			  EFI/BOOT/BOOTX64.EFI \
+			  EFI/BOOT/BOOTX64.EFI.0 \
 			  EFI/BOOT/BOOTIA32.EFI \
+			  EFI/BOOT/BOOTIA32.EFI.0 \
 			  EFI/BOOT/ldlinux.e32 \
-			  EFI/BOOT/ldlinux.e64
+			  EFI/BOOT/ldlinux.e64 \
+			  ldlinux.e32 \
+			  ldlinux.e64
 CLEANFILES		= \
 			  $(PREREQ_BIN) \
 			  images \
@@ -248,25 +252,25 @@ EFI/BOOT/syslx64.cfg: src/syslinux/syslx64.cfg
 	@touch $(@)
 
 
-EFI/BOOT/BOOTX64.EFI: syslinux/iperd.dep
+EFI/BOOT/BOOTX64.EFI EFI/BOOT/BOOTX64.EFI.0: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi64/syslinux.efi $(@)
 	@touch $(@)
 
 
-EFI/BOOT/BOOTIA32.EFI: syslinux/iperd.dep
+EFI/BOOT/BOOTIA32.EFI EFI/BOOT/BOOTIA32.EFI.0: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi32/syslinux.efi $(@)
 	@touch $(@)
 
 
-EFI/BOOT/ldlinux.e32: syslinux/iperd.dep
+EFI/BOOT/ldlinux.e32 ldlinux.e32: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi32/ldlinux.e32 $(@)
 	@touch $(@)
 
 
-EFI/BOOT/ldlinux.e64: syslinux/iperd.dep
+EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi64/ldlinux.e64 $(@)
 	@touch $(@)
