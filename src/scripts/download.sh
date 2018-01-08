@@ -239,16 +239,15 @@ trap cleanup SIGHUP SIGINT SIGTERM EXIT
 
 # download file
 if test ! -f "${TMPFILE}";then
-   echo "downloading ${FILE} ..."
    mkdir -p "$(dirname "${TMPFILE}")" || exit 1;
    wget \
+      -q \
       -O "${TMPFILE}.new" \
       "${URL}" \
       || { rm -f "${TMPFILE}.new"; exit 1; }
 
    # verify hash of file
    if test ! -z "${HASH_FILE}";then
-      echo "Verifing ${FILE} ..."
       FILE_HASH="$(${HASH_CMD} "${TMPFILE}.new" 2> /dev/null |awk '{print$1}')"
       if test "x${FILE_HASH}" != "x${HASH_DATA}";then
          echo "${PROG_NAME}: downloaded file does not match specified hash" 1>&2
