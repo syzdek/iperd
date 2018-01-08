@@ -15,12 +15,20 @@ $(CONFIGDIR)/centos/centos@VERSION@.cfg: Makefile Makefile.config $(DISTRODIR)/c
 
 
 boot/centos/@VERSION@/initrd:
-	URL="$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/initrd.img"; \
-	   $(download_file)
+	./src/scripts/download.sh \
+	   -k \
+	   -H $(CENTOS_HASHES)/initrd-@VERSION@.sha512 \
+	   -t tmp/$(@) \
+	   "$(@)" \
+	   "$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/initrd.img"
 
 
 boot/centos/@VERSION@/vmlinuz:
-	URL="$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/vmlinuz"; \
-	   $(download_file)
+	./src/scripts/download.sh \
+	   -k \
+	   -H $(CENTOS_HASHES)/vmlinuz-@VERSION@.sha512 \
+	   -t tmp/$(@) \
+	   "$(@)" \
+	   "$(MIRROR_CENTOS)/@VERSION@/os/x86_64/isolinux/vmlinuz"
 
 
