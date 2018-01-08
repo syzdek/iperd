@@ -16,17 +16,27 @@ $(CONFIGDIR)/slackware/slackware@ARCH@-@VERSION@.cfg: Makefile Makefile.config $
 
 
 boot/slack@ARCH@/@VERSION@/COPYING:
-	URL="$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/COPYRIGHT.TXT"; \
-	   $(download_file)
+	./src/scripts/download.sh \
+	   -k \
+	   -t tmp/$(@) \
+	   "$(@)" \
+	   "$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/COPYRIGHT.TXT"
 
 
 boot/slack@ARCH@/@VERSION@/bzImage:
-	URL="$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/kernels/huge.s/bzImage"; \
-	   $(download_file)
+	./src/scripts/download.sh \
+	   -k \
+	   -H $(SLACKWARE_HASHES)/bzImage@ARCH@-@VERSION@.sha512 \
+	   -t tmp/$(@) \
+	   "$(@)" \
+	   "$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/kernels/huge.s/bzImage"
 
 
 boot/slack@ARCH@/@VERSION@/initrd:
-	URL="$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/isolinux/initrd.img"; \
-	   $(download_file)
-
+	./src/scripts/download.sh \
+	   -k \
+	   -H $(SLACKWARE_HASHES)/initrd@ARCH@-@VERSION@.sha512 \
+	   -t tmp/$(@) \
+	   "$(@)" \
+	   "$(MIRROR_SLACKWARE)/slackware@ARCH@-@VERSION@/isolinux/initrd.img"
 
