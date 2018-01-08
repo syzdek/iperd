@@ -27,46 +27,43 @@ $(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.pxe.cfg: Makefile Makefile.config $(DI
 	   $(do_subst_dt)
 
 
-tmp/alpine-@VERSION@-@ARCH@.iso:
-	URL="$(MIRROR_ALPINE)/@CODENAME@/releases/@ARCH@/alpine-standard-@VERSION@-@ARCH@.iso"; \
-	   $(download_file)
+tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted:
+	./src/scripts/download.sh \
+	   -k \
+	   -H $(ALPINE_HASHES)/alpine-@VERSION@-@ARCH@.sha512 \
+	   -e tmp/boot/alpine/alpine-@VERSION@-@ARCH@ \
+	   -t tmp/boot/alpine/alpine-@VERSION@-@ARCH@.iso.tmp \
+	   boot/alpine/alpine-@VERSION@-@ARCH@.iso \
+	   $(MIRROR_ALPINE)/@CODENAME@/releases/@ARCH@/alpine-standard-@VERSION@-@ARCH@.iso
 
 
-tmp/alpine-@VERSION@-@ARCH@/.extracted: tmp/alpine-@VERSION@-@ARCH@.iso
-	rm -Rf "tmp/alpine-@VERSION@-@ARCH@"
-	bash src/scripts/extractiso.sh \
-	   tmp/alpine-@VERSION@-@ARCH@.iso \
-	   tmp/alpine-@VERSION@-@ARCH@ \
-	   || { rm -Rf "tmp/alpine-@VERSION@-@ARCH@"; exit 1; }
+boot/alpine/@VERSION@/@ARCH@/vmlinuz: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/vmlinuz-hardened "$(@)"
 	@touch "$(@)"
 
 
-boot/alpine/@VERSION@/@ARCH@/vmlinuz: tmp/alpine-@VERSION@-@ARCH@/.extracted
+boot/alpine/@VERSION@/@ARCH@/initrd: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/vmlinuz-hardened "$(@)"
+	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/initramfs-hardened "$(@)"
+	@touch "$(@)"
+
+
+boot/alpine/@VERSION@/@ARCH@/modloop: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/modloop-hardened "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
-boot/alpine/@VERSION@/@ARCH@/initrd: tmp/alpine-@VERSION@-@ARCH@/.extracted
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/initramfs-hardened "$(@)"
-	@test -f "$(@)" && touch "$(@)"
-
-
-boot/alpine/@VERSION@/@ARCH@/modloop: tmp/alpine-@VERSION@-@ARCH@/.extracted
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/alpine-@VERSION@-@ARCH@/boot/modloop-hardened "$(@)"
-	@test -f "$(@)" && touch "$(@)"
-
-
-boot/alpine/@VERSION@/apks/@ARCH@/.iperd: tmp/alpine-@VERSION@-@ARCH@/.extracted
+boot/alpine/@VERSION@/apks/@ARCH@/.iperd: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted
 	@rm -Rf boot/alpine/@VERSION@/apks/@ARCH@
 	@mkdir -p "$$(dirname "$(@)")"
 	rsync -r \
-	   tmp/alpine-@VERSION@-@ARCH@/apks/@ARCH@/ \
-	   boot/alpine/@VERSION@/apks/@ARCH@/
+           tmp/boot/alpine/alpine-@VERSION@-@ARCH@/apks/@ARCH@/ \
+	   boot/alpine/@VERSION@/apks/@ARCH@
 	@touch "$(@)"
+
 
