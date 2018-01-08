@@ -14,21 +14,17 @@ $(CONFIGDIR)/dban/dban.cfg: Makefile $(DISTRODIR)/dban/dban.cfg
 	   $(do_subst_dt)
 
 
-tmp/dban-@VERSION@_i586.iso:
-	URL="$(MIRROR_DBAN)/dban-@VERSION@/dban-@VERSION@_i586.iso"; \
-	   $(download_file)
-	@test -f "$(@)" && touch "$(@)"
+tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted:
+	./src/scripts/download.sh \
+	   -H $(DBAN_HASHES)/dban-@VERSION@_@ARCH@.sha512 \
+	   -e tmp/boot/dban/dban-@VERSION@_@ARCH@ \
+	   boot/dban/dban-@VERSION@_@ARCH@.iso \
+	   $(MIRROR_DBAN)/dban-@VERSION@/dban-@VERSION@_@ARCH@.iso
 
 
-tmp/dban-@VERSION@_i586/dban.bzi: tmp/dban-@VERSION@_i586.iso
-	bash src/scripts/extractiso.sh \
-	   tmp/dban-@VERSION@_i586.iso \
-	   tmp/dban-@VERSION@_i586
-	@test -f "$(@)" && touch "$(@)"
-
-boot/dban/dban.bzi: tmp/dban-@VERSION@_i586/dban.bzi
+boot/dban/dban.bzi: tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/dban-@VERSION@_i586/dban.bzi "$(@)"
+	cp tmp/boot/dban/dban-@VERSION@_@ARCH@/dban.bzi "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
