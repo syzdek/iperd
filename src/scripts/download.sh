@@ -186,8 +186,12 @@ fi
 if test -z "${TMPFILE}";then
    TMPFILE="${FILE}.$$"
 fi
-if test ! -z "${HASH_FILE}" && test -f "${HASH_FILE}";then
-   HASH_DATA="$(awk '{print$1}' "${HASH_FILE}")"
+if test ! -z "${HASH_FILE}";then
+   if test -f "${HASH_FILE}";then
+      HASH_DATA="$(awk '{print$1}' "${HASH_FILE}")"
+   else
+      HASH_DATA="missing hash"
+   fi
    case "${HASH_FILE}" in
       *.sha1)   HASH_CMD="sha1sum";;
       *.sha256) HASH_CMD="sha256sum";;
