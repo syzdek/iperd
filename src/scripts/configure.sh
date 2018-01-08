@@ -41,7 +41,7 @@ BASEDIR="${2:-$(pwd)}"
 # set defaults
 PROG_NAME="$(basename "${0}")"
 DISTRODIR="${DISTRODIR:-${BASEDIR}/src/distros}"
-CONFIGDIR="${CONFIGDIR:-${BASEDIR}/src/config}"
+CONFIGDIR="${CONFIGDIR:-${BASEDIR}/var/config}"
 CONFIG="${CONFIG:-${CONFIGDIR}/iperd.conf}"
 OPTIONS="${OPTIONS:-${CONFIGDIR}/iperd.opts}"
 

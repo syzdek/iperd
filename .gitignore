@@ -15,4 +15,5 @@
 /pxelinux.cfg/
 /src/config/
 /syslinux/
+/var/
 /tmp/

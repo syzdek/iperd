@@ -34,7 +34,7 @@
 
 
 DISTRODIR		= src/distros
-CONFIGDIR		= src/config
+CONFIGDIR		= var/config
 SCRIPTDIR		= src/scripts
 SYSLINDIR		= src/syslinux
 
