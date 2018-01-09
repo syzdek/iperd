@@ -238,7 +238,7 @@ trap cleanup SIGHUP SIGINT SIGTERM EXIT
 
 
 # download file
-if test ! -f "${TMPFILE}";then
+if test ! -f "${TMPFILE}" && test ! -f "${FILE}";then
    mkdir -p "$(dirname "${TMPFILE}")" || exit 1;
    wget \
       -q \
