@@ -69,14 +69,6 @@ CLEANFILES		= \
 			  syslinux
 
 
-download_file = \
-	rm -f "$(@)"; \
-	mkdir -p "$$(dirname "$(@)")"; \
-	wget \
-	   -O "$(@)" \
-	   "$${URL}" \
-	   || { rm -f "$(@)"; exit 1; }; \
-	touch "$(@)";
 do_subst = sed \
 	-e "s,[@]DISTRO[@],$${DISTRO},g" \
 	-e "s,[@]CODENAME[@],$${DISTRO_CODENAME},g" \
