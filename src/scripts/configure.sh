@@ -65,8 +65,8 @@ configure()
    # prepare options
    mkdir -p "$(dirname "${OPTIONS}")"
    cat \
-      ${DISTRODIR}/*/*.opts \
-      ${DISTRODIR}/*/*.opt \
+      ${DISTRODIR}/*/options \
+      ${DISTRODIR}/*/option \
       |sort \
       > "${OPTIONS}" \
       || exit 1
@@ -116,7 +116,7 @@ configure()
          egrep "^${DISTRO}-" "${OPTIONS}" \
             |awk '{print$1}' \
             >> "${CONFIG}.vers.new"
-      elif test -f ${DISTRODIR}/${DISTRO}/${DISTRO}.opt;then
+      elif test -f ${DISTRODIR}/${DISTRO}/option;then
          egrep "^${DISTRO}-" "${OPTIONS}" \
             |xargs dialog \
                --no-tags \
