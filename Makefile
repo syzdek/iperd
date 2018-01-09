@@ -209,24 +209,20 @@ images: images/iperdboot.img images/iperdboot.iso
 compress: images/iperdboot.img.gz
 
 
-tmp/syslinux-$(SYSLINUX_VERSION).tar.xz:
-	@rm -Rf tmp/syslinux-$(SYSLINUX_VERSION)
-	URL="$(MIRROR_SYSLINUX)"; \
-	   $(download_file)
+tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
+	./src/scripts/download.sh \
+	   tmp/src/syslinux-$(SYSLINUX_VERSION).tar.xz \
+	   $(MIRROR_SYSLINUX)
+	cd tmp/src && tar -xf syslinux-$(SYSLINUX_VERSION).tar.xz
+	touch $(@)
 
 
-tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION).tar.xz
-	@rm -Rf "tmp/syslinux-$(SYSLINUX_VERSION)"
-	tar -C tmp -xf tmp/syslinux-$(SYSLINUX_VERSION).tar.xz
-	@touch "$(@)"
-
-
-syslinux/iperd.dep: tmp/syslinux-$(SYSLINUX_VERSION)/iperd.dep
+syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
 	rm -Rf syslinux
 	rm -Rf EFI
-	cd tmp/syslinux-$(SYSLINUX_VERSION); \
+	cd tmp/src/syslinux-$(SYSLINUX_VERSION); \
 	   make -s install INSTALLROOT="$(PWD)/tmp/syslinux" \
-	   || { rm -Rf tmp/syslinux-$(SYSLINUX_VERSION); exit 1; }
+	   || { rm -Rf tmp/src/syslinux-$(SYSLINUX_VERSION); exit 1; }
 	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
 	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
