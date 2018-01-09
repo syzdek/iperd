@@ -3,7 +3,7 @@ ISOLINUX_CFG            += $(CONFIGDIR)/ipxe/ipxe.cfg
 SYSLINUX_CFG            += $(CONFIGDIR)/ipxe/ipxe.cfg
 FILES_IPXE		 = boot/ipxe/ipxe.krn
 DOWNLOAD_FILES          += $(FILES_IPXE)
-CLEANFILES		+= $(FILES_IPXE) tmp/ipxe
+CLEANFILES		+= $(FILES_IPXE)
 
 
 $(CONFIGDIR)/ipxe/ipxe.cfg: Makefile $(DISTRODIR)/ipxe/ipxe.cfg
@@ -13,23 +13,16 @@ $(CONFIGDIR)/ipxe/ipxe.cfg: Makefile $(DISTRODIR)/ipxe/ipxe.cfg
 	   $(do_subst_dt)
 
 
-tmp/ipxe.iso:
-	URL="$(MIRROR_IPXE)"; \
-	   $(download_file)
-	@test -f "$(@)" && touch "$(@)"
+tmp/boot/ipxe/ipxe/.iperd-extracted:
+	./src/scripts/download.sh \
+	   -e tmp/boot/ipxe/ipxe \
+	   tmp/boot/ipxe/ipxe.iso \
+	   $(MIRROR_IPXE)
 
 
-tmp/ipxe/ipxe.krn: tmp/ipxe.iso
-	bash src/scripts/extractiso.sh \
-	   tmp/ipxe.iso \
-	   tmp/ipxe
-	@test -f "$(@)" && touch "$(@)"
-
-boot/ipxe/ipxe.krn: tmp/ipxe/ipxe.krn
+boot/ipxe/ipxe.krn: tmp/boot/ipxe/ipxe/.iperd-extracted
 	@mkdir -p "$$(dirname "$(@)")"
-	cp tmp/ipxe/ipxe.krn "$(@)"
+	cp tmp/boot/ipxe/ipxe/ipxe.krn "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
-
-ipxe: $(CONFIGDIR)/ipxe.cfg $(FILES_IPXE)
 
