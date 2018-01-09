@@ -4,7 +4,7 @@ PXELINUX_CFG            += $(CONFIGDIR)/tinycore/tinycore.cfg
 SYSLINUX_CFG            += $(CONFIGDIR)/tinycore/tinycore.cfg
 TINYCORE_FILES		=  boot/tinycore/@VERSION@/core.gz \
 			   boot/tinycore/@VERSION@/vmlinuz
-CLEANFILES		+= $(TINYCORE_FILES) cde/
+CLEANFILES		+= cde/
 DOWNLOAD_FILES          += $(TINYCORE_FILES)
 
 

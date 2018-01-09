@@ -4,7 +4,6 @@ PXELINUX_CFG            += $(CONFIGDIR)/dban/dban.cfg
 SYSLINUX_CFG            += $(CONFIGDIR)/dban/dban.cfg
 FILES_DBAN		 = boot/dban/dban.bzi
 DOWNLOAD_FILES          += $(FILES_DBAN)
-CLEANFILES		+= $(FILES_DBAN) tmp/dban-@VERSION@_i586
 
 
 $(CONFIGDIR)/dban/dban.cfg: Makefile $(DISTRODIR)/dban/dban.cfg

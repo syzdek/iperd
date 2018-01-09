@@ -3,7 +3,6 @@ ISOLINUX_CFG            += $(CONFIGDIR)/ipxe/ipxe.cfg
 SYSLINUX_CFG            += $(CONFIGDIR)/ipxe/ipxe.cfg
 FILES_IPXE		 = boot/ipxe/ipxe.krn
 DOWNLOAD_FILES          += $(FILES_IPXE)
-CLEANFILES		+= $(FILES_IPXE)
 
 
 $(CONFIGDIR)/ipxe/ipxe.cfg: Makefile $(DISTRODIR)/ipxe/ipxe.cfg

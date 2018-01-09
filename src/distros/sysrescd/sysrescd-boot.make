@@ -10,7 +10,6 @@ DOWNLOAD_FILES          += boot/sysrescd/@VERSION@/sysrcd.dat \
 			   boot/sysrescd/@VERSION@/initrd.cgz \
 			   boot/sysrescd/@VERSION@/initram.igz \
 			   boot/sysrescd/@VERSION@/scsi.cgz
-CLEANFILES		+= boot/sysrescd tmp/sysrescd-@VERSION@
 
 
 $(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.pxe.cfg: Makefile $(DISTRODIR)/sysrescd/sysrescd.pxe.cfg

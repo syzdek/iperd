@@ -65,6 +65,8 @@ PREREQ_BIN		= \
 			  ldlinux.e64
 CLEANFILES		= \
 			  $(PREREQ_BIN) \
+			  boot \
+			  EFI \
 			  images \
 			  syslinux
 
