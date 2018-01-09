@@ -184,7 +184,7 @@ fi
 
 # adjust options
 if test -z "${TMPFILE}";then
-   TMPFILE="${FILE}.$$"
+   TMPFILE="${FILE}.tmp"
 fi
 if test ! -z "${HASH_FILE}";then
    if test -f "${HASH_FILE}";then
