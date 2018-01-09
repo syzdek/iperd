@@ -14,13 +14,9 @@ $(CONFIGDIR)/memtest/memtest.cfg: Makefile $(DISTRODIR)/memtest/memtest.cfg
 boot/memtest/memtest.bin:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
-	wget \
-	   -O "$(@).gz" \
-	   "$(MIRROR_MEMTEST)/@VERSION@/memtest86+-@VERSION@.bin.gz" \
-	   || { rm -f "$(@)"; exit 1; }
-	@gzip -d "$(@).gz"
+	./src/scripts/download.sh \
+	   tmp/boot/memtest/memtest86-@VERSION@.bin.gz \
+	   $(MIRROR_MEMTEST)/@VERSION@/memtest86+-@VERSION@.bin.gz
+	gzip -cd tmp/boot/memtest/memtest86-@VERSION@.bin.gz > $(@)
 	@touch "$(@)"
-
-
-memtest: $(CONFIGDIR)/memtest.cfg boot/memtest/memtest.bin
 
