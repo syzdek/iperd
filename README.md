@@ -63,34 +63,34 @@ Directory Structure
 Compatibility
 =============
 
-   +---------------------------+---------------+---------------+---------------+
-   |                           |   USB Boot    |    CD Boot    |   Net Boot    |
-   |        Boot Images        | BIOS     UEFI | BIOS     UEFI | BIOS     UEFI |
-   |                           +---------------+---------------+---------------+
-   |                           |x86|_64|x86|_64|x86|_64|x86|_64|x86|_64|x86|_64|
-   +---------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
-   | Alpine Linux 3.6.2        | X | X |   |   |   |   |   |   |   |   |   |   |
-   | Alpine Linux 3.7.0        | X | X |   |   |   |   |   |   |   |   |   |   |
-   | CentOS 6 (x86_64)         |   | X |   |   |   | X |   |   |   | X |   |   |
-   | CentOS 7 (x86_64)         |   | X |   |   |   | X |   |   |   | X |   |   |
-   | Debian "Wheezy"           | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Debian "Jessie"           | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Debian "Stretch"          | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Slackware Linux 14.0      | X | X | X | X | X | X |   |   | X | X |   |   |
-   | Slackware Linux 14.1      | X | X | X | X | X | X |   |   | X | X | X | X |
-   | Slackware Linux 14.2      | X | X | X | X | X | X |   |   | X | X | X | X |
-   | System Rescue CD 4.9.4    | X | X |   |   | X | X |   |   |   |   |   |   |
-   | System Rescue CD 4.9.5    | X | X |   |   | X | X |   |   |   |   |   |   |
-   | System Rescue CD 5.1.2    | X | X |   |   | X | X |   |   |   |   |   |   |
-   | TinyCore 7.2              | X |   |   |   | X |   |   |   |   |   |   |   |
-   | TinyCore 8.2.1            | X |   |   |   | X |   |   |   |   |   |   |   |
-   | Ubuntu "Precise Pangolin" | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Ubuntu "Trusty Tahr"      | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Ubuntu "Xenial Xerus"     | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Ubuntu "Yakkety Yak"      | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Ubuntu "Artful Aardvark"  | X | X |   |   | X | X |   |   |   |   |   |   |
-   | Ubuntu "Zesty Zapus"      | X | X |   |   | X | X |   |   |   |   |   |   |
-   +---------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
+    +---------------------------+---------------+---------------+---------------+
+    |                           |   USB Boot    |    CD Boot    |   Net Boot    |
+    |        Boot Images        | BIOS     UEFI | BIOS     UEFI | BIOS     UEFI |
+    |                           +---------------+---------------+---------------+
+    |                           |x86|_64|x86|_64|x86|_64|x86|_64|x86|_64|x86|_64|
+    +---------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
+    | Alpine Linux 3.6.2        | X | X |   |   |   |   |   |   |   |   |   |   |
+    | Alpine Linux 3.7.0        | X | X |   |   |   |   |   |   |   |   |   |   |
+    | CentOS 6 (x86_64)         |   | X |   |   |   | X |   |   |   | X |   |   |
+    | CentOS 7 (x86_64)         |   | X |   |   |   | X |   |   |   | X |   |   |
+    | Debian "Wheezy"           | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Debian "Jessie"           | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Debian "Stretch"          | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Slackware Linux 14.0      | X | X | X | X | X | X |   |   | X | X |   |   |
+    | Slackware Linux 14.1      | X | X | X | X | X | X |   |   | X | X | X | X |
+    | Slackware Linux 14.2      | X | X | X | X | X | X |   |   | X | X | X | X |
+    | System Rescue CD 4.9.4    | X | X |   |   | X | X |   |   |   |   |   |   |
+    | System Rescue CD 4.9.5    | X | X |   |   | X | X |   |   |   |   |   |   |
+    | System Rescue CD 5.1.2    | X | X |   |   | X | X |   |   |   |   |   |   |
+    | TinyCore 7.2              | X |   |   |   | X |   |   |   |   |   |   |   |
+    | TinyCore 8.2.1            | X |   |   |   | X |   |   |   |   |   |   |   |
+    | Ubuntu "Precise Pangolin" | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Ubuntu "Trusty Tahr"      | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Ubuntu "Xenial Xerus"     | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Ubuntu "Yakkety Yak"      | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Ubuntu "Artful Aardvark"  | X | X |   |   | X | X |   |   |   |   |   |   |
+    | Ubuntu "Zesty Zapus"      | X | X |   |   | X | X |   |   |   |   |   |   |
+    +---------------------------+---+---+---+---+---+---+---+---+---+---+---+---+
 
 
 Configuring and Downloading Images
