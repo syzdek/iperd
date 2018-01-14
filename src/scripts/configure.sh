@@ -156,7 +156,7 @@ configure_all()
             list_vers_opts ${DISTRODIR}/${DISTRO}/option |tail -1
          fi
       fi
-   done |awk '{print$1}' |sort -n > ${CONFIG}.new.tmp
+   done |awk '{print$1}' |sed -e 's/^/#/g' |sort -n > ${CONFIG}.new.tmp
    mv ${CONFIG}.new.tmp ${CONFIG}.new
 
    # confirm change
@@ -276,7 +276,7 @@ configure_image()
 
    # determine option file
    if test -f ${DISTRODIR}/${DISTRO}/option;then
-      COUNT=$(grep "^${DISTRO}-" ${CONFIG}.new |wc -l)
+      COUNT=$(grep "^#${DISTRO}-" ${CONFIG}.new |wc -l)
       if test $COUNT -eq 0;then
          SKIP=on
       else
@@ -319,9 +319,9 @@ configure_image()
    fi
 
    # update configuration
-   grep -v "^${DISTRO}-" "${CONFIG}.new" > "${CONFIG}.new.tmp"
+   grep -v "^#${DISTRO}-" "${CONFIG}.new" > "${CONFIG}.new.tmp"
    for IMAGE in ${RESULT};do
-      echo $IMAGE >> "${CONFIG}.new.tmp"
+      echo "#$IMAGE" >> "${CONFIG}.new.tmp"
    done
    sort -n "${CONFIG}.new.tmp" > "${CONFIG}.new"
 }
@@ -393,7 +393,7 @@ list_vers_opts()
 
    # generate list of options
    for VERS in $(list_vers ${OPTFILE});do
-      grep "^${VERS}$" "${CONFIG}.new" > /dev/null 2> /dev/null
+      grep "^#${VERS}$" "${CONFIG}.new" > /dev/null 2> /dev/null
       if test $? -eq 0;then
          STATE=on
       else
@@ -415,7 +415,7 @@ prereqs()
 
    rm -f "${CONFIG}.new" || exit 1
    if test -f "${CONFIG}";then
-      egrep -i "^[[:space:]]{0,}[a-z0-9_]{1,}-" "${CONFIG}" \
+      egrep -i "^#[a-z0-9_]{1,}-" "${CONFIG}" \
          |awk '{print$1}' \
          |sort \
          |uniq \
