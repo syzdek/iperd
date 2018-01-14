@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #   IP Engineering Rescue Disk
-#   Copyright (C) 2017 David M. Syzdek <david@syzdek.net>.
+#   Copyright (C) 2017, 2018 David M. Syzdek <david@syzdek.net>.
 #
 #   @SYZDEK_BSD_LICENSE_START@
 #
@@ -35,133 +35,310 @@
 
 # set base directory
 ACTION="${1,,}"
-BASEDIR="${2:-$(pwd)}"
 
 
 # set defaults
 PROG_NAME="$(basename "${0}")"
+BASEDIR="$(dirname "${0}")/../../"
 DISTRODIR="${DISTRODIR:-${BASEDIR}/src/distros}"
 CONFIGDIR="${CONFIGDIR:-${BASEDIR}/var/config}"
 CONFIG="${CONFIG:-${CONFIGDIR}/iperd.conf}"
-OPTIONS="${OPTIONS:-${CONFIGDIR}/iperd.opts}"
 
+
+# set exit codes to trigger specific xargs exit codes
+DIALOG_OK=0        # xargs => 0
+DIALOG_CANCEL=255  # xargs => 124
+DIALOG_ESC=255     # xargs => 124
+DIALOG_EXTRA=126   # xargs => 126
+DIALOG_HELP=0      # xargs => 0
+export DIALOG_OK DIALOG_CANCEL DIALOG_HELP DIALOG_EXTRA DIALOG_ESC
+
+
+###############
+#             #
+#  Functions  #
+#             #
+###############
 
 cleanup()
 {
-   rm -f "${OPTIONS}"
    rm -f "${CONFIGDIR}/*.new"
+   rm -f "${CONFIG}.new"
+   rm -f "${CONFIG}.new.tmp"
 }
-trap cleanup EXIT
 
 
 configure()
 {
-   # remove stale files
-   rm -f "${OPTIONS}"
-   rm -f "${CONFIG}.dist"
-   rm -f "${CONFIG}.vers"
+   # enter main loop
+   CONTINUE=0
+   while test ${CONTINUE} -eq 0;do
 
-
-   # prepare options
-   mkdir -p "$(dirname "${OPTIONS}")"
-   cat \
-      ${DISTRODIR}/*/options \
-      ${DISTRODIR}/*/option \
-      |sort \
-      > "${OPTIONS}" \
-      || exit 1
-   sed -i \
-      -e 's/[[:space:]]\{2,\}/ /g' \
-      -e 's/^ //g' \
-      -e 's/ $//g' \
-      -e 's/ @[[:alnum:][:punct:]]\{1,\}@$//g' \
-      -e 's/^\(\([[:alnum:][:punct:]]\{1,\}\) [[:print:]]\{1,\}$\)/\1 @\2@/g' \
-      "${OPTIONS}" \
-      || exit 1
-   if test -f "${CONFIG}";then
-      for IMAGE in $(cat "${CONFIG}");do
-         sed -i -e "s/@${IMAGE}@/on/g" "${OPTIONS}"
-      done
-      sed -i -e "s/@[-.a-zA-Z0-9]\{1,\}@/off/g" "${OPTIONS}"
-   fi
-   sed \
-      -i \
-      -e "s/@[-.a-zA-Z0-9]\{1,\}@/on/g" \
-      -e "s/^[[:space:]]\{1,\}//g" \
-      -e "s/[[:space:]]\{2,\}/ /g" \
-      "${OPTIONS}"
-
-
-   # prompt for OS distributions
-   egrep '^[a-zA-Z0-9]{1,} ' "${OPTIONS}" \
-      |xargs dialog \
-         --no-tags \
-         --title "Distros" \
-         --backtitle "Select distros to install." \
-         --checklist "Choose distros to install:" \
+      # display main menu
+      exec 3>&1
+      #"disk"      "Change disk image options" \
+      RESULT="$(echo "" | xargs dialog \
+         --title " Main Menu " \
+         --backtitle "IP Engineering Rescue Disk Setup" \
+         --ok-label "Select" \
+         --extra-button \
+         --extra-label "Save" \
+         --cancel-label "Exit" \
+         --menu "Select item to configure:" \
          20 70 13 \
-         2> "${CONFIG}.dist.new" \
-         || { echo " "; exit 1; }
-   for DISTRO in $(cat "${CONFIG}.dist.new");do
-      echo "${DISTRO}"
-   done |sort -n > "${CONFIG}.dist"
-   rm -f "${CONFIG}.dist.new"
+         "images"    "Select individual boot images" \
+         "all"       "Select all available images" \
+         "defaults"  "Load defaults" \
+         "revert"    "Revert changes" \
+         2>&1 1>&3)"
+      RC=$?
+      exec 3>&-
 
-
-   # prompt for OS distribution versions
-   for DISTRO in $(cat "${CONFIG}.dist");do
-      echo -n ' ' >> "${CONFIG}.vers.new"
-      COUNT=$(egrep "^${DISTRO}-" "${OPTIONS}" |wc -l)
-      if test $COUNT == 1;then
-         egrep "^${DISTRO}-" "${OPTIONS}" \
-            |awk '{print$1}' \
-            >> "${CONFIG}.vers.new"
-      elif test -f ${DISTRODIR}/${DISTRO}/option;then
-         egrep "^${DISTRO}-" "${OPTIONS}" \
-            |xargs dialog \
-               --no-tags \
-               --title "Boot Image" \
-               --backtitle "Select image to install." \
-               --radiolist "Choose image to install:" \
-               20 70 13 \
-               2>> "${CONFIG}.vers.new" \
-               || { echo " "; exit 1; }
+      # inteprets selection
+      if test $RC -eq 124;then # (exit)
+         dialog \
+            --title " Exit Setup " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --defaultno \
+            --yesno "Exit without saving?" \
+            6 30
+         if test $? -eq 0;then
+            CONTINUE=1
+         else
+            CONTINUE=0
+         fi
+      elif test $RC -eq 126;then # (save)
+         deps
+         CONTINUE=1
+      elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
+         configure_disk
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "ximages";then
+         configure_distros
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "xall";then
+         configure_all
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "xdefaults";then
+         cat /dev/null > ${CONFIG}.new
+         dialog \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --no-tags \
+            --msgbox "Defaults loaded." \
+            6 30
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "xrevert";then
+         prereqs
+         dialog \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --no-tags \
+            --msgbox "Changes reverted." \
+            6 30
+         CONTINUE=0
       else
-         egrep "^${DISTRO}-" "${OPTIONS}" \
-            |xargs dialog \
-               --no-tags \
-               --title "Boot Images" \
-               --backtitle "Select images to install." \
-               --checklist "Choose images to install:" \
-               20 70 13 \
-               2>> "${CONFIG}.vers.new" \
-               || { echo " "; exit 1; }
+         CONTINUE=0
       fi
    done
-   for VERS in $(cat "${CONFIG}.vers.new");do
-      echo "${VERS}"
-   done |sort -n > "${CONFIG}.vers"
-   rm -f "${CONFIG}.vers.new"
+
+   return 0;
+}
 
 
-   # update cached config
-   rm -f "${CONFIG}"
-   cat "${CONFIG}.dist" "${CONFIG}.vers" > "${CONFIG}"
+configure_all()
+{
+   # enable all options
+   for DISTRO in $(list_distros);do
+      if test -f ${DISTRODIR}/${DISTRO}/options;then
+         list_vers ${DISTRODIR}/${DISTRO}/options 
+      elif test -f ${DISTRODIR}/${DISTRO}/option;then
+         list_vers_opts ${DISTRODIR}/${DISTRO}/option |grep ' on$'
+         if test $? -ne 0;then
+            list_vers_opts ${DISTRODIR}/${DISTRO}/option |tail -1
+         fi
+      fi
+   done |awk '{print$1}' |sort -n > ${CONFIG}.new.tmp
+   mv ${CONFIG}.new.tmp ${CONFIG}.new
+
+   # confirm change
+   dialog \
+      --backtitle "IP Engineering Rescue Disk Setup" \
+      --no-tags \
+      --msgbox "All images configured." \
+      6 30
+}
 
 
-   # generate dependencies
-   deps
+configure_disk()
+{
+   # enter main loop
+   CONTINUE=0
+   while test ${CONTINUE} -eq 0;do
+
+      # display main menu
+      exec 3>&1
+      RESULT="$(echo "" | xargs dialog \
+         --title " Disk Options " \
+         --backtitle "IP Engineering Rescue Disk Setup" \
+         --ok-label "Change" \
+         --cancel-label "Back" \
+         --menu "Select option to configure:" \
+         20 70 13 \
+         "usb"       "USB partition type (hybrid)" \
+         "size"      "USB disk image size (2048 MB)" \
+         "iso"       "USB partition type (legacy)" \
+         2>&1 1>&3)"
+      RC=$?
+      exec 3>&-
+
+      # inteprets selection
+      if test $RC -eq 124;then # (exit)
+         CONTINUE=1
+      elif test $RC -eq 0 && test "x${RESULT}" == "xusb";then
+         exec 3>&1
+         RESULT="$(echo "" | xargs dialog \
+            --title " USB Disk Partition Type " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --radiolist "Choose parition type:" \
+            20 70 13 \
+            "uefi" "UEFI" off \
+            "legacy" "Legacy BIOS" off \
+            "hybrid" "Hybrid (UEFI and Legacy BIOS)" off \
+            2>&1 1>&3)"
+         RC=$?
+         exec 3>&-
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "xsize";then
+         exec 3>&1
+         RESULT="$(echo "" | xargs dialog \
+            --title " USB Disk Image Size " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --inputbox "Enter size of disk image file:" \
+            9 40 2048 \
+            2>&1 1>&3)"
+         RC=$?
+         exec 3>&-
+         CONTINUE=0
+      elif test $RC -eq 0 && test "x${RESULT}" == "xiso";then
+         exec 3>&1
+         RESULT="$(echo "" | xargs dialog \
+            --title " ISO Disk Type " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --radiolist "Choose disk image type:" \
+            20 70 13 \
+            "uefi" "UEFI" off \
+            "legacy" "Legacy BIOS" off \
+            "hybrid" "Hybrid (UEFI and Legacy BIOS)" off \
+            2>&1 1>&3)"
+         RC=$?
+         exec 3>&-
+         CONTINUE=0
+      else
+         CONTINUE=0
+      fi
+   done
+}
+
+
+configure_distros()
+{
+   # loop until exit
+   CONTINUE=0
+   while test $CONTINUE -eq 0;do
+      # prompt for OS distributions
+      exec 3>&1
+      RESULT="$(list_distros \
+         |xargs dialog \
+            --title " Boot Distributions " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --no-tags \
+            --ok-label "Configure" \
+            --cancel-label "Back" \
+            --menu "Choose distributions to install:" \
+            20 70 13 \
+            2>&1 1>&3)"
+      RC=$?
+      exec 3>&-
+
+      # intepret the result
+      if test $RC -eq 0;then
+         configure_image "${RESULT}"
+         CONTINUE=0
+      else
+         CONTINUE=1
+      fi
+   done
+}
+
+
+configure_image()
+{
+   DISTRO="${1}"
+
+   # determine option file
+   if test -f ${DISTRODIR}/${DISTRO}/option;then
+      COUNT=$(grep "^${DISTRO}-" ${CONFIG}.new |wc -l)
+      if test $COUNT -eq 0;then
+         SKIP=on
+      else
+         SKIP=off
+      fi
+      exec 3>&1
+      RESULT="$(list_vers_opts ${DISTRODIR}/${DISTRO}/option \
+         |xargs dialog \
+            --no-tags \
+            --title " Boot Images " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --radiolist "Choose image to install:" \
+            20 70 13 \
+            "____SKIP____" "Do not install" $SKIP \
+            2>&1 1>&3)"
+      RC=$?
+      exec 3>&-
+   elif test -f ${DISTRODIR}/${DISTRO}/options;then
+      exec 3>&1
+      RESULT="$(list_vers_opts ${DISTRODIR}/${DISTRO}/options \
+         |xargs dialog \
+            --no-tags \
+            --title " Boot Images " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --checklist "Choose images to install:" \
+            20 70 13 \
+            2>&1 1>&3)"
+      RC=$?
+      exec 3>&-
+   else
+      return 0
+   fi
+
+   # test result
+   if test $RC -ne 0;then
+      return 0;
+   fi
+   if test "${RESULT}" == "____SKIP____";then
+      return 0;
+   fi
+
+   # update configuration
+   grep -v "^${DISTRO}-" "${CONFIG}.new" > "${CONFIG}.new.tmp"
+   for IMAGE in ${RESULT};do
+      echo $IMAGE >> "${CONFIG}.new.tmp"
+   done
+   sort -n "${CONFIG}.new.tmp" > "${CONFIG}.new"
 }
 
 
 deps()
 {
+   # save new config
+   mv "${CONFIG}.new" "${CONFIG}"
+
    # build Makefile configuration
-   for DISTRO in $(cat "${CONFIG}.dist");do
+   rm -f ${BASEDIR}/Makefile.config
+   for DISTRO in $(cut -d- -f1 "${CONFIG}" |sort |uniq);do
       if test -f "${DISTRODIR}/${DISTRO}/make.header";then
          cat "${DISTRODIR}/${DISTRO}/make.header"
       fi
-      for VERS in $(egrep "^${DISTRO}-" "${CONFIG}.vers");do
+      for VERS in $(egrep "^${DISTRO}-" "${CONFIG}");do
          VERSION=$(echo "${VERS}" |cut -d- -f2)
          CODENAME=$(echo "${VERS}" |cut -d- -f3)
          ARCH=$(echo "${VERS}" |cut -d- -f4)
@@ -182,16 +359,96 @@ deps()
 }
 
 
+list_distros()
+{
+   egrep '^[[:space:]]{0,}[a-zA-Z0-9]{1,}[[:space:]]' ${DISTRODIR}/*/option* \
+      |sed \
+         -e 's/^[a-zA-Z0-9/]\{1,\}://g' \
+         -e 's/ @[[:alnum:][:punct:]]\{1,\}@$//g' \
+         -e "s/[[:space:]]\{2,\}/ /g" \
+         -e 's/^ //g' \
+         -e 's/ $//g' \
+      |cut -d: -f2 \
+      |sort -n \
+      |uniq
+}
+
+
+list_vers()
+{
+   egrep '^[[:space:]]{0,}[a-zA-Z0-9]{1,}-' "${1}" \
+      |sed \
+         -e 's/[[:space:]]\{1,\}/ /g' \
+         -e 's/[-a-z0-9_/]\{1,\}: //g' \
+         -e 's/^ //g' \
+      |cut -d\  -f1 \
+      |sort -n \
+      |uniq
+}
+
+
+list_vers_opts()
+{
+   OPTFILE="${1}"
+
+   # generate list of options
+   for VERS in $(list_vers ${OPTFILE});do
+      grep "^${VERS}$" "${CONFIG}.new" > /dev/null 2> /dev/null
+      if test $? -eq 0;then
+         STATE=on
+      else
+         STATE=off
+      fi
+      egrep "^[[:space:]]{0,}${VERS}[[:space:]]" ${OPTFILE} |sed -e "s/$/ ${STATE}/g"
+   done \
+      |sed \
+         -e "s/[[:space:]]\{1,\}/ /g" \
+         -e 's/^ //g' \
+        -e 's/ $//g' \
+      |sort -n
+}
+
+
+prereqs()
+{
+   trap cleanup EXIT
+
+   rm -f "${CONFIG}.new" || exit 1
+   if test -f "${CONFIG}";then
+      egrep -i "^[[:space:]]{0,}[a-z0-9_]{1,}-" "${CONFIG}" \
+         |awk '{print$1}' \
+         |sort \
+         |uniq \
+         > "${CONFIG}.new"
+   else
+      touch "${CONFIG}.new" || exit 1
+   fi
+
+   if test ! -f "${CONFIG}.new";then
+      exit 1
+   fi
+}
+
+
+####################
+#                  #
+#  Body of Script  #
+#                  #
+####################
+
+
 # prompt for images to install
 case "${ACTION}" in
 
    configure)
+   prereqs
    configure
    exit $?
    ;;
 
 
    deps)
+   prereqs
    deps
    exit $?
    ;;
