@@ -85,6 +85,7 @@ configure()
    while test true;do
 
       # display main menu
+      #   "disk"      "Change disk image options" \
       exec 3>&1
       RESULT="$(echo "" | xargs dialog \
          --title " Main Menu " \
@@ -95,7 +96,6 @@ configure()
          --cancel-label "Exit" \
          --menu "Select item to configure:" \
          20 70 13 \
-         "disk"      "Change disk image options" \
          "images"    "Select individual boot images" \
          "all"       "Select all available images" \
          "defaults"  "Load defaults" \
