@@ -71,8 +71,7 @@ cleanup()
 configure()
 {
    # enter main loop
-   CONTINUE=0
-   while test ${CONTINUE} -eq 0;do
+   while test true;do
 
       # display main menu
       exec 3>&1
@@ -103,22 +102,17 @@ configure()
             --yesno "Exit without saving?" \
             6 30
          if test $? -eq 0;then
-            CONTINUE=1
-         else
-            CONTINUE=0
+            return 0
          fi
       elif test $RC -eq 126;then # (save)
          deps
-         CONTINUE=1
+         return 0
       elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
          configure_disk
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "ximages";then
          configure_distros
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "xall";then
          configure_all
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "xdefaults";then
          cat /dev/null > ${CONFIG}.new
          dialog \
@@ -126,7 +120,6 @@ configure()
             --no-tags \
             --msgbox "Defaults loaded." \
             6 30
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "xrevert";then
          prereqs
          dialog \
@@ -134,9 +127,6 @@ configure()
             --no-tags \
             --msgbox "Changes reverted." \
             6 30
-         CONTINUE=0
-      else
-         CONTINUE=0
       fi
    done
 
@@ -171,8 +161,7 @@ configure_all()
 configure_disk()
 {
    # enter main loop
-   CONTINUE=0
-   while test ${CONTINUE} -eq 0;do
+   while test true;do
 
       # display main menu
       exec 3>&1
@@ -192,7 +181,7 @@ configure_disk()
 
       # inteprets selection
       if test $RC -eq 124;then # (exit)
-         CONTINUE=1
+         return 0;
       elif test $RC -eq 0 && test "x${RESULT}" == "xusb";then
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
@@ -206,7 +195,6 @@ configure_disk()
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "xsize";then
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
@@ -217,7 +205,6 @@ configure_disk()
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
-         CONTINUE=0
       elif test $RC -eq 0 && test "x${RESULT}" == "xiso";then
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
@@ -231,9 +218,6 @@ configure_disk()
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
-         CONTINUE=0
-      else
-         CONTINUE=0
       fi
    done
 }
@@ -242,8 +226,7 @@ configure_disk()
 configure_distros()
 {
    # loop until exit
-   CONTINUE=0
-   while test $CONTINUE -eq 0;do
+   while test true;do
       # prompt for OS distributions
       exec 3>&1
       RESULT="$(list_distros \
@@ -260,11 +243,10 @@ configure_distros()
       exec 3>&-
 
       # intepret the result
-      if test $RC -eq 0;then
-         configure_image "${RESULT}"
-         CONTINUE=0
+      if test $RC -ne 0;then
+         return 0;
       else
-         CONTINUE=1
+         configure_image "${RESULT}"
       fi
    done
 }
