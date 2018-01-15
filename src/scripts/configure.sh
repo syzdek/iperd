@@ -437,8 +437,8 @@ case "${ACTION}" in
 
 
    *)
-      echo "Usage: ${PROG_NAME} [ configure | deps ]" 1>&2
-      exit 1
+   echo "Usage: ${PROG_NAME} [ configure | deps ]" 1>&2
+   exit 1
    ;;
 esac
 
