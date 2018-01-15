@@ -423,16 +423,16 @@ prereqs()
 case "${ACTION}" in
 
    configure)
-   prereqs
-   configure
-   exit $?
+   prereqs   || exit 1
+   configure || exit 1
+   exit 0
    ;;
 
 
    deps)
-   prereqs
-   deps
-   exit $?
+   prereqs || exit 1
+   deps    || exit 1
+   exit 0
    ;;
 
 
