@@ -131,7 +131,7 @@ Makefile.local:
 	@touch "$(@)"
 
 Makefile.config: $(SCRIPTDIR)/configure.sh
-	bash ./$(SCRIPTDIR)/configure.sh configure
+	bash ./$(SCRIPTDIR)/configure.sh deps
 	@touch "$(@)"
 
 
