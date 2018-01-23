@@ -307,6 +307,7 @@ download: $(PREREQ_CNF) $(DOWNLOAD_FILES)
 
 
 configure:
+	@mkdir -p var/config
 	bash ./$(SCRIPTDIR)/configure.sh configure
 
 
