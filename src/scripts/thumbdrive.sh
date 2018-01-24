@@ -139,7 +139,7 @@ set -x
    # add boot code to MBR
    dd \
       bs=440 count=1 conv=notrunc \
-      if=~/syslinux-6.03/efi64/mbr/gptmbr.bin \
+      if="${SOURCE}/syslinux/gptmbr.bin" \
       of="${DEVICE}" \
       || exit 1
 
