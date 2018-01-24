@@ -377,11 +377,11 @@ deps()
 
    # build Makefile configuration
    rm -f ${BASEDIR}/Makefile.config
-   for DISTRO in $(cut -d- -f1 "${CONFIG}" |sort |uniq);do
+   for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
       if test -f "${DISTRODIR}/${DISTRO}/make.header";then
          cat "${DISTRODIR}/${DISTRO}/make.header"
       fi
-      for VERS in $(egrep "^${DISTRO}-" "${CONFIG}");do
+      for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
          VERSION=$(echo "${VERS}" |cut -d- -f2)
          CODENAME=$(echo "${VERS}" |cut -d- -f3)
          ARCH=$(echo "${VERS}" |cut -d- -f4)
