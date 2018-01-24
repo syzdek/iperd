@@ -53,7 +53,7 @@ fi
 
 # set missing defaults
 CONFIG_USB_PART="${CONFIG_USB_PART:-hybrid}"
-CONFIG_USB_SIZE="${CONFIG_USB_SIZE:-2048}"
+CONFIG_USB_SIZE="${CONFIG_USB_SIZE:-1900}"
 CONFIG_ISO_PART="${CONFIG_ISO_PART:-mbr}"
 
 
@@ -85,7 +85,6 @@ configure()
    while test true;do
 
       # display main menu
-      #   "disk"      "Change disk image options" \
       exec 3>&1
       RESULT="$(echo "" | xargs dialog \
          --title " Main Menu " \
@@ -96,6 +95,7 @@ configure()
          --cancel-label "Exit" \
          --menu "Select item to configure:" \
          20 70 13 \
+         "disk"      "Change disk image options" \
          "images"    "Select individual boot images" \
          "all"       "Select all available images" \
          "defaults"  "Load defaults" \
@@ -377,28 +377,33 @@ deps()
 
    # build Makefile configuration
    rm -f ${BASEDIR}/Makefile.config
-   for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
-      if test -f "${DISTRODIR}/${DISTRO}/make.header";then
-         cat "${DISTRODIR}/${DISTRO}/make.header"
-      fi
-      for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
-         VERSION=$(echo "${VERS}" |cut -d- -f2)
-         CODENAME=$(echo "${VERS}" |cut -d- -f3)
-         ARCH=$(echo "${VERS}" |cut -d- -f4)
-         if test -f "${DISTRODIR}/${DISTRO}/make.boot";then
-            sed \
-               -e "s/@VERSION@/${VERSION}/g" \
-               -e "s/@CODENAME@/${CODENAME}/g" \
-               -e "s/@DISTRO@/${DISTRO}/g" \
-               -e "s/@ARCH@/${ARCH}/g" \
-               -e "s/@LABEL@/${LABEL}/g" \
-               "${DISTRODIR}/${DISTRO}/make.boot"
+   {
+      echo "ISOTYPE	?= ${CONFIG_ISO_PART}"
+      echo "PARTTYPE	?= ${CONFIG_USB_PART}"
+      echo "PARTSIZE	?= ${CONFIG_USB_SIZE}M"
+      for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
+         if test -f "${DISTRODIR}/${DISTRO}/make.header";then
+            cat "${DISTRODIR}/${DISTRO}/make.header"
          fi
-      done
-      if test -f "${DISTRODIR}/${DISTRO}/make.footer";then
-         cat "${DISTRODIR}/${DISTRO}/make.footer"
-      fi
-   done > ${BASEDIR}/Makefile.config
+         for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
+            VERSION=$(echo "${VERS}" |cut -d- -f2)
+            CODENAME=$(echo "${VERS}" |cut -d- -f3)
+            ARCH=$(echo "${VERS}" |cut -d- -f4)
+            if test -f "${DISTRODIR}/${DISTRO}/make.boot";then
+               sed \
+                  -e "s/@VERSION@/${VERSION}/g" \
+                  -e "s/@CODENAME@/${CODENAME}/g" \
+                  -e "s/@DISTRO@/${DISTRO}/g" \
+                  -e "s/@ARCH@/${ARCH}/g" \
+                  -e "s/@LABEL@/${LABEL}/g" \
+                  "${DISTRODIR}/${DISTRO}/make.boot"
+            fi
+         done
+         if test -f "${DISTRODIR}/${DISTRO}/make.footer";then
+            cat "${DISTRODIR}/${DISTRO}/make.footer"
+         fi
+      done 
+   } >  ${BASEDIR}/Makefile.config
 }
 
 
