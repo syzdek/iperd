@@ -1,0 +1,132 @@
+#
+#   IP Engineering Rescue Disk
+#   Copyright (C) 2017 David M. Syzdek <david@syzdek.net>.
+#
+#   @SYZDEK_BSD_LICENSE_START@
+#
+#   Redistribution and use in source and binary forms, with or without
+#   modification, are permitted provided that the following conditions are
+#   met:
+#
+#      * Redistributions of source code must retain the above copyright
+#        notice, this list of conditions and the following disclaimer.
+#      * Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#      * Neither the name of David M. Syzdek nor the
+#        names of its contributors may be used to endorse or promote products
+#        derived from this software without specific prior written permission.
+#
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+#   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DAVID M. SYZDEK BE LIABLE FOR
+#   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+#   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+#   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+#   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+#   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+#   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+#   SUCH DAMAGE.
+#
+#   @SYZDEK_BSD_LICENSE_END@
+#
+
+
+SYSLINUX_VERSION	?= 6.04-pre1
+MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
+
+
+syslinux/isolinux.bin.mod: $(PREREQ_CNF)
+	cp syslinux/isolinux.bin "$(@)"
+	@touch "$(@)"
+
+
+tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
+	./src/scripts/download.sh \
+	   tmp/src/syslinux-$(SYSLINUX_VERSION).tar.xz \
+	   $(MIRROR_SYSLINUX)
+	cd tmp/src && tar -xf syslinux-$(SYSLINUX_VERSION).tar.xz
+	touch $(@)
+
+
+syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
+	rm -Rf syslinux
+	rm -Rf EFI
+	cd tmp/src/syslinux-$(SYSLINUX_VERSION); \
+	   make -s install INSTALLROOT="$(PWD)/tmp/syslinux" \
+	   || { rm -Rf tmp/src/syslinux-$(SYSLINUX_VERSION); exit 1; }
+	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
+	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
+	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
+	cp $(SYSLINDIR)/f1.txt                              syslinux/
+	cp $(SYSLINDIR)/f2.txt                              syslinux/
+	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/
+	cp $(SYSLINDIR)/efi32/pxelinux.cfg                  syslinux/efi32/
+	cp $(SYSLINDIR)/efi64/pxelinux.cfg                  syslinux/efi64/
+	cp /usr/share/hwdata/pci.ids                        syslinux/
+	cp /lib/modules/$$(uname -r)/modules.alias          syslinux/modules.als
+	@touch "$(@)"
+
+
+EFI/BOOT/syslia32.cfg: src/syslinux/syslia32.cfg
+	@mkdir -p $$(dirname $(@))
+	cp src/syslinux/syslia32.cfg $(@)
+	@touch $(@)
+
+
+EFI/BOOT/syslx64.cfg: src/syslinux/syslx64.cfg
+	@mkdir -p $$(dirname $(@))
+	cp src/syslinux/syslx64.cfg $(@)
+	@touch $(@)
+
+
+EFI/BOOT/BOOTX64.EFI EFI/BOOT/BOOTX64.EFI.0: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi64/syslinux.efi $(@)
+	@touch $(@)
+
+
+EFI/BOOT/BOOTIA32.EFI EFI/BOOT/BOOTIA32.EFI.0: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi32/syslinux.efi $(@)
+	@touch $(@)
+
+
+EFI/BOOT/ldlinux.e32 ldlinux.e32: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi32/ldlinux.e32 $(@)
+	@touch $(@)
+
+
+EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
+	@mkdir -p $$(dirname $(@))
+	cp syslinux/efi64/ldlinux.e64 $(@)
+	@touch $(@)
+
+
+syslinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(ISOLINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(ISOLINUX_CFG) > "$(@)"
+	@touch "$(@)"
+
+
+syslinux/pxelinux.cfg: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(PXELINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
+	@touch "$(@)"
+
+
+syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@rm -f "$(@)"
+	@mkdir -p syslinux
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(SYSLINUX_CFG) > $(@)'
+	@$(do_subst) $(SYSLINDIR)/common.cfg $(SYSLINUX_CFG) > "$(@)"
+	@touch "$(@)"
+
+
+# end of makefile

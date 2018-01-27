@@ -39,11 +39,6 @@ SCRIPTDIR		= src/scripts
 SYSLINDIR		= src/syslinux
 
 
-SYSLINUX_VERSION	?= 6.04-pre1
-#MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/6.xx/syslinux-$(SYSLINUX_VERSION).tar.xz
-MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
-
-
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
 DATE			= $(shell date +%Y-%m-%d)
 
@@ -156,6 +151,7 @@ NETBOOT_TFTP_PATH       ?= /
 NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
 NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
+include src/syslinux/Makefile.syslinux
 
 
 images/iperdboot.gpt.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
@@ -176,11 +172,6 @@ images/iperdboot.mbr.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t mbr -s "$(DISKSIZE)" "." "$(@)"
-	@touch "$(@)"
-
-
-syslinux/isolinux.bin.mod: $(PREREQ_CNF)
-	cp syslinux/isolinux.bin "$(@)"
 	@touch "$(@)"
 
 
@@ -210,93 +201,6 @@ thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
 
 
 images: images/iperdboot.$(DISKTYPE).img images/iperdboot.iso
-
-
-tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
-	./src/scripts/download.sh \
-	   tmp/src/syslinux-$(SYSLINUX_VERSION).tar.xz \
-	   $(MIRROR_SYSLINUX)
-	cd tmp/src && tar -xf syslinux-$(SYSLINUX_VERSION).tar.xz
-	touch $(@)
-
-
-syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
-	rm -Rf syslinux
-	rm -Rf EFI
-	cd tmp/src/syslinux-$(SYSLINUX_VERSION); \
-	   make -s install INSTALLROOT="$(PWD)/tmp/syslinux" \
-	   || { rm -Rf tmp/src/syslinux-$(SYSLINUX_VERSION); exit 1; }
-	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
-	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
-	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
-	cp $(SYSLINDIR)/f1.txt                              syslinux/
-	cp $(SYSLINDIR)/f2.txt                              syslinux/
-	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/
-	cp $(SYSLINDIR)/efi32/pxelinux.cfg                  syslinux/efi32/
-	cp $(SYSLINDIR)/efi64/pxelinux.cfg                  syslinux/efi64/
-	cp /usr/share/hwdata/pci.ids                        syslinux/
-	cp /lib/modules/$$(uname -r)/modules.alias          syslinux/modules.als
-	@touch "$(@)"
-
-
-EFI/BOOT/syslia32.cfg: src/syslinux/syslia32.cfg
-	@mkdir -p $$(dirname $(@))
-	cp src/syslinux/syslia32.cfg $(@)
-	@touch $(@)
-
-
-EFI/BOOT/syslx64.cfg: src/syslinux/syslx64.cfg
-	@mkdir -p $$(dirname $(@))
-	cp src/syslinux/syslx64.cfg $(@)
-	@touch $(@)
-
-
-EFI/BOOT/BOOTX64.EFI EFI/BOOT/BOOTX64.EFI.0: syslinux/iperd.dep
-	@mkdir -p $$(dirname $(@))
-	cp syslinux/efi64/syslinux.efi $(@)
-	@touch $(@)
-
-
-EFI/BOOT/BOOTIA32.EFI EFI/BOOT/BOOTIA32.EFI.0: syslinux/iperd.dep
-	@mkdir -p $$(dirname $(@))
-	cp syslinux/efi32/syslinux.efi $(@)
-	@touch $(@)
-
-
-EFI/BOOT/ldlinux.e32 ldlinux.e32: syslinux/iperd.dep
-	@mkdir -p $$(dirname $(@))
-	cp syslinux/efi32/ldlinux.e32 $(@)
-	@touch $(@)
-
-
-EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
-	@mkdir -p $$(dirname $(@))
-	cp syslinux/efi64/ldlinux.e64 $(@)
-	@touch $(@)
-
-
-syslinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(ISOLINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(ISOLINUX_CFG) > "$(@)"
-	@touch "$(@)"
-
-
-syslinux/pxelinux.cfg: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(PXELINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
-	@touch "$(@)"
-
-
-syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
-	@rm -f "$(@)"
-	@mkdir -p syslinux
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(SYSLINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(SYSLINUX_CFG) > "$(@)"
-	@touch "$(@)"
 
 
 syslinux: $(PREREQ_CNF)
