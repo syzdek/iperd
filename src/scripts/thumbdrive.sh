@@ -33,14 +33,13 @@
 #   @SYZDEK_BSD_LICENSE_END@
 #
 
+# +-=-=-=-=-=-+
+# |           |
+# |  Headers  |
+# |           |
+# +-=-=-=-=-=-+
+
 PROG_NAME="$(basename "${0}")"
-if test "x${2}" == "x";then
-   echo "Usage: ${PROG_NAME} <source> <device>"
-   exit 1
-fi
-SOURCE="${1}"
-DEVICE="${2}"
-PARTSIZE="${3}"
 
 
 SCRIPTDIR=src/scripts
@@ -48,14 +47,191 @@ DIRS="boot src syslinux"
 FILES="COPYING Makefile Makefile.config Makefile.local syslinux/pxelinux.cfg"
 
 
+# +-=-=-=-=-=-=-+
+# |             |
+# |  Functions  |
+# |             |
+# +-=-=-=-=-=-=-+
+
+cleanup()
+{
+   if test ! -z "${MKTEMP}";then
+      mount \
+         | grep "${MKTEMP}" \
+         && umount -f "${MKTEMP}"
+      rm -Rf "${MKTEMP}"
+   fi
+}
+
+
+part_gpt()
+{
+   # create 1st partition: EFI
+   sgdisk "${DEVICE}" --new=1:0:+1M     || return 1
+   sgdisk "${DEVICE}" --typecode=1:EF02 || return 1
+
+   # create 2nd parition
+   sgdisk "${DEVICE}" --new=2:0:${PARTSIZE} || return 1
+   sgdisk "${DEVICE}" --typecode=2:0700      || return 1
+}
+
+
+part_hybrid()
+{
+   # create base partition table
+   part_gpt || return 1
+
+   # convert to hybrid partition table
+   sgdisk "${DEVICE}" --hybrid=1:2 || return 1
+
+   # convert to MBR and activate partition 2
+   sgdisk "${DEVICE}" --zap        || return 1
+   sfdisk --activate "${DEVICE}" 2 || return 1
+
+   # add boot code to MBR
+   dd \
+      bs=440 count=1 conv=notrunc \
+      if="${SOURCE}/syslinux/gptmbr.bin" \
+      of="${DEVICE}" \
+      || return 1
+
+   # backup MBR table
+   rm -f "${SOURCE}/tmp/mbr.backup"
+   dd bs=512 count=1 conv=notrunc \
+      if="${DEVICE}" \
+      of="${SOURCE}/tmp/mbr.backup" \
+      || return 1
+
+   # convert back to GPT and adjust partition numbers
+   sgdisk "${DEVICE}" --mbrtogpt      || return 1
+   sgdisk "${DEVICE}" --transpose=1:2 || return 1
+   sgdisk "${DEVICE}" --transpose=2:3 || return 1
+
+   # re-adjust partition 2 information for GPT
+   sgdisk "${DEVICE}" --typecode=2:EF00          || return 1
+   sgdisk "${DEVICE}" --change-name=2:"BootDisk" || return 1
+   sgdisk "${DEVICE}" --attributes=2:set:2       || return 1
+
+    # convert GPT to hybrid GPT
+   sgdisk "${DEVICE}" --hybrid=1:2 || return 1
+
+   # restore MBR with bootable partition 2
+   dd bs=512 count=1 conv=notrunc \
+      if="${SOURCE}/tmp/mbr.backup" \
+      of="${DEVICE}" \
+      || return 1
+   rm -f \
+      "${SOURCE}/tmp/mbr.backup" \
+      || return 1
+
+   return 0;
+}
+
+
+part_mbr()
+{
+   # create base partition table
+   part_gpt || return 1
+
+   # convert to hybrid partition table
+   sgdisk "${DEVICE}" gpttombr=1:2 || return 1
+
+   # convert to MBR and activate partition 2
+   sgdisk "${DEVICE}" --zap        || return 1
+   sfdisk --activate "${DEVICE}" 2 || return 1
+
+   # add boot code to MBR
+   dd \
+      bs=440 count=1 conv=notrunc \
+      if="${SOURCE}/syslinux/mbr.bin" \
+      of="${DEVICE}" \
+      || return 1
+
+   return 0;
+}
+
+
+usage()
+{
+   printf "Usage: %s [OPTIONS] <source> <device>\n" "$PROG_NAME"
+   printf "OPTIONS:\n"
+   printf "   -h            display this message\n"
+   printf "   -q            quiet\n"
+   printf "   -s size       size of data partition (default: 100%)"
+   printf "   -t type       partition type (mbr, hybrid [default], or gpt)\n"
+   printf "   -v            verbose\n"
+   printf "\n"
+}
+
+
+# +-=-=-=-=-=-=-+
+# |             |
+# |  Main Body  |
+# |             |
+# +-=-=-=-=-=-=-+
+
+# set defaults
 unset MKTEMP
+unset VERBOSE
+PARTTYPE="hybrid"
+PARTSIZE=0
+
+
+# parse CLI arguments
+while getopts :hqs:t:v OPT; do
+   case ${OPT} in
+      h) usage; exit 0;;
+      s) PARTSIZE="${OPTARG}";;
+      t) PARTTYPE="${OPTARG}";;
+      v) VERBOSE="1";;
+      q) unset VERBOSE;;
+      ?)
+         echo "${PROG_NAME}: illegal option -- ${OPTARG}" 1>&2
+         echo "Try '${PROG_NAME} -h' for more information." 1>&2
+         exit 1;
+      ;;
+      *)
+      ;;
+   esac
+done
+shift "$((OPTIND-1))"
+SOURCE="${1}"
+DEVICE="${2}"
+
+
+# check configuration options
+if test -z "${SOURCE}";then
+   echo "${PROG_NAME}: missing source"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1
+fi
+if test -z "${DEVICE}";then
+   echo "${PROG_NAME}: missing device"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1
+fi
+if test "x${PARTTYPE}" != "xhybrid" &&
+   test "x${PARTTYPE}" != "xmbr" &&
+   "x${PARTTYPE}" != "xgpt";then
+   echo "${PROG_NAME}: invalid partition type"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1;
+fi
+if test ! -z "$(echo ${PARTSIZE} |sed -e 's/^[0-9]\+M\{0,1\}$//g'";then
+   echo "${PROG_NAME}: invalid data partition size"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1;
+fi
+
+
+# adjusts PARTSIZE
+if test "x${PARTSIZE//[0-9]/}" == "x" &&
+   test "x${PARTSIZE}" != "x0"then
+   PARTSIZE="${PARTSIZE}M"
+fi
 
 
 # check for required files/directories/devices
-if test -z "${DEVICE}";then
-   echo "${PROG_NAME}: invalid device name"
-   exit 1
-fi
 if test ! -b "${DEVICE}";then
    echo "${PROG_NAME}: device not found"
    exit 1
@@ -74,104 +250,35 @@ for FILE in ${FILES};do
 done
 
 
-cleanup()
-{
-   if test ! -z "${MKTEMP}";then
-      mount \
-         | grep "${MKTEMP}" \
-         && umount -f "${MKTEMP}"
-      rm -Rf "${MKTEMP}"
-   fi
-}
-trap cleanup EXIT
+# set up exit traps
+trap cleanup SIGHUP SIGINT SIGTERM EXIT
 
 
-set -x
+# enable verbose output
+if test "x${VERBOSE}" == "x1";then
+   set -x
+fi
 
 
-## wipe MBR partition table on USB device
-#parted -a optimal -s "${DEVICE}" mktable msdos || exit 1
-
-## create DOS partition on USB device
-#parted -a optimal -s "${DEVICE}" mkpart primary fat32 0% 100% || exit 1
-
-## restore valid master boot record
-#dd conv=notrunc bs=440 count=1 if="${SOURCE}/syslinux/mbr.bin" of="${DEVICE}" || exit 1
-
-## set DOS partition as boot partition
-#parted -a optimal -s "${DEVICE}" set 1 boot on || exit 1
-
-
-##sgdisk "${DEVICE}" --zap-all                       || exit 1
-##sgdisk "${DEVICE}" --new=1:0:+${PARTSIZE}          || exit 1
-##sgdisk "${DEVICE}" --typecode=1:ef00               || exit 1
-##sgdisk "${DEVICE}" --change-name=1:'BIOS/EFI Boot' || exit 1
-##sgdisk "${DEVICE}" --gpttombr=1                    || exit 1
-##sfdisk "${DEVICE}" --activate 1                    || exit 1
-##dd \
-##   if="${SOURCE}/syslinux/gptmbr.bin" \
-##   of="${DEVICE}" \
-##   bs=440 \
-##   conv=notrunc \
-##   count=1 \
-##   || exit 1
+# clear existing MBR and/or GPT data
+sgdisk "${DEVICE}" --zap-all || exit 1
 
 
 # partition disk
-   # clear existing MBR and/or GPT data
-   sgdisk "${DEVICE}" --zap-all || exit 1
+case "${PARTTYPE}" in
+   'mbr') part_mbr       || exit 1;;
+   'gpt') part_gpt       || exit 1;;
+   'hybrid') part_hybrid || exit 1;;
+   *)
+   echo "${PROG_NAME}: unknown partition table type" 1>&2
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1;
+   ;;
+esac
 
-   # create 1st partition: EFI
-   sgdisk "${DEVICE}" --new=1:0:+1M     || exit 1
-   sgdisk "${DEVICE}" --typecode=1:EF02 || exit 1
 
-   # create 2nd parition
-   sgdisk "${DEVICE}" --new=2:0:0       || exit 1
-   sgdisk "${DEVICE}" --typecode=2:0700 || exit 1
-
-   # make hybrid
-   sgdisk "${DEVICE}" --hybrid=1:2 || exit 1
-
-   # convert to MBR and activate partition 2
-   sgdisk "${DEVICE}" --zap        || exit 1
-   sfdisk --activate "${DEVICE}" 2 || exit 1
-
-   # add boot code to MBR
-   dd \
-      bs=440 count=1 conv=notrunc \
-      if="${SOURCE}/syslinux/gptmbr.bin" \
-      of="${DEVICE}" \
-      || exit 1
-
-   # backup MBR table
-   rm -f "${SOURCE}/tmp/mbr.backup"
-   dd bs=512 count=1 conv=notrunc \
-      if="${DEVICE}" \
-      of="${SOURCE}/tmp/mbr.backup" \
-      || exit 1
-
-   # convert back to GPT and adjust partition numbers
-   sgdisk "${DEVICE}" --mbrtogpt      || exit 1
-   sgdisk "${DEVICE}" --transpose=1:2 || exit 1
-   sgdisk "${DEVICE}" --transpose=2:3 || exit 1
-
-   # re-adjust partition 2 information for GPT
-   sgdisk "${DEVICE}" --typecode=2:EF00          || exit 1
-   sgdisk "${DEVICE}" --change-name=2:"BootDisk" || exit 1
-   sgdisk "${DEVICE}" --attributes=2:set:2       || exit 1
-
-    # convert GPT to hybrid GPT
-   sgdisk "${DEVICE}" --hybrid=1:2 || exit 1
-
-   # restore MBR with bootable partition 2
-   dd bs=512 count=1 conv=notrunc \
-      if="${SOURCE}/tmp/mbr.backup" \
-      of="${DEVICE}" \
-      || exit 1
-   rm -f "${SOURCE}/tmp/mbr.backup"
-
-   # refresh partition table in kernel memory
-   partprobe "${DEVICE}" || exit 1
+# refresh partition table in kernel memory
+partprobe "${DEVICE}" || exit 1
 
 
 
@@ -186,12 +293,14 @@ fi
 
 # make vFAT file systems
 mkfs.vfat -F 32 -I -n "IP_ENG_BOOT" /dev/${DEVPART} || exit 1
-#fatlabel /dev/${DEVPART} IP_ENG_BOOT || exit 1
 parted -a optimal -s "${DEVICE}" print
 
 
 # install syslinux
-"${SOURCE}/syslinux/bin/syslinux" -i /dev/${DEVPART} || exit 1
+if test "${PARTTYPE}" == "mbr" ||
+   test "${PARTTYPE}" == "hybrid";then
+   "${SOURCE}/syslinux/bin/syslinux" -i /dev/${DEVPART} || exit 1
+fi
 
 
 # mount disk image
