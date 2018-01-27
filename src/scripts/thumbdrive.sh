@@ -172,7 +172,7 @@ usage()
 
 # set defaults
 unset MKTEMP
-unset VERBOSE
+VERBOSE=1
 PARTTYPE="hybrid"
 PARTSIZE=0
 
