@@ -122,8 +122,10 @@ all:
 	@echo "Build:"
 	@echo "   make images"
 	@echo "   make images/iperdboot.iso"
-	@echo "   make images/iperdboot.img"
-	@echo "   make thumbdrive DISK=/dev/sdb PARTSIZE=1900M"
+	@echo "   make images/iperdboot.gpt.img"
+	@echo "   make images/iperdboot.hybrid.img"
+	@echo "   make images/iperdboot.mbr.img"
+	@echo "   make thumbdrive DISK=/dev/sdb PARTTYPE=hybrid PARTSIZE=1900M"
 	@echo " "
 
 
@@ -156,15 +158,25 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
 
 
-images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
-	@mkdir -p $$(dirname "$(@)")
+images/iperdboot.gpt.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh -t "$(DISKTYPE)" -s "$(DISKSIZE)" "." "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh -t gpt -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.img.gz: images/iperdboot.img
-	gzip --keep images/iperdboot.img
+images/iperdboot.hybrid.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+	@mkdir -p "$$(dirname "$(@)")"
+	@rm -f "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh -t hybrid -s "$(DISKSIZE)" "." "$(@)"
+	@touch "$(@)"
+
+
+images/iperdboot.mbr.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+	@mkdir -p "$$(dirname "$(@)")"
+	@rm -f "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh -t mbr -s "$(DISKSIZE)" "." "$(@)"
+	@touch "$(@)"
 
 
 syslinux/isolinux.bin.mod: $(PREREQ_CNF)
@@ -197,10 +209,7 @@ thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
 	bash src/scripts/thumbdrive.sh -t "$(DISKTYPE)" -s "$(PARTSIZE)" . "$(DISK)"
 
 
-images: images/iperdboot.img images/iperdboot.iso
-
-
-compress: images/iperdboot.img.gz
+images: images/iperdboot.$(DISKTYPE).img images/iperdboot.iso
 
 
 tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
