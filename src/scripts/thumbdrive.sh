@@ -281,7 +281,6 @@ esac
 partprobe "${DEVICE}" || exit 1
 
 
-
 # calculate partition device name
 DEVPART="$(basename "${DEVICE}")"
 DEVPART="$(grep "[0-9] ${DEVPART}p\{0,1\}2$" /proc/partitions|awk '{print$4}')"
