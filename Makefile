@@ -159,7 +159,7 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh "." "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh -t "$(DISKTYPE)" -s "$(DISKSIZE)"." "$(@)"
 	@touch "$(@)"
 
 
@@ -194,7 +194,7 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) syslinux/isolinux.bin.mod
 
 
 thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
-	bash src/scripts/thumbdrive.sh . "$(DISK)" $(PARTSIZE)
+	bash src/scripts/thumbdrive.sh -t "$(DISKTYPE)" -s "$(PARTSIZE)" . "$(DISK)"
 
 
 images: images/iperdboot.img images/iperdboot.iso

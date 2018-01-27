@@ -52,9 +52,14 @@ fi
 
 
 # set missing defaults
-CONFIG_USB_PART="${CONFIG_USB_PART:-hybrid}"
-CONFIG_USB_SIZE="${CONFIG_USB_SIZE:-1900}"
-CONFIG_ISO_PART="${CONFIG_ISO_PART:-mbr}"
+DEFAULT_PART_TYPE="hybrid"
+DEFAULT_PART_SIZE="0"
+DEFAULT_IMG_SIZE="1900"
+DEFAULT_ISO_TYPE="bios"
+CONFIG_PART_TYPE="${CONFIG_PART_TYPE:-${DEFAULT_PART_TYPE}}"
+CONFIG_PART_SIZE="${CONFIG_PART_SIZE:-${DEFAULT_PART_SIZE}}"
+CONFIG_IMG_SIZE="${CONFIG_IMG_SIZE:-${DEFAULT_IMG_SIZE}}"
+CONFIG_ISO_TYPE="${CONFIG_ISO_TYPE:-${DEFAULT_ISO_TYPE}}"
 
 
 # set exit codes to trigger specific xargs exit codes
@@ -125,9 +130,10 @@ configure()
       elif test $RC -eq 0 && test "x${RESULT}" == "xall";then
          configure_all
       elif test $RC -eq 0 && test "x${RESULT}" == "xdefaults";then
-         CONFIG_USB_PART="hybrid"
-         CONFIG_USB_SIZE="2048"
-         CONFIG_ISO_PART="mbr"
+         CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
+         CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
+         CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
+         CONFIG_ISO_TYPE="${DEFAULT_ISO_SIZE}"
          cat /dev/null > ${CONFIG}.new
          dialog \
             --backtitle "IP Engineering Rescue Disk Setup" \
@@ -163,9 +169,10 @@ configure_all()
    done |awk '{print$1}' |sed -e 's/^/#/g' |sort -n > ${CONFIG}.new.tmp
 
    # set variables
-   echo "CONFIG_USB_PART=${CONFIG_USB_PART}" >> ${CONFIG}.new.tmp
-   echo "CONFIG_USB_SIZE=${CONFIG_USB_SIZE}" >> ${CONFIG}.new.tmp
-   echo "CONFIG_ISO_PART=${CONFIG_ISO_PART}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_PART_TYPE=${CONFIG_PART_TYPE}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_PART_SIZE=${CONFIG_PART_SIZE}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_ISO_TYPE=${CONFIG_ISO_TYPE}" >> ${CONFIG}.new.tmp
 
    # copy new settings into place
    mv ${CONFIG}.new.tmp ${CONFIG}.new
@@ -193,9 +200,9 @@ configure_disk()
          --cancel-label "Back" \
          --menu "Select option to configure:" \
          20 70 13 \
-         "usb"       "USB partition type (${CONFIG_USB_PART})" \
-         "size"      "USB disk image size (${CONFIG_USB_SIZE} MB)" \
-         "iso"       "ISO partition type (${CONFIG_ISO_PART})" \
+         "usb"       "USB partition type (${CONFIG_PART_TYPE})" \
+         "size"      "USB disk image size (${CONFIG_IMG_SIZE} MB)" \
+         "iso"       "ISO partition type (${CONFIG_ISO_TYPE})" \
          2>&1 1>&3)"
       RC=$?
       exec 3>&-
@@ -206,7 +213,7 @@ configure_disk()
          return 0;
       elif test $RC -eq 0 && test "x${RESULT}" == "xusb";then
          TMP_GPT=off; TMP_MBR=off; TMP_HYB=off;
-         case "x${CONFIG_USB_PART}" in
+         case "x${CONFIG_PART_TYPE}" in
             xgpt) TMP_GPT=on;;
             xhyb) TMP_HYB=on;;
             xmbr) TMP_MBR=on;;
@@ -224,19 +231,19 @@ configure_disk()
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
-         CONFIG_USB_PART="${RESULT}"
+         CONFIG_PART_TYPE="${RESULT}"
       elif test $RC -eq 0 && test "x${RESULT}" == "xsize";then
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
             --title " USB Disk Image Size " \
             --backtitle "IP Engineering Rescue Disk Setup" \
             --inputbox "Enter size of disk image file:" \
-            9 40 ${CONFIG_USB_SIZE} \
+            9 40 ${CONFIG_IMG_SIZE} \
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
          if test -z "${RESULT//[0-9]/}";then
-            CONFIG_USB_SIZE=$RESULT
+            CONFIG_IMG_SIZE=$RESULT
          else
             dialog \
                --backtitle "IP Engineering Rescue Disk Setup" \
@@ -244,12 +251,12 @@ configure_disk()
                7 40
          fi
       elif test $RC -eq 0 && test "x${RESULT}" == "xiso";then
-         TMP_GPT=off; TMP_MBR=off; TMP_HYB=off;
-         case "x${CONFIG_ISO_PART}" in
-            xgpt) TMP_GPT=on;;
-            xhyb) TMP_HYB=on;;
-            xmbr) TMP_MBR=on;;
-            *)    TMP_MBR=on;;
+         TMP_UEFI=off; TMP_HYBRID=off; TMP_BIOS=off;
+         case "x${CONFIG_ISO_TYPE}" in
+            xuefi)   TMP_UEFI=on;;
+            xhybrid) TMP_HYBRID=on;;
+            xbios)   TMP_BIOS=on;;
+            *)       TMP_BIOS=on;;
          esac
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
@@ -257,13 +264,13 @@ configure_disk()
             --backtitle "IP Engineering Rescue Disk Setup" \
             --radiolist "Choose ISO image type:" \
             20 70 13 \
-            "gpt"    "GUID Partition Table (UEFI)"      ${TMP_GPT} \
-            "hybrid" "Hybrid (GPT and MBR)"             ${TMP_HYB} \
-            "mbr"    "Master Boot Record (Legacy BIOS)" ${TMP_MBR} \
+            "uefi"   "GUID Partition Table (UEFI)"      ${TMP_UEFI} \
+            "hybrid" "Hybrid (GPT and MBR)"             ${TMP_HYBRID} \
+            "bios"   "Master Boot Record (Legacy BIOS)" ${TMP_BIOS} \
             2>&1 1>&3)"
          RC=$?
          exec 3>&-
-         CONFIG_ISO_PART="${RESULT}"
+         CONFIG_ISO_TYPE="${RESULT}"
       fi
    done
 }
@@ -358,16 +365,17 @@ configure_image()
 deps()
 {
    # save variables
-   for STR in "CONFIG_USB_PART" "CONFIG_USB_SIZE" "CONFIG_ISO_PART";do
+   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
       if test $? -ne 0;then
          echo "${STR}=" >> "${CONFIG}.new"
       fi
    done
    sed \
-      -e "s/^CONFIG_ISO_PART=.*$/CONFIG_ISO_PART=${CONFIG_ISO_PART}/g" \
-      -e "s/^CONFIG_USB_PART=.*$/CONFIG_USB_PART=${CONFIG_USB_PART}/g" \
-      -e "s/^CONFIG_USB_SIZE=.*$/CONFIG_USB_SIZE=${CONFIG_USB_SIZE}/g" \
+      -e "s/^CONFIG_ISO_TYPE=.*$/CONFIG_ISO_TYPE=${CONFIG_ISO_TYPE}/g" \
+      -e "s/^CONFIG_IMG_SIZE=.*$/CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}/g" \
+      -e "s/^CONFIG_PART_TYPE=.*$/CONFIG_PART_TYPE=${CONFIG_PART_TYPE}/g" \
+      -e "s/^CONFIG_PART_SIZE=.*$/CONFIG_PART_SIZE=${CONFIG_PART_SIZE}/g" \
       "${CONFIG}.new" \
       > "${CONFIG}.new.tmp"
    mv "${CONFIG}.new.tmp" "${CONFIG}.new"
@@ -378,9 +386,10 @@ deps()
    # build Makefile configuration
    rm -f ${BASEDIR}/Makefile.config
    {
-      echo "ISOTYPE	?= ${CONFIG_ISO_PART}"
-      echo "PARTTYPE	?= ${CONFIG_USB_PART}"
-      echo "PARTSIZE	?= ${CONFIG_USB_SIZE}M"
+      echo "ISOTYPE	?= ${CONFIG_ISO_TYPE}"
+      echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
+      echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
+      echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
       for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
          if test -f "${DISTRODIR}/${DISTRO}/make.header";then
             cat "${DISTRODIR}/${DISTRO}/make.header"
