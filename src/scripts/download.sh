@@ -205,7 +205,6 @@ if test ! -z "${HASH_FILE}";then
 fi
 if test ! -z "${EXTRACTDIR}";then
    case "${FILE}" in
-      #*.iso)     EXTRACT_CMD="sudo $(dirname "${0}")/extractiso.sh ${FILE} ${EXTRACTDIR}";;
       *.iso)     EXTRACT_CMD="extactiso";;
       *.tar.gz)  EXTRACT_CMD="gzip  -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
       *.tgz)     EXTRACT_CMD="gzip  -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
