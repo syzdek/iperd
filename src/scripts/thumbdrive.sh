@@ -292,7 +292,8 @@ fi
 
 # make vFAT file systems
 mkfs.vfat -F 32 -I -n "IP_ENG_BOOT" /dev/${DEVPART} || exit 1
-parted -a optimal -s "${DEVICE}" print
+sgdisk -p "${DEVICE}"
+sgdisk -O "${DEVICE}"
 
 
 # install syslinux
