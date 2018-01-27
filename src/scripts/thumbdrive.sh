@@ -212,13 +212,13 @@ if test -z "${DEVICE}";then
 fi
 if test "x${PARTTYPE}" != "xhybrid" &&
    test "x${PARTTYPE}" != "xmbr" &&
-   "x${PARTTYPE}" != "xgpt";then
-   echo "${PROG_NAME}: invalid partition type"
+   test "x${PARTTYPE}" != "xgpt";then
+   echo "${PROG_NAME}: invalid partition type" 1>&2
    echo "Try '${PROG_NAME} -h' for more information." 1>&2
    exit 1;
 fi
-if test ! -z "$(echo ${PARTSIZE} |sed -e 's/^[0-9]\+M\{0,1\}$//g'";then
-   echo "${PROG_NAME}: invalid data partition size"
+if test ! -z "$(echo ${PARTSIZE} |sed -e 's/^[0-9]\+M\{0,1\}$//g')";then
+   echo "${PROG_NAME}: invalid data partition size" 1>&2
    echo "Try '${PROG_NAME} -h' for more information." 1>&2
    exit 1;
 fi
@@ -226,7 +226,7 @@ fi
 
 # adjusts PARTSIZE
 if test "x${PARTSIZE//[0-9]/}" == "x" &&
-   test "x${PARTSIZE}" != "x0"then
+   test "x${PARTSIZE}" != "x0";then
    PARTSIZE="${PARTSIZE}M"
 fi
 
