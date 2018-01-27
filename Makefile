@@ -122,9 +122,9 @@ all:
 	@echo "Build:"
 	@echo "   make images"
 	@echo "   make images/iperdboot.iso"
-	@echo "   make images/iperdboot.gpt.img"
-	@echo "   make images/iperdboot.hybrid.img"
-	@echo "   make images/iperdboot.mbr.img"
+	@echo "   make images/iperdboot.gpt.img DISKSIZE=1900"
+	@echo "   make images/iperdboot.hybrid.img DISKSIZE=1900"
+	@echo "   make images/iperdboot.mbr.img DISKSIZE=1900"
 	@echo "   make thumbdrive DISK=/dev/sdb PARTTYPE=hybrid PARTSIZE=1900M"
 	@echo " "
 
