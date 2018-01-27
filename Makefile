@@ -302,16 +302,6 @@ syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR
 syslinux: $(PREREQ_CNF)
 
 
-prune:
-	find "./tmp" \
-	   -type d \
-	   -path "./tmp/*" \
-	   -maxdepth 1 \
-	   -mindepth 1 \
-	   -exec echo rm -Rf {} \; \
-	   -exec rm -Rf {} \;
-
-
 download: $(PREREQ_CNF) $(DOWNLOAD_FILES)
 
 
