@@ -159,7 +159,7 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 images/iperdboot.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh -t "$(DISKTYPE)" -s "$(DISKSIZE)"." "$(@)"
+	bash ./$(SCRIPTDIR)/diskimage.sh -t "$(DISKTYPE)" -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
