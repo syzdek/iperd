@@ -33,15 +33,107 @@
 #   @SYZDEK_BSD_LICENSE_END@
 #
 
+# +-=-=-=-=-=-+
+# |           |
+# |  Headers  |
+# |           |
+# +-=-=-=-=-=-+
+
 PROG_NAME="$(basename "${0}")"
-if test "x${2}" == "x";then
-   echo "Usage: ${PROG_NAME} <source> <file>"
+
+
+# +-=-=-=-=-=-=-+
+# |             |
+# |  Functions  |
+# |             |
+# +-=-=-=-=-=-=-+
+
+cleanup()
+{
+   test -z "${LOOPDEV}" || sudo losetup -d "${LOOPDEV}"
+}
+
+
+catchsig()
+{
+   rm -f "${OUTPUT}"
    exit 1
-fi
+}
+
+
+usage()
+{
+   printf "Usage: %s [OPTIONS] <source> <file>\n" "$PROG_NAME"
+   printf "OPTIONS:\n"
+   printf "   -h            display this message\n"
+   printf "   -q            quiet\n"
+   printf "   -s size       size of image in megabytes (default: 1900)"
+   printf "   -t type       partition type (mbr, hybrid [default], or gpt)\n"
+   printf "   -v            verbose\n"
+   printf "\n"
+}
+
+
+# +-=-=-=-=-=-=-+
+# |             |
+# |  Main Body  |
+# |             |
+# +-=-=-=-=-=-=-+
+
+# set defaults
+unset VERBOSE
+PARTSIZE="1900"
+PARTTYPE="hybrid"
+
+
+# parse CLI arguments
+while getopts :hqs:t:v OPT; do
+   case ${OPT} in
+      h) usage; exit 0;;
+      s) PARTSIZE="${OPTARG}";;
+      t) PARTTYPE="${OPTARG}";;
+      v) VERBOSE="1";;
+      q) unset VERBOSE;;
+      ?)
+         echo "${PROG_NAME}: illegal option -- ${OPTARG}" 1>&2
+         echo "Try '${PROG_NAME} -h' for more information." 1>&2
+         exit 1;
+      ;;
+      *)
+      ;;
+   esac
+done
+shift "$((OPTIND-1))"
 SOURCE="${1}"
 OUTPUT="${2}"
 
 
+# check configuration options
+if test -z "${SOURCE}";then
+   echo "${PROG_NAME}: missing source"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1
+fi
+if test -z "${OUTPUT}";then
+   echo "${PROG_NAME}: missing file"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1
+fi
+if test "x${PARTTYPE}" != "xhybrid" &&
+   test "x${PARTTYPE}" != "xmbr" &&
+   "x${PARTTYPE}" != "xgpt";then
+   echo "${PROG_NAME}: invalid partition type"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1;
+fi
+if test ! -z "${PARTSIZE//[0-9]/}";then
+   echo "${PROG_NAME}: invalid partition size"
+   echo "Try '${PROG_NAME} -h' for more information." 1>&2
+   exit 1;
+fi
+
+
+# check for required files/directories/devices
 if test ! -f "${SOURCE}/src/scripts/thumbdrive.sh";then
    echo "${PROG_NAME}: thumbdrive.sh: file not found"
    exit 1
@@ -52,15 +144,7 @@ if test -f "${OUTPUT}";then
 fi
 
 
-cleanup()
-{
-   test -z "${LOOPDEV}" || sudo losetup -d "${LOOPDEV}"
-}
-catchsig()
-{
-   rm -f "${OUTPUT}"
-   exit 1
-}
+# set up exit traps
 trap catchsig SIGHUP SIGINT SIGTERM
 trap cleanup EXIT
 
@@ -71,7 +155,7 @@ dd \
    of="${OUTPUT}" \
    count=0 \
    bs=512 \
-   seek=$((2048*1900)) \
+   seek=$((2048*${PARTSIZE})) \
    || { rm -f "${OUTPUT}"; exit 1; }
 
 
@@ -83,7 +167,7 @@ if test -z "${LOOPDEV}";then
 fi
 
 
-sudo bash "${SOURCE}/src/scripts/thumbdrive.sh" "${SOURCE}" "${LOOPDEV}" \
+sudo bash "${SOURCE}/src/scripts/thumbdrive.sh" -t ${PARTTYPE} "${SOURCE}" "${LOOPDEV}" \
    || { rm -f "${OUTPUT}"; exit 1; }
 
 
