@@ -1,7 +1,4 @@
 
-ISOLINUX_CFG            += $(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.cfg
-PXELINUX_CFG            += $(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.pxe.cfg
-SYSLINUX_CFG            += $(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.cfg
 DOWNLOAD_FILES          += boot/sysrescd/@VERSION@/sysrcd.dat \
 			   boot/sysrescd/@VERSION@/sysrcd.md5 \
 			   boot/sysrescd/@VERSION@/vmlinuz.32 \
@@ -10,20 +7,6 @@ DOWNLOAD_FILES          += boot/sysrescd/@VERSION@/sysrcd.dat \
 			   boot/sysrescd/@VERSION@/initrd.cgz \
 			   boot/sysrescd/@VERSION@/initram.igz \
 			   boot/sysrescd/@VERSION@/scsi.cgz
-
-
-$(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.pxe.cfg: Makefile $(DISTRODIR)/sysrescd/sysrescd.pxe.cfg
-	@SRCFILE="$(DISTRODIR)/sysrescd/sysrescd.pxe.cfg"; \
-	   DISTRO_CODENAME="@VERSION@"; \
-	   DISTRO_VERSION="@VERSION@"; \
-	   $(do_subst_dt)
-
-
-$(CONFIGDIR)/sysrescd/@VERSION@/sysrescd.cfg: Makefile $(DISTRODIR)/sysrescd/sysrescd.cfg
-	@SRCFILE="$(DISTRODIR)/sysrescd/sysrescd.cfg"; \
-	   DISTRO_CODENAME="@VERSION@"; \
-	   DISTRO_VERSION="@VERSION@"; \
-	   $(do_subst_dt)
 
 
 tmp/boot/sysrescd/sysrescd-@VERSION@/.iperd-extracted:
@@ -80,7 +63,4 @@ boot/sysrescd/@VERSION@/sysrcd.dat: tmp/boot/sysrescd/sysrescd-@VERSION@/.iperd-
 	@mkdir -p "$$(dirname "$(@)")"
 	cp tmp/boot/sysrescd/sysrescd-@VERSION@/sysrcd.dat "$(@)"
 	@touch "$(@)"
-
-
-#sysrescd: $(CONFIGDIR)/sysrescd.cfg boot/sysrescd/sysrescd.bin
 

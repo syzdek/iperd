@@ -1,0 +1,71 @@
+MENU BEGIN sysrescd
+MENU TITLE SystemRescueCD (@VERSION@)
+
+label rescue32
+    MENU LABEL SystemRescueCd (32bit):
+    MENU DISABLE
+
+label rescue32_1
+    MENU LABEL SystemRescueCd with default options
+    MENU INDENT 3
+    KERNEL /boot/sysrescd/vmlinuz.32
+    INITRD /boot/sysrescd/initram.igz
+    APPEND subdir=/boot/sysrescd/
+    TEXT HELP
+    Boot standard 32bit kernel with default options (should always work)
+    ENDTEXT
+
+label rescue32_2
+    MENU LABEL SystemRescueCd with all files cached to memory
+    MENU INDENT 3
+    KERNEL /boot/sysrescd/vmlinuz.32
+    INITRD /boot/sysrescd/initram.igz
+    APPEND docache subdir=/boot/sysrescd/
+    TEXT HELP
+    Boot standard 32bit kernel and run system from memory.
+    It requires 512 MB of memory to work and takes some time during the
+    boot process, but the cdrom can be removed and system will be faster.
+    ENDTEXT
+
+label rescue64
+    MENU LABEL SystemRescueCd (64bit):
+    MENU DISABLE
+
+label rescue64_1
+    MENU LABEL SystemRescueCd with default options
+    MENU INDENT 3
+    KERNEL /boot/sysrescd/vmlinuz.64
+    INITRD /boot/sysrescd/initram.igz
+    APPEND docache subdir=/boot/sysrescd/
+    TEXT HELP
+    Boot standard 64bit kernel with default options (should always work)
+    ENDTEXT
+
+label rescue64_2
+    MENU LABEL SystemRescueCd with all files cached to memory
+    MENU INDENT 3
+    KERNEL /boot/sysrescd/vmlinuz.64
+    INITRD /boot/sysrescd/initram.igz
+    APPEND docache subdir=/boot/sysrescd/
+    TEXT HELP
+    Boot standard 64bit kernel and run system from RAM (cdrom can be removed)
+    It requires 512 MB of memory to work and takes some time during the
+    boot process, but the cdrom can be removed and system will be faster.
+    ENDTEXT
+
+label rescuemisc
+    MENU LABEL SystemRescueCd Misc:
+    MENU DISABLE
+
+label ntpass
+    MENU LABEL NTPASSWD: Reset or edit Windows passwords
+    MENU INDENT 3
+    kernel /boot/sysrescd/vmlinuz.nt
+    append rw vga=1 initrd=/boot/sysrescd/initrd.cgz,/boot/sysrescd/scsi.cgz
+    TEXT HELP
+    This tool can be used to reset windows users accounts. It works with all
+    windows user accounts including the administrator. You can use this tool if
+    you forgot the administrator's password.
+    ENDTEXT
+
+MENU END
