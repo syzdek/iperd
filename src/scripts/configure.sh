@@ -428,28 +428,9 @@ deps()
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
       echo "CFG_DEP_FILES	= ${CFG_DEP_FILES}"
-      for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
-         if test -f "${DISTRODIR}/${DISTRO}/make.header";then
-            cat "${DISTRODIR}/${DISTRO}/make.header"
-         fi
-         for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
-            VERSION=$(echo "${VERS}" |cut -d- -f2)
-            CODENAME=$(echo "${VERS}" |cut -d- -f3)
-            ARCH=$(echo "${VERS}" |cut -d- -f4)
-            if test -f "${DISTRODIR}/${DISTRO}/make.boot";then
-               sed \
-                  -e "s/@VERSION@/${VERSION}/g" \
-                  -e "s/@CODENAME@/${CODENAME}/g" \
-                  -e "s/@DISTRO@/${DISTRO}/g" \
-                  -e "s/@ARCH@/${ARCH}/g" \
-                  -e "s/@LABEL@/${LABEL}/g" \
-                  "${DISTRODIR}/${DISTRO}/make.boot"
-            fi
-         done
-         if test -f "${DISTRODIR}/${DISTRO}/make.footer";then
-            cat "${DISTRODIR}/${DISTRO}/make.footer"
-         fi
-      done 
+      for MAKEDISTRO in $(list_cfg_distros);do
+         generate_cfg "${MAKEDISTRO}" "make "make.boot"
+      done
    } >  ${BASEDIR}/Makefile.config
 }
 
