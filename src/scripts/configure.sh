@@ -364,6 +364,43 @@ configure_image()
 
 deps()
 {
+
+   CFG_DEP_FILES=""
+
+   # generate include file for isolinux.cfg
+   rm -f ${CONFIGDIR}/isolinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
+   done  > "${CONFIGDIR}/isolinux.inc"
+
+   # generate include file for pxelinux.cfg
+   rm -f ${CONFIGDIR}/pxelinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+   done  > "${CONFIGDIR}/pxelinux.inc"
+
+   # generate include file for syslinux.cfg
+   rm -f ${CONFIGDIR}/syslinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+   done  > "${CONFIGDIR}/syslinux.inc"
+
+   # generate include file for pxelx64.cfg
+   rm -f ${CONFIGDIR}/pxelx64.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
+         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+      fi
+   done  > "${CONFIGDIR}/pxelx64.inc"
+
+   # generate include file for syslx64.cfg
+   rm -f ${CONFIGDIR}/syslx64.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
+         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+      fi
+   done  > "${CONFIGDIR}/syslx64.inc"
+
    # save variables
    for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
@@ -390,6 +427,7 @@ deps()
       echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
+      echo "CFG_DEP_FILES	= ${CFG_DEP_FILES}"
       for DISTRO in $(egrep '^#[[:alnum:]]+-' "${CONFIG}" |cut -d- -f1 |cut -d'#' -f2 |sort |uniq);do
          if test -f "${DISTRODIR}/${DISTRO}/make.header";then
             cat "${DISTRODIR}/${DISTRO}/make.header"
@@ -413,6 +451,49 @@ deps()
          fi
       done 
    } >  ${BASEDIR}/Makefile.config
+}
+
+
+generate_cfg()
+{
+   DISTRO="${1}"
+   PREFIX="${2}"
+   FILES="${3}"
+   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.header";then
+      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.header"
+      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
+   fi
+   for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
+      VERSION=$(echo "${VERS}" |cut -d- -f2)
+      CODENAME=$(echo "${VERS}" |cut -d- -f3)
+      ARCH=$(echo "${VERS}" |cut -d- -f4)
+      for TMPFILE in ${FILES};do
+         if test -f "${DISTRODIR}/${DISTRO}/${TMPFILE}";then
+            CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${TMPFILE}"
+            sed \
+               -e "s/@VERSION@/${VERSION}/g" \
+               -e "s/@CODENAME@/${CODENAME}/g" \
+               -e "s/@DISTRO@/${DISTRO}/g" \
+               -e "s/@ARCH@/${ARCH}/g" \
+               -e "s/@LABEL@/${LABEL}/g" \
+               "${DISTRODIR}/${DISTRO}/${TMPFILE}"
+         fi
+      done
+   done
+   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.footer";then
+      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
+      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
+   fi
+}
+
+
+list_cfg_distros()
+{
+   egrep '^#[[:alnum:]]+-' "${CONFIG}" \
+      |cut -d- -f1 \
+      |cut -d'#' -f2 \
+      |sort \
+      |uniq
 }
 
 
