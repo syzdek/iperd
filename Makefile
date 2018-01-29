@@ -123,7 +123,6 @@ Makefile.config: $(SCRIPTDIR)/configure.sh
 
 
 -include Makefile.local
-SYSLINUX_SRC		?= /usr/share/syslinux
 NETBOOT_HOST            ?= 10.0.109.254
 NETBOOT_PATH            ?= /pub/iperd/iperd-current/
 NETBOOT_HTTP_SCHEME     ?= http
