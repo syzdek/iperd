@@ -35,6 +35,7 @@
 
 # set base directory
 ACTION="${1,,}"
+REGEN_FILE="${2,,}"
 
 
 # set defaults
@@ -364,42 +365,7 @@ configure_image()
 
 deps()
 {
-
-   CFG_DEP_FILES=""
-
-   # generate include file for isolinux.cfg
-   rm -f ${CONFIGDIR}/isolinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
-   done  > "${CONFIGDIR}/isolinux.inc"
-
-   # generate include file for pxelinux.cfg
-   rm -f ${CONFIGDIR}/pxelinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
-   done  > "${CONFIGDIR}/pxelinux.inc"
-
-   # generate include file for syslinux.cfg
-   rm -f ${CONFIGDIR}/syslinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-   done  > "${CONFIGDIR}/syslinux.inc"
-
-   # generate include file for pxelx64.cfg
-   rm -f ${CONFIGDIR}/pxelx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
-      fi
-   done  > "${CONFIGDIR}/pxelx64.inc"
-
-   # generate include file for syslx64.cfg
-   rm -f ${CONFIGDIR}/syslx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-      fi
-   done  > "${CONFIGDIR}/syslx64.inc"
+   GEN_FILES="${1}"
 
    # save variables
    for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE";do
@@ -420,17 +386,116 @@ deps()
    # save new config
    mv "${CONFIG}.new" "${CONFIG}" || exit 1
 
-   # build Makefile configuration
+   # adjusts file list, if empty
+   if test -z "${GEN_FILES}";then
+      GEN_FILES="${GEN_FILES} var/config/isolinux.inc"
+      GEN_FILES="${GEN_FILES} var/config/pxelinux.inc"
+      GEN_FILES="${GEN_FILES} var/config/pxelx64.inc"
+      GEN_FILES="${GEN_FILES} var/config/syslinux.inc"
+      GEN_FILES="${GEN_FILES} var/config/syslx64.inc"
+      GEN_FILES="${GEN_FILES} makefile.config"
+   fi
+
+   for GEN_FILE in ${GEN_FILES};do
+      case ${GEN_FILE} in
+         var/config/isolinux.inc) deps_isolinux_inc;;
+         var/config/pxelinux.inc) deps_pxelinux_inc;;
+         var/config/pxelx64.inc)  deps_pxelx64_inc;;
+         var/config/syslinux.inc) deps_syslinux_inc;;
+         var/config/syslx64.inc)  deps_syslx64_inc;;
+         makefile.config)         deps_makefile_config;;
+         *)
+            echo "${PROG_NAME}: unknown file requested" 1>&2
+            exit 1;
+         ;;
+      esac
+   done
+}
+
+
+# generate include file for isolinux.cfg
+deps_isolinux_inc()
+{
+   CFG_DEP_FILES=""
+   rm -f ${CONFIGDIR}/isolinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
+   done  > "${CONFIGDIR}/isolinux.inc"
+   ISOLINUX_INC_DEPS="${CFG_DEP_FILES}"
+}
+
+
+# generate include file for pxelinux.cfg
+deps_pxelinux_inc()
+{
+   CFG_DEP_FILES=""
+   rm -f ${CONFIGDIR}/pxelinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+   done  > "${CONFIGDIR}/pxelinux.inc"
+   PXELINUX_INC_DEPS="${CFG_DEP_FILES}"
+}
+
+
+# generate include file for pxelx64.cfg
+deps_pxelx64_inc()
+{
+   CFG_DEP_FILES=""
+   rm -f ${CONFIGDIR}/pxelx64.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
+         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+      fi
+   done  > "${CONFIGDIR}/pxelx64.inc"
+   PXELX64_INC_DEPS="${CFG_DEP_FILES}"
+}
+
+
+# generate include file for syslinux.cfg
+deps_syslinux_inc()
+{
+   CFG_DEP_FILES=""
+   rm -f ${CONFIGDIR}/syslinux.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+   done  > "${CONFIGDIR}/syslinux.inc"
+   SYSLINUX_INC_DEPS="${CFG_DEP_FILES}"
+}
+
+
+# generate include file for syslx64.cfg
+deps_syslx64_inc()
+{
+   CFG_DEP_FILES=""
+   rm -f ${CONFIGDIR}/syslx64.inc
+   for ISODISTRO in $(list_cfg_distros);do
+      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
+         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+      fi
+   done  > "${CONFIGDIR}/syslx64.inc"
+   SYSLX64_INC_DEPS="${CFG_DEP_FILES}"
+}
+
+
+# build Makefile configuration
+deps_makefile_config()
+{
+   CFG_DEP_FILES=""
    rm -f ${BASEDIR}/Makefile.config
    {
       echo "ISOTYPE	?= ${CONFIG_ISO_TYPE}"
       echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
-      echo "CFG_DEP_FILES	= ${CFG_DEP_FILES}"
+      echo "ISOLINUX_INC_DEPS	= ${ISOLINUX_INC_DEPS}"
+      echo "PXELINUX_INC_DEPS	= ${PXELINUX_INC_DEPS}"
+      echo "PXELX64_INC_DEPS	= ${PXELX64_INC_DEPS}"
+      echo "SYSLINUX_INC_DEPS	= ${SYSLINUX_INC_DEPS}"
+      echo "SYSLX64_INC_DEPS	= ${SYSLX64_INC_DEPS}"
       for MAKEDISTRO in $(list_cfg_distros);do
-         generate_cfg "${MAKEDISTRO}" "make "make.boot"
+         generate_cfg "${MAKEDISTRO}" "make" "make.boot"
       done
+      echo "MAKEFILE_CONFIG_DEPS	= ${CFG_DEP_FILES}"
    } >  ${BASEDIR}/Makefile.config
 }
 
@@ -568,7 +633,7 @@ case "${ACTION}" in
 
    deps)
    prereqs || exit 1
-   deps    || exit 1
+   deps ${REGEN_FILE} || exit 1
    exit 0
    ;;
 
