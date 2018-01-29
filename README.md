@@ -13,6 +13,7 @@ Table of Contents
 
    * Disclaimer
    * Maintainers
+   * Quick Start
    * Directory Structure
    * Configuring and Downloading Images
    * Creating Images
@@ -42,6 +43,26 @@ Maintainers
 
    David M. Syzdek
    david@syzdek.net
+
+
+Quick Start
+===========
+
+   Configure images and disk options:
+
+       make configure
+
+   Download files:
+
+       make download
+
+   Make disk ISO and USB images in `images/`:
+
+       make images
+
+   Make bootable USB thumbdrive:
+
+       make thumbdrive DISK=/dev/sdX
 
 
 Directory Structure
