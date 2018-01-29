@@ -35,6 +35,22 @@
 
 SYSLINUX_VERSION	?= 6.04-pre1
 MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
+SYSLINUX_CONFIGS	= \
+			  EFI/BOOT/syslia32.cfg \
+			  EFI/BOOT/syslx64.cfg \
+			  syslinux/isolinux.cfg \
+			  syslinux/pxelinux.cfg \
+			  syslinux/syslinux.cfg
+SYSLINUX_BINARIES	= \
+			  syslinux/isolinux.bin.mod \
+			  EFI/BOOT/BOOTX64.EFI \
+			  EFI/BOOT/BOOTX64.EFI.0 \
+			  EFI/BOOT/BOOTIA32.EFI \
+			  EFI/BOOT/BOOTIA32.EFI.0 \
+			  EFI/BOOT/ldlinux.e32 \
+			  EFI/BOOT/ldlinux.e64 \
+			  ldlinux.e32 \
+			  ldlinux.e64
 
 
 var/config/isolinux.inc: $(ISOLINUX_INC_DEPS)
