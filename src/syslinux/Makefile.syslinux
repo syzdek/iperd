@@ -123,7 +123,7 @@ EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@touch $(@)
 
 
-EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -138,7 +138,7 @@ EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SY
 	@touch "$(@)"
 
 
-EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -153,7 +153,7 @@ EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SY
 	@touch "$(@)"
 
 
-EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -168,7 +168,7 @@ EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SYS
 	@touch "$(@)"
 
 
-EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -183,7 +183,7 @@ EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYS
 	@touch "$(@)"
 
 
-syslinux/isolinux.cfg: Makefile.config var/config/isolinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/isolinux.cfg: Makefile.config var/config/isolinux.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -198,7 +198,7 @@ syslinux/isolinux.cfg: Makefile.config var/config/isolinux.inc $(PREREQ_BIN) $(S
 	@touch "$(@)"
 
 
-syslinux/pxelinux.cfg: Makefile.config var/config/pxelinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/pxelinux.cfg: Makefile.config var/config/pxelinux.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
@@ -213,7 +213,7 @@ syslinux/pxelinux.cfg: Makefile.config var/config/pxelinux.inc $(PREREQ_BIN) $(S
 	@touch "$(@)"
 
 
-syslinux/syslinux.cfg: Makefile.config var/config/syslinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/syslinux.cfg: Makefile.config var/config/syslinux.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p syslinux
