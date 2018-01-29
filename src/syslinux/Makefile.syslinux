@@ -37,6 +37,26 @@ SYSLINUX_VERSION	?= 6.04-pre1
 MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
 
 
+var/config/isolinux.inc: $(ISOLINUX_INC_DEPS)
+	bash ./src/scripts/configure.sh deps $(@)
+
+
+var/config/pxelinux.inc: $(PXELINUX_INC_DEPS)
+	bash ./src/scripts/configure.sh deps $(@)
+
+
+var/config/pxelx64.inc: $(PXELX86_INC_DEPS)
+	bash ./src/scripts/configure.sh deps $(@)
+
+
+var/config/syslinux.inc: $(SYSLINUX_INC_DEPS)
+	bash ./src/scripts/configure.sh deps $(@)
+
+
+var/config/syslx64.inc: $(SYSLX86_INC_DEPS)
+	bash ./src/scripts/configure.sh deps $(@)
+
+
 syslinux/isolinux.bin.mod: $(PREREQ_CNF)
 	cp syslinux/isolinux.bin "$(@)"
 	@touch "$(@)"
@@ -69,18 +89,6 @@ syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
 	@touch "$(@)"
 
 
-EFI/BOOT/syslia32.cfg: src/syslinux/syslia32.cfg
-	@mkdir -p $$(dirname $(@))
-	cp src/syslinux/syslia32.cfg $(@)
-	@touch $(@)
-
-
-EFI/BOOT/syslx64.cfg: src/syslinux/syslx64.cfg
-	@mkdir -p $$(dirname $(@))
-	cp src/syslinux/syslx64.cfg $(@)
-	@touch $(@)
-
-
 EFI/BOOT/BOOTX64.EFI EFI/BOOT/BOOTX64.EFI.0: syslinux/iperd.dep
 	@mkdir -p $$(dirname $(@))
 	cp syslinux/efi64/syslinux.efi $(@)
@@ -105,27 +113,78 @@ EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@touch $(@)
 
 
-syslinux/isolinux.cfg: Makefile.config $(ISOLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(ISOLINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(ISOLINUX_CFG) > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslx64.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/syslx64.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
+	   > "$(@)"
 	@touch "$(@)"
 
 
-syslinux/pxelinux.cfg: Makefile.config $(PXELINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(PXELINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(PXELINUX_CFG) > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslx64.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/syslx64.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
+	   > "$(@)"
 	@touch "$(@)"
 
 
-syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_CFG) $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+syslinux/isolinux.cfg: Makefile.config var/config/isolinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/isolinux.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/isolinux.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/iso\/BIOS/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
+	   > "$(@)"
+	@touch "$(@)"
+
+
+syslinux/pxelinux.cfg: Makefile.config var/config/pxelinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelinux.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg\
+	   var/config/pxelinux.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/BIOS/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
+	    > "$(@)"
+	@touch "$(@)"
+
+
+syslinux/syslinux.cfg: Makefile.config var/config/syslinux.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p syslinux
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg $$(SYSLINUX_CFG) > $(@)'
-	@$(do_subst) $(SYSLINDIR)/common.cfg $(SYSLINUX_CFG) > "$(@)"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslinux.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/syslinux.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/BIOS/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
+	   > "$(@)"
 	@touch "$(@)"
 
 

@@ -43,13 +43,13 @@ IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' 
 DATE			= $(shell date +%Y-%m-%d)
 
 
-PREREQ_CNF		= \
+SYSLINUX_CONFIGS	= \
+			  EFI/BOOT/syslia32.cfg \
+			  EFI/BOOT/syslx64.cfg \
 			  syslinux/isolinux.cfg \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
-PREREQ_BIN		= \
-			  EFI/BOOT/syslia32.cfg \
-			  EFI/BOOT/syslx64.cfg \
+SYSLINUX_BINARIES	= \
 			  EFI/BOOT/BOOTX64.EFI \
 			  EFI/BOOT/BOOTX64.EFI.0 \
 			  EFI/BOOT/BOOTIA32.EFI \
@@ -59,7 +59,7 @@ PREREQ_BIN		= \
 			  ldlinux.e32 \
 			  ldlinux.e64
 CLEANFILES		= \
-			  $(PREREQ_BIN) \
+			  $(SYSLINUX_BINARIES) \
 			  boot \
 			  EFI \
 			  images \
@@ -154,21 +154,21 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 include src/syslinux/Makefile.syslinux
 
 
-images/iperdboot.gpt.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.gpt.img: $(SYSLINUX_CONFIGS) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t gpt -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.hybrid.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.hybrid.img: $(SYSLINUX_CONFIGS) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t hybrid -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.mbr.img: $(PREREQ_CNF) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.mbr.img: $(SYSLINUX_CONFIGS) $(DOWNLOAD_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t mbr -s "$(DISKSIZE)" "." "$(@)"
@@ -196,17 +196,17 @@ images/iperdboot.iso: $(DOWNLOAD_FILES) syslinux/isolinux.bin.mod
 	@touch "$(@)"
 
 
-thumbdrive: $(PREREQ_CNF) $(DOWNLOAD_FILES)
+thumbdrive: $(SYSLINUX_CONFIGS) $(DOWNLOAD_FILES)
 	bash src/scripts/thumbdrive.sh -t "$(DISKTYPE)" -s "$(PARTSIZE)" . "$(DISK)"
 
 
 images: images/iperdboot.$(DISKTYPE).img images/iperdboot.iso
 
 
-syslinux: $(PREREQ_CNF)
+syslinux: $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
 
 
-download: $(PREREQ_CNF) $(DOWNLOAD_FILES)
+download: syslinux $(DOWNLOAD_FILES)
 
 
 configure:
