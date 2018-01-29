@@ -44,7 +44,6 @@ SYSLINUX_CONFIGS	= \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
 SYSLINUX_BINARIES	= \
-			  syslinux/isolinux.bin.mod \
 			  EFI/BOOT/BOOTX64.EFI \
 			  EFI/BOOT/BOOTX64.EFI.0 \
 			  EFI/BOOT/BOOTIA32.EFI \
@@ -75,11 +74,6 @@ var/config/syslx64.inc: $(SYSLX86_INC_DEPS)
 	bash ./src/scripts/configure.sh deps $(@)
 
 
-syslinux/isolinux.bin.mod: $(PREREQ_CNF)
-	cp syslinux/isolinux.bin "$(@)"
-	@touch "$(@)"
-
-
 tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
 	./src/scripts/download.sh \
 	   tmp/src/syslinux-$(SYSLINUX_VERSION).tar.xz \
@@ -101,6 +95,7 @@ syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
 	cp $(SYSLINDIR)/f2.txt                              syslinux/
 	cp /usr/share/hwdata/pci.ids                        syslinux/
 	cp /lib/modules/$$(uname -r)/modules.alias          syslinux/modules.als
+	cp syslinux/isolinux.bin                            syslinux/isolinux.bin.mod
 	@touch "$(@)"
 
 
