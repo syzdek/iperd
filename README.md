@@ -50,10 +50,18 @@ Directory Structure
    * boot/<distro>/<ver>/<arch>
    * docs/
    * images/
-   * src/distros/<distro>/options
-   * src/distros/<distro>/make.header
+   * src/distros/<distro>/broken.efi
+   * src/distros/<distro>/cfg.footer
+   * src/distros/<distro>/cfg.header
+   * src/distros/<distro>/cfg.label
+   * src/distros/<distro>/cfg.label.iso
+   * src/distros/<distro>/cfg.label.pxe
+   * src/distros/<distro>/cfg.label.sys
    * src/distros/<distro>/make.boot
    * src/distros/<distro>/make.footer
+   * src/distros/<distro>/make.header
+   * src/distros/<distro>/option
+   * src/distros/<distro>/options
    * src/scripts/
    * src/syslinux
    * tmp/
