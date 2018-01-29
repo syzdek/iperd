@@ -1,30 +1,9 @@
 
-
-ALPINE_FILES		+= \
+DOWNLOAD_FILES		+= \
 			   boot/alpine/@VERSION@/@ARCH@/vmlinuz \
 			   boot/alpine/@VERSION@/@ARCH@/initrd \
 			   boot/alpine/@VERSION@/@ARCH@/modloop \
 			   boot/alpine/@VERSION@/apks/@ARCH@/.iperd
-ALPINE_CFG		+= \
-			   $(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.cfg
-ALPINE_PXE_CFG		+= \
-			   $(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.pxe.cfg
-
-
-$(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.cfg: Makefile Makefile.config $(DISTRODIR)/alpine/alpine-boot.cfg
-	@SRCFILE="$(DISTRODIR)/alpine/alpine-boot.cfg"; \
-	   DISTRO_CODENAME="@CODENAME@"; \
-	   DISTRO_VERSION="@VERSION@"; \
-	   DISTRO_ARCH="@ARCH@"; \
-	   $(do_subst_dt)
-
-
-$(CONFIGDIR)/alpine/alpine@VERSION@@ARCH@.pxe.cfg: Makefile Makefile.config $(DISTRODIR)/alpine/alpine-boot.pxe.cfg
-	@SRCFILE="$(DISTRODIR)/alpine/alpine-boot.pxe.cfg"; \
-	   DISTRO_CODENAME="@CODENAME@"; \
-	   DISTRO_VERSION="@VERSION@"; \
-	   DISTRO_ARCH="@ARCH@"; \
-	   $(do_subst_dt)
 
 
 tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.iperd-extracted:
@@ -65,5 +44,4 @@ boot/alpine/@VERSION@/apks/@ARCH@/.iperd: tmp/boot/alpine/alpine-@VERSION@-@ARCH
            tmp/boot/alpine/alpine-@VERSION@-@ARCH@/apks/@ARCH@/ \
 	   boot/alpine/@VERSION@/apks/@ARCH@
 	@touch "$(@)"
-
 
