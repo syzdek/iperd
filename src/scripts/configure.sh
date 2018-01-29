@@ -523,6 +523,7 @@ generate_cfg()
                -e "s/@ARCH@/${ARCH}/g" \
                -e "s/@LABEL@/${LABEL}/g" \
                "${DISTRODIR}/${DISTRO}/${TMPFILE}"
+            break;
          fi
       done
    done
