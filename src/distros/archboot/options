@@ -1,0 +1,5 @@
+archboot                     'Arch Linux (archboot)'
+   archboot-2016.08-201608-i686    'Arch Linux 2016.08 (i686)'
+   archboot-2016.08-201608-x86_64  'Arch Linux 2016.08 (x86_64)'
+   archboot-2016.12-201608-i686    'Arch Linux 2016.12 (i686)'
+   archboot-2016.12-201608-x86_64  'Arch Linux 2016.12 (x86_64)'

@@ -1,0 +1,8 @@
+
+label archboot@VERSION@@ARCH@
+    MENU LABEL Alpine Linux @VERSION@ (@ARCH@)
+    kernel /boot/archboot/@VERSION@/@ARCH@/vmlinuz
+    initrd /boot/archboot/@VERSION@/@ARCH@/initrd
+    append modloop=@NETBOOT_HTTP@/boot/archboot/@VERSION@/@ARCH@/modloop archboot_repo=@NETBOOT_HTTP@/boot/archboot/@VERSION@/apks/
+
+

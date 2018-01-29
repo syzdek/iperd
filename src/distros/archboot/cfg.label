@@ -1,0 +1,7 @@
+
+label archboot@VERSION@@ARCH@
+    MENU LABEL Arch Linux @VERSION@ (@ARCH@)
+    kernel /boot/archboot/@VERSION@/@ARCH@/vmlinuz
+    initrd /boot/archboot/@VERSION@/@ARCH@/initrd
+    append modloop=/boot/archboot/@VERSION@/@ARCH@/modloop archboot_repo=/boot/archboot/@VERSION@/apks/
+

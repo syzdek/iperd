@@ -1,0 +1,5 @@
+
+
+MIRROR_ARCHBOOT           ?= https://mirrors.kernel.org/archlinux/iso/archboot/
+ARCHBOOT_HASHES		= src/distros/archboot/hashes/
+
