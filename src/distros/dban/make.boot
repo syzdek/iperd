@@ -1,16 +1,5 @@
 
-ISOLINUX_CFG            += $(CONFIGDIR)/dban/dban.cfg
-PXELINUX_CFG            += $(CONFIGDIR)/dban/dban.cfg
-SYSLINUX_CFG            += $(CONFIGDIR)/dban/dban.cfg
-FILES_DBAN		 = boot/dban/dban.bzi
 DOWNLOAD_FILES          += $(FILES_DBAN)
-
-
-$(CONFIGDIR)/dban/dban.cfg: Makefile $(DISTRODIR)/dban/dban.cfg
-	@SRCFILE="$(DISTRODIR)/dban/dban.cfg"; \
-	   DISTRO_CODENAME="@VERSION@"; \
-	   DISTRO_VERSION="@VERSION@"; \
-	   $(do_subst_dt)
 
 
 tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted:
@@ -26,6 +15,4 @@ boot/dban/dban.bzi: tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted
 	cp tmp/boot/dban/dban-@VERSION@_@ARCH@/dban.bzi "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
-
-dban: $(CONFIGDIR)/dban.cfg $(FILES_DBAN)
 
