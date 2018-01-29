@@ -36,7 +36,9 @@
 SYSLINUX_VERSION	?= 6.04-pre1
 MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
 SYSLINUX_CONFIGS	= \
+			  EFI/BOOT/pxelia32.cfg \
 			  EFI/BOOT/syslia32.cfg \
+			  EFI/BOOT/pxelx64.cfg \
 			  EFI/BOOT/syslx64.cfg \
 			  syslinux/isolinux.cfg \
 			  syslinux/pxelinux.cfg \
@@ -97,9 +99,6 @@ syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
 	cp $(SYSLINDIR)/f1.txt                              syslinux/
 	cp $(SYSLINDIR)/f2.txt                              syslinux/
-	cp $(SYSLINDIR)/lpxelinux.cfg                       syslinux/
-	cp $(SYSLINDIR)/efi32/pxelinux.cfg                  syslinux/efi32/
-	cp $(SYSLINDIR)/efi64/pxelinux.cfg                  syslinux/efi64/
 	cp /usr/share/hwdata/pci.ids                        syslinux/
 	cp /lib/modules/$$(uname -r)/modules.alias          syslinux/modules.als
 	@touch "$(@)"
@@ -129,6 +128,21 @@ EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@touch $(@)
 
 
+EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelia32.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/pxelia32.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
+	   > "$(@)"
+	@touch "$(@)"
+
+
 EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
@@ -140,6 +154,21 @@ EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(PREREQ_BIN) $(SY
 	   | sed \
               -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI/g' \
               -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
+	   > "$(@)"
+	@touch "$(@)"
+
+
+EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(PREREQ_BIN) $(SYSLINDIR)/common.cfg
+	@mkdir -p $$(dirname $(@))
+	@rm -f "$(@)"
+	@mkdir -p "$$(dirname "$(@)")"
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelx64.inc > $(@)'
+	@$(do_subst) \
+	   $(SYSLINDIR)/common.cfg \
+	   var/config/pxelx64.inc \
+	   | sed \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
 	   > "$(@)"
 	@touch "$(@)"
 
