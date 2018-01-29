@@ -127,10 +127,10 @@ EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/commo
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelx86.inc > $(@)'
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelx64.inc > $(@)'
 	@$(do_subst) \
 	   $(SYSLINDIR)/common.cfg \
-	   var/config/pxelx86.inc \
+	   var/config/pxelx64.inc \
 	   | sed \
               -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI/g' \
               -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
