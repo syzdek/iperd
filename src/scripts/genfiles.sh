@@ -62,7 +62,7 @@ deps_isolinux_inc()
    CFG_DEP_FILES=""
    rm -f ${CONFIGDIR}/isolinux.inc
    for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
+      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
    done  > "${CONFIGDIR}/isolinux.inc"
    ISOLINUX_INC_DEPS="${CFG_DEP_FILES}"
 }
@@ -74,7 +74,7 @@ deps_pxelinux_inc()
    CFG_DEP_FILES=""
    rm -f ${CONFIGDIR}/pxelinux.inc
    for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
    done  > "${CONFIGDIR}/pxelinux.inc"
    PXELINUX_INC_DEPS="${CFG_DEP_FILES}"
 }
@@ -87,7 +87,7 @@ deps_pxelx64_inc()
    rm -f ${CONFIGDIR}/pxelx64.inc
    for ISODISTRO in $(list_cfg_distros);do
       if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+         gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
       fi
    done  > "${CONFIGDIR}/pxelx64.inc"
    PXELX64_INC_DEPS="${CFG_DEP_FILES}"
@@ -100,7 +100,7 @@ deps_syslinux_inc()
    CFG_DEP_FILES=""
    rm -f ${CONFIGDIR}/syslinux.inc
    for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
    done  > "${CONFIGDIR}/syslinux.inc"
    SYSLINUX_INC_DEPS="${CFG_DEP_FILES}"
 }
@@ -113,7 +113,7 @@ deps_syslx64_inc()
    rm -f ${CONFIGDIR}/syslx64.inc
    for ISODISTRO in $(list_cfg_distros);do
       if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
+         gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
       fi
    done  > "${CONFIGDIR}/syslx64.inc"
    SYSLX64_INC_DEPS="${CFG_DEP_FILES}"
@@ -136,14 +136,14 @@ deps_makefile_config()
       echo "SYSLINUX_INC_DEPS	= ${SYSLINUX_INC_DEPS}"
       echo "SYSLX64_INC_DEPS	= ${SYSLX64_INC_DEPS}"
       for MAKEDISTRO in $(list_cfg_distros);do
-         generate_cfg "${MAKEDISTRO}" "make" "make.boot"
+         gen_dosubst "${MAKEDISTRO}" "make" "make.boot"
       done
       echo "MAKEFILE_CONFIG_DEPS	= ${CFG_DEP_FILES}"
    } >  ${BASEDIR}/Makefile.config
 }
 
 
-generate_cfg()
+gen_dosubst()
 {
    DISTRO="${1}"
    PREFIX="${2}"
