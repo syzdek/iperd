@@ -83,6 +83,13 @@ list_cfg_distros()
 }
 
 
+list_cfg_vers()
+{
+   egrep "^#${1}-" "${CONFIG}" \
+      |cut -d\# -f2
+}
+
+
 list_distros()
 {
    egrep '^[[:space:]]{0,}[a-zA-Z0-9]{1,}[[:space:]]' ${DISTRODIR}/*/option* \
