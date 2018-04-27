@@ -326,15 +326,14 @@ configure_distros_image()
    if test $RC -ne 0;then
       return 0;
    fi
-   if test "${RESULT}" == "____SKIP____";then
-      return 0;
-   fi
 
    # update configuration
    grep -v "^#${DISTRO}-" "${CONFIG}.new" > "${CONFIG}.new.tmp"
-   for IMAGE in ${RESULT};do
-      echo "#$IMAGE" >> "${CONFIG}.new.tmp"
-   done
+   if test "${RESULT}" != "____SKIP____";then
+      for IMAGE in ${RESULT};do
+         echo "#$IMAGE" >> "${CONFIG}.new.tmp"
+      done
+   fi
    sort -n "${CONFIG}.new.tmp" > "${CONFIG}.new"
 }
 
