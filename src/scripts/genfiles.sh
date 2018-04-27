@@ -35,6 +35,9 @@
 
 # set base directory
 REGEN_FILE="${1,,}"
+if test -z "${REGEN_FILE}";then
+   REGEN_FILE=all
+fi
 
 
 # set PROG_NAME and load profile
@@ -52,37 +55,6 @@ fi
 #  Functions  #
 #             #
 ###############
-
-deps()
-{
-   GEN_FILES="${1}"
-
-   # adjusts file list, if empty
-   if test -z "${GEN_FILES}";then
-      GEN_FILES="${GEN_FILES} var/config/isolinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/pxelinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/pxelx64.inc"
-      GEN_FILES="${GEN_FILES} var/config/syslinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/syslx64.inc"
-      GEN_FILES="${GEN_FILES} makefile.config"
-   fi
-
-   for GEN_FILE in ${GEN_FILES};do
-      case ${GEN_FILE} in
-         var/config/isolinux.inc) deps_isolinux_inc;;
-         var/config/pxelinux.inc) deps_pxelinux_inc;;
-         var/config/pxelx64.inc)  deps_pxelx64_inc;;
-         var/config/syslinux.inc) deps_syslinux_inc;;
-         var/config/syslx64.inc)  deps_syslx64_inc;;
-         makefile.config)         deps_makefile_config;;
-         *)
-            echo "${PROG_NAME}: unknown file requested" 1>&2
-            exit 1;
-         ;;
-      esac
-   done
-}
-
 
 # generate include file for isolinux.cfg
 deps_isolinux_inc()
@@ -212,7 +184,36 @@ generate_cfg()
 ####################
 
 
-deps ${REGEN_FILE} || exit 1
+case "${REGEN_FILE}" in
+   var/config/isolinux.inc) deps_isolinux_inc    || exit 1;;
+   var/config/pxelinux.inc) deps_pxelinux_inc    || exit 1;;
+   var/config/pxelx64.inc)  deps_pxelx64_inc     || exit 1;;
+   var/config/syslinux.inc) deps_syslinux_inc    || exit 1;;
+   var/config/syslx64.inc)  deps_syslx64_inc     || exit 1;;
+   Makefile.config)         deps_makefile_config || exit 1;;
+
+   all)
+   deps_isolinux_inc    || exit 1
+   deps_pxelinux_inc    || exit 1
+   deps_pxelx64_inc     || exit 1
+   deps_syslinux_inc    || exit 1
+   deps_syslx64_inc     || exit 1
+   deps_makefile_config || exit 1
+   ;;
+
+   *)
+   echo "Usage: ${PROG_NAME} all"                     1>&2
+   echo "       ${PROG_NAME} var/config/isolinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/pxelinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/pxelx64.inc"  1>&2
+   echo "       ${PROG_NAME} var/config/syslinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/syslx64.inc"  1>&2
+   echo "       ${PROG_NAME} Makefile.config"         1>&2
+   echo ""
+   exit 1
+   ;;
+esac
+
 exit 0
 
 # end of script
