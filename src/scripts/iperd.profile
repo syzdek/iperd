@@ -34,8 +34,8 @@
 #
 
 # set defaults
-SCRIPTDIR="$(cd $(dirname "${0}"); pwd)"
-BASEDIR="$(dirname "${0}")/../../"
+BASEDIR="$(cd "$(dirname "${IPERD_PROFILE}")/../../"; pwd)"
+SCRIPTDIR="${SCRIPTDIR:-${BASEDIR}/src/scripts}"
 DISTRODIR="${DISTRODIR:-${BASEDIR}/src/distros}"
 CONFIGDIR="${CONFIGDIR:-${BASEDIR}/var/config}"
 CONFIG="${CONFIG:-${CONFIGDIR}/iperd.conf}"
