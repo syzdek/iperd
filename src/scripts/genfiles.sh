@@ -111,10 +111,10 @@ gen_dosubst()
       cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
    fi
 
-   for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
-      VERSION=$(echo "${VERS}" |cut -d- -f2)
+   for VERS in $(list_cfg_vers "${DISTRO}");do
+      VERSION=$(echo  "${VERS}" |cut -d- -f2)
       CODENAME=$(echo "${VERS}" |cut -d- -f3)
-      ARCH=$(echo "${VERS}" |cut -d- -f4)
+      ARCH=$(echo     "${VERS}" |cut -d- -f4)
       for TMPFILE in ${FILES};do
          if test -f "${DISTRODIR}/${DISTRO}/${TMPFILE}";then
             CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${TMPFILE}"
@@ -123,7 +123,6 @@ gen_dosubst()
                -e "s/@CODENAME@/${CODENAME}/g" \
                -e "s/@DISTRO@/${DISTRO}/g" \
                -e "s/@ARCH@/${ARCH}/g" \
-               -e "s/@LABEL@/${LABEL}/g" \
                "${DISTRODIR}/${DISTRO}/${TMPFILE}"
             break;
          fi
