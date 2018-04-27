@@ -148,10 +148,12 @@ gen_dosubst()
    DISTRO="${1}"
    PREFIX="${2}"
    FILES="${3}"
+
    if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.header";then
       CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.header"
       cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
    fi
+
    for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
       VERSION=$(echo "${VERS}" |cut -d- -f2)
       CODENAME=$(echo "${VERS}" |cut -d- -f3)
@@ -170,6 +172,7 @@ gen_dosubst()
          fi
       done
    done
+
    if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.footer";then
       CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
       cat "${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
