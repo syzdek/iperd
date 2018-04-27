@@ -56,72 +56,29 @@ fi
 #             #
 ###############
 
-# generate include file for isolinux.cfg
-deps_isolinux_inc()
+
+# generate syslinux configurations
+generate_cfg()
 {
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/isolinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
-   done  > "${CONFIGDIR}/isolinux.inc"
-   ISOLINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
+   INCFILE="${1}"
+   SRCFILES="cfg.label ${2}"
+   BROKEFILE="${3}"
 
+   rm -f "${CONFIGDIR}/${INCFILE}" || return 1
 
-# generate include file for pxelinux.cfg
-deps_pxelinux_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/pxelinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
-   done  > "${CONFIGDIR}/pxelinux.inc"
-   PXELINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for pxelx64.cfg
-deps_pxelx64_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/pxelx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
+   for GENDISTRO in $(list_cfg_distros);do
+      if test ! -z "${BROKEFILE}";then
+         if test -f "${DISTRODIR}/${GENDISTRO}/${BROKEFILE}";then
+            continue;
+         fi
       fi
-   done  > "${CONFIGDIR}/pxelx64.inc"
-   PXELX64_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for syslinux.cfg
-deps_syslinux_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/syslinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-   done  > "${CONFIGDIR}/syslinux.inc"
-   SYSLINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for syslx64.cfg
-deps_syslx64_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/syslx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         gen_dosubst "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-      fi
-   done  > "${CONFIGDIR}/syslx64.inc"
-   SYSLX64_INC_DEPS="${CFG_DEP_FILES}"
+      gen_dosubst "${GENDISTRO}" cfg "${SRCFILES}" || return 1
+   done > "${CONFIGDIR}/${INCFILE}"
 }
 
 
 # build Makefile configuration
-deps_makefile_config()
+generate_makefile_config()
 {
    CFG_DEP_FILES=""
    rm -f ${BASEDIR}/Makefile.config
@@ -188,30 +145,30 @@ gen_dosubst()
 
 
 case "${REGEN_FILE}" in
-   var/config/isolinux.inc) deps_isolinux_inc    || exit 1;;
-   var/config/pxelinux.inc) deps_pxelinux_inc    || exit 1;;
-   var/config/pxelx64.inc)  deps_pxelx64_inc     || exit 1;;
-   var/config/syslinux.inc) deps_syslinux_inc    || exit 1;;
-   var/config/syslx64.inc)  deps_syslx64_inc     || exit 1;;
-   Makefile.config)         deps_makefile_config || exit 1;;
+   isolinux.inc)    generate_cfg isolinux.inc cfg.label.iso              || exit 1;;
+   pxelinux.inc)    generate_cfg pxelinux.inc cfg.label.pxe              || exit 1;;
+   pxelx64.inc)     generate_cfg pxelx64.inc  cfg.label.pxe broken.efi64 || exit 1;;
+   syslinux.inc)    generate_cfg syslinux.inc cfg.label.sys              || exit 1;;
+   syslx64.inc)     generate_cfg syslx64.inc  cfg.label.sys broken.efi64 || exit 1;;
+   Makefile.config) generate_makefile_config                             || exit 1;;
 
    all)
-   deps_isolinux_inc    || exit 1
-   deps_pxelinux_inc    || exit 1
-   deps_pxelx64_inc     || exit 1
-   deps_syslinux_inc    || exit 1
-   deps_syslx64_inc     || exit 1
-   deps_makefile_config || exit 1
+   generate_cfg isolinux.inc cfg.label.iso              || exit 1
+   generate_cfg pxelinux.inc cfg.label.pxe              || exit 1
+   generate_cfg pxelx64.inc  cfg.label.pxe broken.efi64 || exit 1
+   generate_cfg syslinux.inc cfg.label.sys              || exit 1
+   generate_cfg syslx64.inc  cfg.label.sys broken.efi64 || exit 1
+   generate_makefile_config                             || exit 1
    ;;
 
    *)
-   echo "Usage: ${PROG_NAME} all"                     1>&2
-   echo "       ${PROG_NAME} var/config/isolinux.inc" 1>&2
-   echo "       ${PROG_NAME} var/config/pxelinux.inc" 1>&2
-   echo "       ${PROG_NAME} var/config/pxelx64.inc"  1>&2
-   echo "       ${PROG_NAME} var/config/syslinux.inc" 1>&2
-   echo "       ${PROG_NAME} var/config/syslx64.inc"  1>&2
-   echo "       ${PROG_NAME} Makefile.config"         1>&2
+   echo "Usage: ${PROG_NAME} all"             1>&2
+   echo "       ${PROG_NAME} isolinux.inc"    1>&2
+   echo "       ${PROG_NAME} pxelinux.inc"    1>&2
+   echo "       ${PROG_NAME} pxelx64.inc"     1>&2
+   echo "       ${PROG_NAME} syslinux.inc"    1>&2
+   echo "       ${PROG_NAME} syslx64.inc"     1>&2
+   echo "       ${PROG_NAME} Makefile.config" 1>&2
    echo ""
    exit 1
    ;;
