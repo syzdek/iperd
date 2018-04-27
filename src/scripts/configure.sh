@@ -98,7 +98,7 @@ configure()
             return 0
          fi
       elif test $RC -eq 126;then # (save)
-         deps
+         configure_save
          return 0
       elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
          configure_disk
@@ -276,13 +276,13 @@ configure_distros()
       if test $RC -ne 0;then
          return 0;
       else
-         configure_image "${RESULT}"
+         configure_distros_image "${RESULT}"
       fi
    done
 }
 
 
-configure_image()
+configure_distros_image()
 {
    DISTRO="${1}"
 
@@ -339,10 +339,8 @@ configure_image()
 }
 
 
-deps()
+configure_save()
 {
-   GEN_FILES="${1}"
-
    # save variables
    for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
@@ -361,152 +359,6 @@ deps()
 
    # save new config
    mv "${CONFIG}.new" "${CONFIG}" || exit 1
-
-   # adjusts file list, if empty
-   if test -z "${GEN_FILES}";then
-      GEN_FILES="${GEN_FILES} var/config/isolinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/pxelinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/pxelx64.inc"
-      GEN_FILES="${GEN_FILES} var/config/syslinux.inc"
-      GEN_FILES="${GEN_FILES} var/config/syslx64.inc"
-      GEN_FILES="${GEN_FILES} makefile.config"
-   fi
-
-   for GEN_FILE in ${GEN_FILES};do
-      case ${GEN_FILE} in
-         var/config/isolinux.inc) deps_isolinux_inc;;
-         var/config/pxelinux.inc) deps_pxelinux_inc;;
-         var/config/pxelx64.inc)  deps_pxelx64_inc;;
-         var/config/syslinux.inc) deps_syslinux_inc;;
-         var/config/syslx64.inc)  deps_syslx64_inc;;
-         makefile.config)         deps_makefile_config;;
-         *)
-            echo "${PROG_NAME}: unknown file requested" 1>&2
-            exit 1;
-         ;;
-      esac
-   done
-}
-
-
-# generate include file for isolinux.cfg
-deps_isolinux_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/isolinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.iso"
-   done  > "${CONFIGDIR}/isolinux.inc"
-   ISOLINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for pxelinux.cfg
-deps_pxelinux_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/pxelinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
-   done  > "${CONFIGDIR}/pxelinux.inc"
-   PXELINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for pxelx64.cfg
-deps_pxelx64_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/pxelx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.pxe"
-      fi
-   done  > "${CONFIGDIR}/pxelx64.inc"
-   PXELX64_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for syslinux.cfg
-deps_syslinux_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/syslinux.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-   done  > "${CONFIGDIR}/syslinux.inc"
-   SYSLINUX_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# generate include file for syslx64.cfg
-deps_syslx64_inc()
-{
-   CFG_DEP_FILES=""
-   rm -f ${CONFIGDIR}/syslx64.inc
-   for ISODISTRO in $(list_cfg_distros);do
-      if test ! -f "${DISTRODIR}/${DISTRO}/broken.efi64";then
-         generate_cfg "${ISODISTRO}" cfg "cfg.label cfg.label.sys"
-      fi
-   done  > "${CONFIGDIR}/syslx64.inc"
-   SYSLX64_INC_DEPS="${CFG_DEP_FILES}"
-}
-
-
-# build Makefile configuration
-deps_makefile_config()
-{
-   CFG_DEP_FILES=""
-   rm -f ${BASEDIR}/Makefile.config
-   {
-      echo "ISOTYPE	?= ${CONFIG_ISO_TYPE}"
-      echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
-      echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
-      echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
-      echo "ISOLINUX_INC_DEPS	= ${ISOLINUX_INC_DEPS}"
-      echo "PXELINUX_INC_DEPS	= ${PXELINUX_INC_DEPS}"
-      echo "PXELX64_INC_DEPS	= ${PXELX64_INC_DEPS}"
-      echo "SYSLINUX_INC_DEPS	= ${SYSLINUX_INC_DEPS}"
-      echo "SYSLX64_INC_DEPS	= ${SYSLX64_INC_DEPS}"
-      for MAKEDISTRO in $(list_cfg_distros);do
-         generate_cfg "${MAKEDISTRO}" "make" "make.boot"
-      done
-      echo "MAKEFILE_CONFIG_DEPS	= ${CFG_DEP_FILES}"
-   } >  ${BASEDIR}/Makefile.config
-}
-
-
-generate_cfg()
-{
-   DISTRO="${1}"
-   PREFIX="${2}"
-   FILES="${3}"
-   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.header";then
-      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.header"
-      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
-   fi
-   for VERS in $(egrep "^#${DISTRO}-" "${CONFIG}");do
-      VERSION=$(echo "${VERS}" |cut -d- -f2)
-      CODENAME=$(echo "${VERS}" |cut -d- -f3)
-      ARCH=$(echo "${VERS}" |cut -d- -f4)
-      for TMPFILE in ${FILES};do
-         if test -f "${DISTRODIR}/${DISTRO}/${TMPFILE}";then
-            CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${TMPFILE}"
-            sed \
-               -e "s/@VERSION@/${VERSION}/g" \
-               -e "s/@CODENAME@/${CODENAME}/g" \
-               -e "s/@DISTRO@/${DISTRO}/g" \
-               -e "s/@ARCH@/${ARCH}/g" \
-               -e "s/@LABEL@/${LABEL}/g" \
-               "${DISTRODIR}/${DISTRO}/${TMPFILE}"
-            break;
-         fi
-      done
-   done
-   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.footer";then
-      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
-      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
-   fi
 }
 
 
@@ -549,8 +401,7 @@ case "${ACTION}" in
 
 
    deps)
-   prereqs || exit 1
-   deps ${REGEN_FILE} || exit 1
+   "${SCRIPTDIR}"/genfiles.sh ${REGEN_FILE}
    exit 0
    ;;
 

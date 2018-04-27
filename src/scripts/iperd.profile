@@ -34,6 +34,7 @@
 #
 
 # set defaults
+SCRIPTDIR="$(cd $(dirname "${0}"); pwd)"
 BASEDIR="$(dirname "${0}")/../../"
 DISTRODIR="${DISTRODIR:-${BASEDIR}/src/distros}"
 CONFIGDIR="${CONFIGDIR:-${BASEDIR}/var/config}"
