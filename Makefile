@@ -118,7 +118,7 @@ Makefile.local:
 	@touch "$(@)"
 
 Makefile.config: $(SCRIPTDIR)/configure.sh
-	bash ./$(SCRIPTDIR)/configure.sh deps
+	bash ./$(SCRIPTDIR)/genfiles.sh all
 	@touch "$(@)"
 
 
@@ -204,7 +204,7 @@ configure:
 
 
 deps:
-	bash ./$(SCRIPTDIR)/configure.sh deps
+	bash ./$(SCRIPTDIR)/genfiles.sh all
 
 
 clean:
