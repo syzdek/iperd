@@ -211,8 +211,7 @@ configure:
 	bash ./$(SCRIPTDIR)/configure.sh
 
 
-deps:
-	bash ./$(SCRIPTDIR)/genfiles.sh all
+deps: $(SYSLINUX_CONFIGS) Makefile.config
 
 
 clean:
