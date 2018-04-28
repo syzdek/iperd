@@ -61,76 +61,6 @@ cleanup()
 }
 
 
-configure()
-{
-   # enter main loop
-   while test true;do
-
-      # display main menu
-      exec 3>&1
-      RESULT="$(echo "" | xargs dialog \
-         --title " Main Menu " \
-         --backtitle "IP Engineering Rescue Disk Setup" \
-         --ok-label "Select" \
-         --extra-button \
-         --extra-label "Save" \
-         --cancel-label "Exit" \
-         --menu "Select item to configure:" \
-         20 70 13 \
-         "disk"      "Change disk image options" \
-         "images"    "Select individual boot images" \
-         "all"       "Select all available images" \
-         "defaults"  "Load defaults" \
-         "revert"    "Revert changes" \
-         2>&1 1>&3)"
-      RC=$?
-      exec 3>&-
-
-      # inteprets selection
-      if test $RC -eq 124;then # (exit)
-         dialog \
-            --title " Exit Setup " \
-            --backtitle "IP Engineering Rescue Disk Setup" \
-            --defaultno \
-            --yesno "Exit without saving?" \
-            6 30
-         if test $? -eq 0;then
-            return 0
-         fi
-      elif test $RC -eq 126;then # (save)
-         configure_save
-         return 0
-      elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
-         configure_disk
-      elif test $RC -eq 0 && test "x${RESULT}" == "ximages";then
-         configure_distros
-      elif test $RC -eq 0 && test "x${RESULT}" == "xall";then
-         configure_all
-      elif test $RC -eq 0 && test "x${RESULT}" == "xdefaults";then
-         CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
-         CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
-         CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
-         CONFIG_ISO_TYPE="${DEFAULT_ISO_SIZE}"
-         cat /dev/null > ${CONFIG}.new
-         dialog \
-            --backtitle "IP Engineering Rescue Disk Setup" \
-            --no-tags \
-            --msgbox "Defaults loaded." \
-            6 30
-      elif test $RC -eq 0 && test "x${RESULT}" == "xrevert";then
-         prereqs
-         dialog \
-            --backtitle "IP Engineering Rescue Disk Setup" \
-            --no-tags \
-            --msgbox "Changes reverted." \
-            6 30
-      fi
-   done
-
-   return 0;
-}
-
-
 configure_all()
 {
    # enable all options
@@ -389,26 +319,71 @@ prereqs()
 ####################
 
 
-# prompt for images to install
-case "${ACTION}" in
+prereqs   || exit 1
 
-   configure)
-   prereqs   || exit 1
-   configure || exit 1
-   exit 0
-   ;;
+# main loop
+while test true;do
 
+   # display main menu
+   exec 3>&1
+   RESULT="$(echo "" | xargs dialog \
+      --title " Main Menu " \
+      --backtitle "IP Engineering Rescue Disk Setup" \
+      --ok-label "Select" \
+      --extra-button \
+      --extra-label "Save" \
+      --cancel-label "Exit" \
+      --menu "Select item to configure:" \
+      20 70 13 \
+      "disk"      "Change disk image options" \
+      "images"    "Select individual boot images" \
+      "all"       "Select all available images" \
+      "defaults"  "Load defaults" \
+      "revert"    "Revert changes" \
+      2>&1 1>&3)"
+   RC=$?
+   exec 3>&-
 
-   deps)
-   "${SCRIPTDIR}"/genfiles.sh ${REGEN_FILE}
-   exit 0
-   ;;
+   # inteprets selection
+   if test $RC -eq 124;then # (exit)
+      dialog \
+         --title " Exit Setup " \
+         --backtitle "IP Engineering Rescue Disk Setup" \
+         --defaultno \
+         --yesno "Exit without saving?" \
+         6 30
+      if test $? -eq 0;then
+         exit 0
+      fi
+   elif test $RC -eq 126;then # (save)
+      configure_save
+      exit 0
+   elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
+      configure_disk
+   elif test $RC -eq 0 && test "x${RESULT}" == "ximages";then
+      configure_distros
+   elif test $RC -eq 0 && test "x${RESULT}" == "xall";then
+      configure_all
+   elif test $RC -eq 0 && test "x${RESULT}" == "xdefaults";then
+      CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
+      CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
+      CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
+      CONFIG_ISO_TYPE="${DEFAULT_ISO_SIZE}"
+      cat /dev/null > ${CONFIG}.new
+      dialog \
+         --backtitle "IP Engineering Rescue Disk Setup" \
+         --no-tags \
+         --msgbox "Defaults loaded." \
+         6 30
+   elif test $RC -eq 0 && test "x${RESULT}" == "xrevert";then
+      prereqs
+      dialog \
+      --backtitle "IP Engineering Rescue Disk Setup" \
+         --no-tags \
+         --msgbox "Changes reverted." \
+         6 30
+   fi
+done
 
-
-   *)
-   echo "Usage: ${PROG_NAME} [ configure | deps ]" 1>&2
-   exit 1
-   ;;
-esac
 
 # end of script

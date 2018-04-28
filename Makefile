@@ -117,7 +117,7 @@ all:
 Makefile.local:
 	@touch "$(@)"
 
-Makefile.config: $(SCRIPTDIR)/configure.sh
+Makefile.config: $(SCRIPTDIR)/configure.sh $(SCRIPTDIR)/genfiles.sh
 	bash ./$(SCRIPTDIR)/genfiles.sh all
 	@touch "$(@)"
 
@@ -200,7 +200,7 @@ download: syslinux $(DOWNLOAD_FILES)
 
 configure:
 	@mkdir -p var/config
-	bash ./$(SCRIPTDIR)/configure.sh configure
+	bash ./$(SCRIPTDIR)/configure.sh
 
 
 deps:
