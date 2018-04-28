@@ -96,7 +96,7 @@ generate_makefile_config()
       # save Makekfile dependencies
       CFG_DEP_FILES="${STD_DEP_FILES}"
       for MAKEDISTRO in $(list_cfg_distros);do
-         for FILE in $(cd ${BASEDIR} && ls src/distros/make.*);do
+         for FILE in $(cd ${BASEDIR} && ls src/distros/${MAKEDISTRO}/make.*);do
             CFG_DEP_FILES="${CFG_DEP_FILES} ${FILE}"
          done
       done
@@ -105,7 +105,7 @@ generate_makefile_config()
       # save syslinux config include dependencies
       CFG_DEP_FILES="${STD_DEP_FILES}"
       for MAKEDISTRO in $(list_cfg_distros);do
-         for FILE in $(cd ${BASEDIR} && ls src/distros/cfg.*);do
+         for FILE in $(cd ${BASEDIR} && ls src/distros/${MAKEDISTRO}/cfg.*);do
             CFG_DEP_FILES="${CFG_DEP_FILES} ${FILE}"
          done
       done
