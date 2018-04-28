@@ -55,23 +55,23 @@ SYSLINUX_BINARIES	= \
 
 
 var/config/isolinux.inc: $(ISOLINUX_INC_DEPS)
-	bash ./src/scripts/configure.sh deps $(@)
+	bash ./src/scripts/genfiles.sh $(@)
 
 
 var/config/pxelinux.inc: $(PXELINUX_INC_DEPS)
-	bash ./src/scripts/configure.sh deps $(@)
+	bash ./src/scripts/genfiles.sh $(@)
 
 
 var/config/pxelx64.inc: $(PXELX86_INC_DEPS)
-	bash ./src/scripts/configure.sh deps $(@)
+	bash ./src/scripts/genfiles.sh $(@)
 
 
 var/config/syslinux.inc: $(SYSLINUX_INC_DEPS)
-	bash ./src/scripts/configure.sh deps $(@)
+	bash ./src/scripts/genfiles.sh $(@)
 
 
 var/config/syslx64.inc: $(SYSLX86_INC_DEPS)
-	bash ./src/scripts/configure.sh deps $(@)
+	bash ./src/scripts/genfiles.sh $(@)
 
 
 tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
