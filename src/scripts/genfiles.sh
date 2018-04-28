@@ -162,38 +162,13 @@ gen_dosubst()
 
 case "${REGEN_FILE}" in
 
-   var/config/isolinux.inc)
-   generate_cfg isolinux.inc cfg.label.iso || exit 1;
-   ;;
-
-   var/config/pxelinux.inc)
-   generate_cfg pxelinux.inc cfg.label.pxe || exit 1;
-   ;;
-
-   var/config/pxelx64.inc)
-   generate_cfg pxelx64.inc cfg.label.pxe broken.efi64 || exit 1;
-   ;;
-
-   var/config/syslinux.inc)
-   generate_cfg syslinux.inc cfg.label.sys || exit 1;
-   ;;
-
-   var/config/syslx64.inc)
-   generate_cfg syslx64.inc cfg.label.sys broken.efi64 || exit 1;
-   ;;
-
-   Makefile.config)
-   generate_makefile_config || exit 1;
-   ;;
-
-   all)
-   generate_cfg isolinux.inc cfg.label.iso              || exit 1
-   generate_cfg pxelinux.inc cfg.label.pxe              || exit 1
-   generate_cfg pxelx64.inc  cfg.label.pxe broken.efi64 || exit 1
-   generate_cfg syslinux.inc cfg.label.sys              || exit 1
-   generate_cfg syslx64.inc  cfg.label.sys broken.efi64 || exit 1
-   generate_makefile_config                             || exit 1
-   ;;
+   all);;
+   makefile.config);;
+   var/config/isolinux.inc);;
+   var/config/pxelinux.inc);;
+   var/config/pxelx64.inc);;
+   var/config/syslinux.inc);;
+   var/config/syslx64.inc);;
 
    *)
    echo "Usage: ${PROG_NAME} all"                     1>&2
@@ -207,6 +182,50 @@ case "${REGEN_FILE}" in
    exit 1
    ;;
 esac
+
+
+if test "x${REGEN_FILE}" = "xall";then
+   REGEN_FILE=""
+   REGEN_FILE="${REGEN_FILE} makefile.config"
+   REGEN_FILE="${REGEN_FILE} var/config/isolinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/pxelinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/pxelx64.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/syslinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/syslx64.inc"
+fi
+
+
+for FILE in ${REGEN_FILE};do
+   case "${FILE}" in
+      makefile.config)
+      generate_makefile_config || exit 1
+      ;;
+
+      var/config/isolinux.inc)
+      generate_cfg isolinux.inc cfg.label.iso || exit 1;
+      ;;
+
+      var/config/pxelinux.inc)
+      generate_cfg pxelinux.inc cfg.label.pxe || exit 1;
+      ;;
+
+      var/config/pxelx64.inc)
+      generate_cfg pxelx64.inc cfg.label.pxe broken.efi64 || exit 1;
+      ;;
+
+      var/config/syslinux.inc)
+      generate_cfg syslinux.inc cfg.label.sys || exit 1;
+      ;;
+
+      var/config/syslx64.inc)
+      generate_cfg syslx64.inc cfg.label.sys broken.efi64 || exit 1;
+      ;;
+
+      *)
+      ;;
+   esac
+done
+
 
 exit 0
 
