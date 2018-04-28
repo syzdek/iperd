@@ -35,7 +35,6 @@
 
 # set base directory
 ACTION="${1,,}"
-REGEN_FILE="${2,,}"
 
 
 # set PROG_NAME and load profile
@@ -320,6 +319,24 @@ prereqs()
 
 
 prereqs   || exit 1
+
+
+# checks arguments
+case "${ACTION}" in
+   deps)
+   configure_save || exit 1
+   exit 0
+   ;;
+
+   configure)
+   ;;
+
+   *)
+   echo "Usage: ${PROG_NAME} [ configure | deps ]" 1>&2
+   exit 1;
+   ;;
+esac
+
 
 # main loop
 while test true;do

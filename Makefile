@@ -122,7 +122,7 @@ Makefile.local:
 
 var/config/iperd.conf: $(SCRIPTDIR)/configure.sh $(SCRIPTDIR)/iperd.profile
 	@mkdir -p var/config
-	bash ./$(SCRIPTDIR)/configure.sh
+	bash ./$(SCRIPTDIR)/configure.sh deps
 	@touch "$(@)"
 
 
@@ -209,7 +209,8 @@ download: syslinux $(DOWNLOAD_FILES)
 
 configure:
 	@mkdir -p var/config
-	bash ./$(SCRIPTDIR)/configure.sh
+	bash ./$(SCRIPTDIR)/configure.sh configure
+	@touch "var/config/iperd.conf"
 
 
 deps: $(SYSLINUX_CONFIGS) Makefile.config
