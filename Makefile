@@ -50,6 +50,8 @@ ALL_FILES		= \
 CLEANFILES		= \
 			  $(SYSLINUX_CONFIGS) \
 			  $(SYSLINUX_BINARIES) \
+			  $(SYSLINUX_INCLUDES) \
+			  Makefile.config \
 			  boot \
 			  EFI \
 			  images \
@@ -213,7 +215,6 @@ clean:
 
 distclean: clean
 	rm -Rf boot
-	rm -f  Makefile.config
 	rm -Rf src/config
 	rm -Rf tmp
 
