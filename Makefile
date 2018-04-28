@@ -123,6 +123,7 @@ Makefile.local:
 var/config/iperd.conf: $(SCRIPTDIR)/configure.sh $(SCRIPTDIR)/iperd.profile
 	@mkdir -p var/config
 	bash ./$(SCRIPTDIR)/configure.sh
+	@touch "$(@)"
 
 
 Makefile.config: $(SCRIPTDIR)/configure.sh $(SCRIPTDIR)/genfiles.sh
