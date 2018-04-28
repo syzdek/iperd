@@ -43,6 +43,12 @@ SYSLINUX_CONFIGS	= \
 			  syslinux/isolinux.cfg \
 			  syslinux/pxelinux.cfg \
 			  syslinux/syslinux.cfg
+SYSLINUX_INCLUDES	= \
+			  var/config/isolinux.inc \
+			  var/config/pxelinux.inc \
+			  var/config/pxelx64.inc \
+			  var/config/syslinux.inc \
+			  var/config/syslx64.inc
 SYSLINUX_BINARIES	= \
 			  EFI/BOOT/BOOTX64.EFI \
 			  EFI/BOOT/BOOTX64.EFI.0 \
@@ -54,23 +60,7 @@ SYSLINUX_BINARIES	= \
 			  ldlinux.e64
 
 
-var/config/isolinux.inc: $(ISOLINUX_INC_DEPS)
-	bash ./src/scripts/genfiles.sh $(@)
-
-
-var/config/pxelinux.inc: $(PXELINUX_INC_DEPS)
-	bash ./src/scripts/genfiles.sh $(@)
-
-
-var/config/pxelx64.inc: $(PXELX86_INC_DEPS)
-	bash ./src/scripts/genfiles.sh $(@)
-
-
-var/config/syslinux.inc: $(SYSLINUX_INC_DEPS)
-	bash ./src/scripts/genfiles.sh $(@)
-
-
-var/config/syslx64.inc: $(SYSLX86_INC_DEPS)
+$(SYSLINUX_INCLUDES): $(SYSLINUX_INC_DEPS)
 	bash ./src/scripts/genfiles.sh $(@)
 
 
