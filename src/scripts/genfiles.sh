@@ -65,7 +65,6 @@ generate_cfg()
    BROKEFILE="${3}"
 
    rm -f "${CONFIGDIR}/${INCFILE}" || return 1
-
    for GENDISTRO in $(list_cfg_distros);do
       if test ! -z "${BROKEFILE}";then
          if test -f "${DISTRODIR}/${GENDISTRO}/${BROKEFILE}";then
@@ -74,29 +73,50 @@ generate_cfg()
       fi
       gen_dosubst "${GENDISTRO}" cfg "${SRCFILES}" || return 1
    done > "${CONFIGDIR}/${INCFILE}"
+   touch "${CONFIGDIR}/${INCFILE}"
 }
 
 
 # build Makefile configuration
 generate_makefile_config()
 {
-   CFG_DEP_FILES=""
    rm -f ${BASEDIR}/Makefile.config
    {
+      # add configured options
       echo "ISOTYPE	?= ${CONFIG_ISO_TYPE}"
       echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
-      echo "ISOLINUX_INC_DEPS	= ${ISOLINUX_INC_DEPS}"
-      echo "PXELINUX_INC_DEPS	= ${PXELINUX_INC_DEPS}"
-      echo "PXELX64_INC_DEPS	= ${PXELX64_INC_DEPS}"
-      echo "SYSLINUX_INC_DEPS	= ${SYSLINUX_INC_DEPS}"
-      echo "SYSLX64_INC_DEPS	= ${SYSLX64_INC_DEPS}"
+
+      # define standard dependencies
+      STD_DEP_FILES="src/scripts/genfiles.sh"
+      STD_DEP_FILES="${STD_DEP_FILES} src/scripts/iperd.profile"
+      STD_DEP_FILES="${STD_DEP_FILES} var/config/iperd.conf"
+
+      # save Makekfile dependencies
+      CFG_DEP_FILES="${STD_DEP_FILES}"
+      for MAKEDISTRO in $(list_cfg_distros);do
+         for FILE in $(cd ${BASEDIR} && ls src/distros/make.*);do
+            CFG_DEP_FILES="${CFG_DEP_FILES} ${FILE}"
+         done
+      done
+      echo "MAKEFILE_CONFIG_DEPS	= ${CFG_DEP_FILES}"
+
+      # save syslinux config include dependencies
+      CFG_DEP_FILES="${STD_DEP_FILES}"
+      for MAKEDISTRO in $(list_cfg_distros);do
+         for FILE in $(cd ${BASEDIR} && ls src/distros/cfg.*);do
+            CFG_DEP_FILES="${CFG_DEP_FILES} ${FILE}"
+         done
+      done
+      echo "SYSLINUX_INC_DEPS		= ${CFG_DEP_FILES}"
+
+      # add distro specific rules
       for MAKEDISTRO in $(list_cfg_distros);do
          gen_dosubst "${MAKEDISTRO}" "make" "make.boot"
       done
-      echo "MAKEFILE_CONFIG_DEPS	= ${CFG_DEP_FILES}"
    } >  ${BASEDIR}/Makefile.config
+   touch "${BASEDIR}/Makefile.config"
 }
 
 
@@ -107,7 +127,6 @@ gen_dosubst()
    FILES="${3}"
 
    if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.header";then
-      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.header"
       cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
    fi
 
@@ -117,7 +136,6 @@ gen_dosubst()
       ARCH=$(echo     "${VERS}" |cut -d- -f4)
       for TMPFILE in ${FILES};do
          if test -f "${DISTRODIR}/${DISTRO}/${TMPFILE}";then
-            CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${TMPFILE}"
             sed \
                -e "s/@VERSION@/${VERSION}/g" \
                -e "s/@CODENAME@/${CODENAME}/g" \
@@ -130,7 +148,6 @@ gen_dosubst()
    done
 
    if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.footer";then
-      CFG_DEP_FILES="${CFG_DEP_FILES} ${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
       cat "${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
    fi
 }
@@ -144,12 +161,30 @@ gen_dosubst()
 
 
 case "${REGEN_FILE}" in
-   isolinux.inc)    generate_cfg isolinux.inc cfg.label.iso              || exit 1;;
-   pxelinux.inc)    generate_cfg pxelinux.inc cfg.label.pxe              || exit 1;;
-   pxelx64.inc)     generate_cfg pxelx64.inc  cfg.label.pxe broken.efi64 || exit 1;;
-   syslinux.inc)    generate_cfg syslinux.inc cfg.label.sys              || exit 1;;
-   syslx64.inc)     generate_cfg syslx64.inc  cfg.label.sys broken.efi64 || exit 1;;
-   Makefile.config) generate_makefile_config                             || exit 1;;
+
+   var/config/isolinux.inc)
+   generate_cfg isolinux.inc cfg.label.iso || exit 1;
+   ;;
+
+   var/config/pxelinux.inc)
+   generate_cfg pxelinux.inc cfg.label.pxe || exit 1;
+   ;;
+
+   var/config/pxelx64.inc)
+   generate_cfg pxelx64.inc cfg.label.pxe broken.efi64 || exit 1;
+   ;;
+
+   var/config/syslinux.inc)
+   generate_cfg syslinux.inc cfg.label.sys || exit 1;
+   ;;
+
+   var/config/syslx64.inc)
+   generate_cfg syslx64.inc cfg.label.sys broken.efi64 || exit 1;
+   ;;
+
+   Makefile.config)
+   generate_makefile_config || exit 1;
+   ;;
 
    all)
    generate_cfg isolinux.inc cfg.label.iso              || exit 1
@@ -161,13 +196,13 @@ case "${REGEN_FILE}" in
    ;;
 
    *)
-   echo "Usage: ${PROG_NAME} all"             1>&2
-   echo "       ${PROG_NAME} isolinux.inc"    1>&2
-   echo "       ${PROG_NAME} pxelinux.inc"    1>&2
-   echo "       ${PROG_NAME} pxelx64.inc"     1>&2
-   echo "       ${PROG_NAME} syslinux.inc"    1>&2
-   echo "       ${PROG_NAME} syslx64.inc"     1>&2
-   echo "       ${PROG_NAME} Makefile.config" 1>&2
+   echo "Usage: ${PROG_NAME} all"                     1>&2
+   echo "       ${PROG_NAME} Makefile.config"         1>&2
+   echo "       ${PROG_NAME} var/config/isolinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/pxelinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/pxelx64.inc"  1>&2
+   echo "       ${PROG_NAME} var/config/syslinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/syslx64.inc"  1>&2
    echo ""
    exit 1
    ;;
