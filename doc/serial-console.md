@@ -1,8 +1,8 @@
                     IP Engineering Rescue Disk Serial Cosole
 
 Most boot images supported by IPERD contain support for serial consoles. In
-most cases the serial console can be enabled by navigating to the desired image,
-pressing the [TAB] key to edit the boot parameters, and appending the following:
+most cases a serial console can be enabled by navigating to the desired image,
+pressing [TAB] key to edit the boot parameters, and appending the following:
 
         console=<device>,<speed>
 
@@ -18,6 +18,6 @@ Multiple consoles may be specified. The last console specified will be used for
 
         console=tty0 console=ttyS1,115200
 
-The filw 'admin-guide/serial-console.rst' in the Linux kernel documentation
+The file 'admin-guide/serial-console.rst' in the Linux kernel documentation
 contains more detailed information.
 
