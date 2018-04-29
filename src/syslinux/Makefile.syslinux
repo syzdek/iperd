@@ -81,8 +81,6 @@ syslinux/iperd.dep: tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted
 	rsync -ra "$(PWD)/tmp/syslinux/usr/share/syslinux/" syslinux
 	rsync -ra "$(PWD)/tmp/syslinux/usr/bin/"            syslinux/bin
 	rsync -ra "$(PWD)/tmp/syslinux/sbin/"               syslinux/sbin
-	cp $(SYSLINDIR)/f1.txt                              syslinux/
-	cp $(SYSLINDIR)/f2.txt                              syslinux/
 	cp /usr/share/hwdata/pci.ids                        syslinux/
 	cp /lib/modules/$$(uname -r)/modules.alias          syslinux/modules.als
 	cp syslinux/isolinux.bin                            syslinux/isolinux.bin.mod
