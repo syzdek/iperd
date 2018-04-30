@@ -166,8 +166,10 @@ case "${REGEN_FILE}" in
    makefile.config);;
    var/config/isolinux.inc);;
    var/config/pxelinux.inc);;
+   var/config/pxelia32.inc);;
    var/config/pxelx64.inc);;
    var/config/syslinux.inc);;
+   var/config/syslia32.inc);;
    var/config/syslx64.inc);;
 
    *)
@@ -175,8 +177,10 @@ case "${REGEN_FILE}" in
    echo "       ${PROG_NAME} Makefile.config"         1>&2
    echo "       ${PROG_NAME} var/config/isolinux.inc" 1>&2
    echo "       ${PROG_NAME} var/config/pxelinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/pxelia32.inc"  1>&2
    echo "       ${PROG_NAME} var/config/pxelx64.inc"  1>&2
    echo "       ${PROG_NAME} var/config/syslinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/syslia32.inc"  1>&2
    echo "       ${PROG_NAME} var/config/syslx64.inc"  1>&2
    echo ""
    exit 1
@@ -189,8 +193,10 @@ if test "x${REGEN_FILE}" = "xall";then
    REGEN_FILE="${REGEN_FILE} makefile.config"
    REGEN_FILE="${REGEN_FILE} var/config/isolinux.inc"
    REGEN_FILE="${REGEN_FILE} var/config/pxelinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/pxelia32.inc"
    REGEN_FILE="${REGEN_FILE} var/config/pxelx64.inc"
    REGEN_FILE="${REGEN_FILE} var/config/syslinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/syslia32.inc"
    REGEN_FILE="${REGEN_FILE} var/config/syslx64.inc"
 fi
 
@@ -209,12 +215,20 @@ for FILE in ${REGEN_FILE};do
       generate_cfg pxelinux.inc cfg.label.pxe || exit 1;
       ;;
 
+      var/config/pxelia32.inc)
+      generate_cfg pxelia32.inc cfg.label.pxe broken.efi32 || exit 1;
+      ;;
+
       var/config/pxelx64.inc)
       generate_cfg pxelx64.inc cfg.label.pxe broken.efi64 || exit 1;
       ;;
 
       var/config/syslinux.inc)
       generate_cfg syslinux.inc cfg.label.sys || exit 1;
+      ;;
+
+      var/config/syslia32.inc)
+      generate_cfg syslia32.inc cfg.label.sys broken.efi32 || exit 1;
       ;;
 
       var/config/syslx64.inc)

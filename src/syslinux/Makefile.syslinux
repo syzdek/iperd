@@ -46,8 +46,10 @@ SYSLINUX_CONFIGS	= \
 SYSLINUX_INCLUDES	= \
 			  var/config/isolinux.inc \
 			  var/config/pxelinux.inc \
+			  var/config/pxelia32.inc \
 			  var/config/pxelx64.inc \
 			  var/config/syslinux.inc \
+			  var/config/syslia32.inc \
 			  var/config/syslx64.inc
 SYSLINUX_BINARIES	= \
 			  EFI/BOOT/BOOTX64.EFI \
@@ -111,31 +113,31 @@ EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@touch $(@)
 
 
-EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/common.cfg
+EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelia32.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelx64.inc > $(@)'
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelia32.inc > $(@)'
 	@$(do_subst) \
 	   $(SYSLINDIR)/common.cfg \
-	   var/config/pxelx64.inc \
+	   var/config/pxelia32.inc \
 	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI IA32/g' \
+              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
 	   > "$(@)"
 	@touch "$(@)"
 
 
-EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslx64.inc $(SYSLINDIR)/common.cfg
+EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslia32.inc $(SYSLINDIR)/common.cfg
 	@mkdir -p $$(dirname $(@))
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslx64.inc > $(@)'
+	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslia32.inc > $(@)'
 	@$(do_subst) \
 	   $(SYSLINDIR)/common.cfg \
-	   var/config/syslx64.inc \
+	   var/config/syslia32.inc \
 	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI/g' \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI IA32/g' \
               -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
 	   > "$(@)"
 	@touch "$(@)"
@@ -150,7 +152,7 @@ EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/common
 	   $(SYSLINDIR)/common.cfg \
 	   var/config/pxelx64.inc \
 	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI/g' \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI X64/g' \
               -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
 	   > "$(@)"
 	@touch "$(@)"
@@ -165,7 +167,7 @@ EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(SYSLINDIR)/common
 	   $(SYSLINDIR)/common.cfg \
 	   var/config/syslx64.inc \
 	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI/g' \
+              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI X64/g' \
               -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
 	   > "$(@)"
 	@touch "$(@)"
