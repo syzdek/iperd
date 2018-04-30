@@ -62,14 +62,20 @@ generate_cfg()
 {
    INCFILE="${1}"
    SRCFILES="cfg.label ${2}"
-   BROKEFILE="${3}"
+   BROKEFILES="${3}"
 
    rm -f "${CONFIGDIR}/${INCFILE}" || return 1
    for GENDISTRO in $(list_cfg_distros);do
-      if test ! -z "${BROKEFILE}";then
-         if test -f "${DISTRODIR}/${GENDISTRO}/${BROKEFILE}";then
-            continue;
+      BROKEN=no
+      for BROKEFILE in "broken ${BROKEFILES};do
+         if test ! -z "${BROKEFILE}";then
+            if test -f "${DISTRODIR}/${GENDISTRO}/${BROKEFILE}";then
+               BROKEN=yes;
+            fi
          fi
+      done
+      if test "x${BROKEN}" == "xyes";then
+         continue;
       fi
       gen_dosubst "${GENDISTRO}" cfg "${SRCFILES}" || return 1
    done > "${CONFIGDIR}/${INCFILE}"
@@ -208,31 +214,31 @@ for FILE in ${REGEN_FILE};do
       ;;
 
       var/config/isolinux.inc)
-      generate_cfg isolinux.inc cfg.label.iso || exit 1;
+      generate_cfg isolinux.inc cfg.label.iso "broken.iso" || exit 1;
       ;;
 
       var/config/pxelinux.inc)
-      generate_cfg pxelinux.inc cfg.label.pxe || exit 1;
+      generate_cfg pxelinux.inc cfg.label.pxe "broken.pxe" || exit 1;
       ;;
 
       var/config/pxelia32.inc)
-      generate_cfg pxelia32.inc cfg.label.pxe broken.efi32 || exit 1;
+      generate_cfg pxelia32.inc cfg.label.pxe "broken.pxe broken.efi broken.efi32" || exit 1;
       ;;
 
       var/config/pxelx64.inc)
-      generate_cfg pxelx64.inc cfg.label.pxe broken.efi64 || exit 1;
+      generate_cfg pxelx64.inc cfg.label.pxe "broken.pxe broken.efi broken.efi64" || exit 1;
       ;;
 
       var/config/syslinux.inc)
-      generate_cfg syslinux.inc cfg.label.sys || exit 1;
+      generate_cfg syslinux.inc cfg.label.sys "broken.sys" || exit 1;
       ;;
 
       var/config/syslia32.inc)
-      generate_cfg syslia32.inc cfg.label.sys broken.efi32 || exit 1;
+      generate_cfg syslia32.inc cfg.label.sys "broken.sys broken.efi broken.efi32" || exit 1;
       ;;
 
       var/config/syslx64.inc)
-      generate_cfg syslx64.inc cfg.label.sys broken.efi64 || exit 1;
+      generate_cfg syslx64.inc cfg.label.sys "broken.sys broken.efi broken.efi64" || exit 1;
       ;;
 
       *)
