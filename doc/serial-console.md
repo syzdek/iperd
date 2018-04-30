@@ -1,4 +1,5 @@
-                    IP Engineering Rescue Disk Serial Cosole
+IP Engineering Rescue Disk: Serial Cosole
+=========================================
 
 Most boot images supported by IPERD contain support for serial consoles. In
 most cases a serial console can be enabled by navigating to the desired image,
@@ -20,4 +21,3 @@ Multiple consoles may be specified. The last console specified will be used for
 
 The file 'admin-guide/serial-console.rst' in the Linux kernel documentation
 contains more detailed information.
-
