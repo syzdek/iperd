@@ -35,6 +35,7 @@
 
 SYSLINUX_VERSION	?= 6.04-pre1
 MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
+CLEANFILES		+= tmp/src/syslinux-$(SYSLINUX_VERSION)
 SYSLINUX_CONFIGS	= \
 			  EFI/BOOT/pxelia32.cfg \
 			  EFI/BOOT/syslia32.cfg \
