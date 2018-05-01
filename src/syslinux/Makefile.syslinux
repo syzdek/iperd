@@ -133,17 +133,17 @@ EFI/BOOT/pxelia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.
            $(do_syslinux_cfg);
 
 
-EFI/BOOT/syslia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
-	@SYSLINUX_INC_FILE="var/config/syslia32.inc"; \
-	   SYSLINUX_FLAVOR="sys/UEFI IA32"; \
-	   SYSLINUX_PATH="/syslinux/efi32/"; \
-           $(do_syslinux_cfg);
-
-
 EFI/BOOT/pxelx64.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
 	@SYSLINUX_INC_FILE="var/config/pxelx64.inc"; \
 	   SYSLINUX_FLAVOR="pxe/UEFI X64"; \
 	   SYSLINUX_PATH="/syslinux/efi64/"; \
+           $(do_syslinux_cfg);
+
+
+EFI/BOOT/syslia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/syslia32.inc"; \
+	   SYSLINUX_FLAVOR="sys/UEFI IA32"; \
+	   SYSLINUX_PATH="/syslinux/efi32/"; \
            $(do_syslinux_cfg);
 
 
