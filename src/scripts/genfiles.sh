@@ -210,35 +210,64 @@ fi
 for FILE in ${REGEN_FILE};do
    case "${FILE}" in
       makefile.config)
-      generate_makefile_config || exit 1
+      generate_makefile_config \
+         || exit 1
       ;;
 
       var/config/isolinux.inc)
-      generate_cfg isolinux.inc cfg.label.iso "broken.iso" || exit 1;
+      generate_cfg \
+         isolinux.inc \
+         cfg.label.iso \
+         "broken.iso" \
+         || exit 1;
       ;;
 
       var/config/pxelinux.inc)
-      generate_cfg pxelinux.inc cfg.label.pxe "broken.pxe" || exit 1;
+      generate_cfg \
+         pxelinux.inc \
+         cfg.label.pxe \
+         "broken.pxe" \
+         || exit 1;
       ;;
 
       var/config/pxelia32.inc)
-      generate_cfg pxelia32.inc cfg.label.pxe "broken.pxe broken.efi broken.efi32" || exit 1;
+      generate_cfg \
+         pxelia32.inc \
+         cfg.label.pxe \
+         "broken.pxe broken.efi broken.efi32" \
+         || exit 1;
       ;;
 
       var/config/pxelx64.inc)
-      generate_cfg pxelx64.inc cfg.label.pxe "broken.pxe broken.efi broken.efi64" || exit 1;
+      generate_cfg \
+         pxelx64.inc \
+         cfg.label.pxe \
+         "broken.pxe broken.efi broken.efi64" \
+         || exit 1;
       ;;
 
       var/config/syslinux.inc)
-      generate_cfg syslinux.inc cfg.label.sys "broken.sys" || exit 1;
+      generate_cfg \
+         syslinux.inc \
+         cfg.label.sys \
+         "broken.sys" \
+         || exit 1;
       ;;
 
       var/config/syslia32.inc)
-      generate_cfg syslia32.inc cfg.label.sys "broken.sys broken.efi broken.efi32" || exit 1;
+      generate_cfg \
+         syslia32.inc \
+         cfg.label.sys \
+         "broken.sys broken.efi broken.efi32" \
+         || exit 1;
       ;;
 
       var/config/syslx64.inc)
-      generate_cfg syslx64.inc cfg.label.sys "broken.sys broken.efi broken.efi64" || exit 1;
+      generate_cfg \
+         syslx64.inc \
+         cfg.label.sys \
+         "broken.sys broken.efi broken.efi64" \
+         || exit 1;
       ;;
 
       *)
