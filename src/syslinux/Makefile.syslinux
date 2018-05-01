@@ -62,11 +62,6 @@ SYSLINUX_BINARIES	= \
 			  ldlinux.e32 \
 			  ldlinux.e64
 
-
-$(SYSLINUX_INCLUDES): $(SYSLINUX_INC_DEPS)
-	bash ./src/scripts/genfiles.sh $(@)
-
-
 tmp/src/syslinux-$(SYSLINUX_VERSION)/.iperd-extracted:
 	./src/scripts/download.sh \
 	   tmp/src/syslinux-$(SYSLINUX_VERSION).tar.xz \
@@ -114,109 +109,70 @@ EFI/BOOT/ldlinux.e64 ldlinux.e64: syslinux/iperd.dep
 	@touch $(@)
 
 
-EFI/BOOT/pxelia32.cfg: Makefile.config var/config/pxelia32.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelia32.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/pxelia32.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI IA32/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+do_syslinux_cfg = \
+        mkdir -p $$(dirname $(@)); \
+        rm -f "$(@)"; \
+        rm -f "$${SYSLINUX_INC_FILE}"; \
+	echo 'bash ./src/scripts/genfiles.sh $${SYSLINUX_INC_FILE}'; \
+	bash ./src/scripts/genfiles.sh "$${SYSLINUX_INC_FILE}"; \
+        echo 'do_subst $$(SYSLINDIR)/common.cfg $${SYSLINUX_INC_FILE} > $(@)'; \
+        $(do_subst) \
+           $(SYSLINDIR)/common.cfg \
+           $${SYSLINUX_INC_FILE} \
+           | sed \
+              -e "s,[@]SYSLINUX_FLAVOR[@],$${SYSLINUX_FLAVOR},g" \
+              -e "s,[@]SYSLINUX_PATH[@],$${SYSLINUX_PATH},g" \
+           > "$(@)"; \
+        touch "$(@)"
 
 
-EFI/BOOT/syslia32.cfg: Makefile.config var/config/syslia32.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslia32.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/syslia32.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI IA32/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi32/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+EFI/BOOT/pxelia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/pxelia32.inc"; \
+	   SYSLINUX_FLAVOR="pxe/UEFI IA32"; \
+	   SYSLINUX_PATH="/syslinux/efi32/"; \
+           $(do_syslinux_cfg);
 
 
-EFI/BOOT/pxelx64.cfg: Makefile.config var/config/pxelx64.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelx64.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/pxelx64.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/UEFI X64/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+EFI/BOOT/syslia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/syslia32.inc"; \
+	   SYSLINUX_FLAVOR="sys/UEFI IA32"; \
+	   SYSLINUX_PATH="/syslinux/efi32/"; \
+           $(do_syslinux_cfg);
 
 
-EFI/BOOT/syslx64.cfg: Makefile.config var/config/syslx64.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslx64.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/syslx64.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/UEFI X64/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/efi64/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+EFI/BOOT/pxelx64.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/pxelx64.inc"; \
+	   SYSLINUX_FLAVOR="pxe/UEFI X64"; \
+	   SYSLINUX_PATH="/syslinux/efi64/"; \
+           $(do_syslinux_cfg);
 
 
-syslinux/isolinux.cfg: Makefile.config var/config/isolinux.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/isolinux.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/isolinux.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/iso\/BIOS/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+EFI/BOOT/syslx64.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/syslx64.inc"; \
+	   SYSLINUX_FLAVOR="sys/UEFI X64"; \
+	   SYSLINUX_PATH="/syslinux/efi64/"; \
+           $(do_syslinux_cfg);
 
 
-syslinux/pxelinux.cfg: Makefile.config var/config/pxelinux.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p "$$(dirname "$(@)")"
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/pxelinux.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg\
-	   var/config/pxelinux.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/pxe\/BIOS/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
-	    > "$(@)"
-	@touch "$(@)"
+syslinux/isolinux.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/isolinux.inc"; \
+	   SYSLINUX_FLAVOR="iso/BIOS"; \
+	   SYSLINUX_PATH="/syslinux/"; \
+           $(do_syslinux_cfg);
 
 
-syslinux/syslinux.cfg: Makefile.config var/config/syslinux.inc $(SYSLINDIR)/common.cfg
-	@mkdir -p $$(dirname $(@))
-	@rm -f "$(@)"
-	@mkdir -p syslinux
-	@echo 'do_subst $$(SYSLINDIR)/common.cfg var/config/syslinux.inc > $(@)'
-	@$(do_subst) \
-	   $(SYSLINDIR)/common.cfg \
-	   var/config/syslinux.inc \
-	   | sed \
-              -e 's/[@]SYSLINUX_FLAVOR[@]/sys\/BIOS/g' \
-              -e 's,[@]SYSLINUX_PATH[@],/syslinux/,g' \
-	   > "$(@)"
-	@touch "$(@)"
+syslinux/pxelinux.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/pxelinux.inc"; \
+	   SYSLINUX_FLAVOR="pxe/BIOS"; \
+	   SYSLINUX_PATH="/syslinux/"; \
+           $(do_syslinux_cfg);
+
+
+syslinux/syslinux.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/syslinux.inc"; \
+	   SYSLINUX_FLAVOR="sys/BIOS"; \
+	   SYSLINUX_PATH="/syslinux/"; \
+           $(do_syslinux_cfg);
 
 
 # end of makefile
