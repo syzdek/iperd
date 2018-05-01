@@ -38,8 +38,8 @@ MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing
 CLEANFILES		+= tmp/src/syslinux-$(SYSLINUX_VERSION)
 SYSLINUX_CONFIGS	= \
 			  EFI/BOOT/pxelia32.cfg \
-			  EFI/BOOT/syslia32.cfg \
 			  EFI/BOOT/pxelx64.cfg \
+			  EFI/BOOT/syslia32.cfg \
 			  EFI/BOOT/syslx64.cfg \
 			  syslinux/isolinux.cfg \
 			  syslinux/pxelinux.cfg \
