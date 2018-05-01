@@ -173,7 +173,14 @@ images/iperdboot.mbr.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/th
 	@touch "$(@)"
 
 
-images/iperdboot.iso: $(ALL_FILES)
+EFI/BOOT/efiboot.img: Makefile $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
+	@mkdir -p $$(dirname "$(@)")
+	@rm -f "$(@)"
+	bash src/scripts/iso-efiboot.sh "$(@)"
+	@touch "$(@)"
+
+
+images/iperdboot.iso: $(ALL_FILES) EFI/BOOT/efiboot.img
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
 	mkisofs \
@@ -188,6 +195,10 @@ images/iperdboot.iso: $(ALL_FILES)
 	   -boot-info-table \
 	   -b syslinux/isolinux.bin.mod \
 	   -c syslinux/isolinux.boot \
+	   -eltorito-alt-boot \
+	   -no-emul-boot \
+	   -eltorito-platform efi \
+	   -eltorito-boot EFI/BOOT/efiboot.img \
 	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./

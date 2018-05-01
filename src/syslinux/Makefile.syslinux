@@ -37,6 +37,8 @@ SYSLINUX_VERSION	?= 6.04-pre1
 MIRROR_SYSLINUX		?= https://www.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
 CLEANFILES		+= tmp/src/syslinux-$(SYSLINUX_VERSION)
 SYSLINUX_CONFIGS	= \
+			  EFI/BOOT/isolia32.cfg \
+			  EFI/BOOT/isolx64.cfg \
 			  EFI/BOOT/pxelia32.cfg \
 			  EFI/BOOT/pxelx64.cfg \
 			  EFI/BOOT/syslia32.cfg \
@@ -124,6 +126,20 @@ do_syslinux_cfg = \
               -e "s,[@]SYSLINUX_PATH[@],$${SYSLINUX_PATH},g" \
            > "$(@)"; \
         touch "$(@)"
+
+
+EFI/BOOT/isolia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/isolia32.inc"; \
+	   SYSLINUX_FLAVOR="iso/UEFI IA32"; \
+	   SYSLINUX_PATH="/syslinux/efi32/"; \
+           $(do_syslinux_cfg);
+
+
+EFI/BOOT/isolx64.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg
+	@SYSLINUX_INC_FILE="var/config/isolx64.inc"; \
+	   SYSLINUX_FLAVOR="iso/UEFI X64"; \
+	   SYSLINUX_PATH="/syslinux/efi64/"; \
+           $(do_syslinux_cfg);
 
 
 EFI/BOOT/pxelia32.cfg: Makefile.config $(SYSLINUX_INC_DEPS) $(SYSLINDIR)/common.cfg

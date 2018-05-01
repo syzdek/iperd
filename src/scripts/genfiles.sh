@@ -171,6 +171,8 @@ case "${REGEN_FILE}" in
    all);;
    makefile.config);;
    var/config/isolinux.inc);;
+   var/config/isolia32.inc);;
+   var/config/isolx64.inc);;
    var/config/pxelinux.inc);;
    var/config/pxelia32.inc);;
    var/config/pxelx64.inc);;
@@ -182,11 +184,13 @@ case "${REGEN_FILE}" in
    echo "Usage: ${PROG_NAME} all"                     1>&2
    echo "       ${PROG_NAME} Makefile.config"         1>&2
    echo "       ${PROG_NAME} var/config/isolinux.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/isolia32.inc" 1>&2
+   echo "       ${PROG_NAME} var/config/isolx64.inc"  1>&2
    echo "       ${PROG_NAME} var/config/pxelinux.inc" 1>&2
-   echo "       ${PROG_NAME} var/config/pxelia32.inc"  1>&2
+   echo "       ${PROG_NAME} var/config/pxelia32.inc" 1>&2
    echo "       ${PROG_NAME} var/config/pxelx64.inc"  1>&2
    echo "       ${PROG_NAME} var/config/syslinux.inc" 1>&2
-   echo "       ${PROG_NAME} var/config/syslia32.inc"  1>&2
+   echo "       ${PROG_NAME} var/config/syslia32.inc" 1>&2
    echo "       ${PROG_NAME} var/config/syslx64.inc"  1>&2
    echo ""
    exit 1
@@ -198,6 +202,8 @@ if test "x${REGEN_FILE}" = "xall";then
    REGEN_FILE=""
    REGEN_FILE="${REGEN_FILE} makefile.config"
    REGEN_FILE="${REGEN_FILE} var/config/isolinux.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/isolia32.inc"
+   REGEN_FILE="${REGEN_FILE} var/config/isolx64.inc"
    REGEN_FILE="${REGEN_FILE} var/config/pxelinux.inc"
    REGEN_FILE="${REGEN_FILE} var/config/pxelia32.inc"
    REGEN_FILE="${REGEN_FILE} var/config/pxelx64.inc"
@@ -219,6 +225,22 @@ for FILE in ${REGEN_FILE};do
          isolinux.inc \
          cfg.label.iso \
          "broken.iso" \
+         || exit 1;
+      ;;
+
+      var/config/isolia32.inc)
+      generate_cfg \
+         isolia32.inc \
+         cfg.label.iso \
+         "broken.iso broken.efi broken.efi32" \
+         || exit 1;
+      ;;
+
+      var/config/isolx64.inc)
+      generate_cfg \
+         isolx64.inc \
+         cfg.label.iso \
+         "broken.iso broken.efi broken.efi64" \
          || exit 1;
       ;;
 
