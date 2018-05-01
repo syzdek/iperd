@@ -67,7 +67,7 @@ generate_cfg()
    rm -f "${CONFIGDIR}/${INCFILE}" || return 1
    for GENDISTRO in $(list_cfg_distros);do
       BROKEN=no
-      for BROKEFILE in "broken ${BROKEFILES};do
+      for BROKEFILE in "broken ${BROKEFILES}";do
          if test ! -z "${BROKEFILE}";then
             if test -f "${DISTRODIR}/${GENDISTRO}/${BROKEFILE}";then
                BROKEN=yes;
