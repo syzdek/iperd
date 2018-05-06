@@ -61,8 +61,10 @@ fi
 generate_cfg()
 {
    INCFILE="${1}"
-   SRCFILES="cfg.label ${2}"
-   BROKEFILES="${3}"
+   SRCHEADER="${2:-cfg.header}"
+   SRCFILES="${3:-cfg.label}"
+   SRCFOOTER="${4:-cfg.footer}"
+   BROKEFILES="${5:-broken}"
 
    rm -f "${CONFIGDIR}/${INCFILE}" || return 1
    for GENDISTRO in $(list_cfg_distros);do
@@ -77,7 +79,7 @@ generate_cfg()
       if test "x${BROKEN}" == "xyes";then
          continue;
       fi
-      gen_dosubst "${GENDISTRO}" cfg "${SRCFILES}" || return 1
+      gen_dosubst "${GENDISTRO}" "${SRCHEADER}" "${SRCFILES}" "${SRCFOOTER}" || return 1
    done > "${CONFIGDIR}/${INCFILE}"
    touch "${CONFIGDIR}/${INCFILE}"
 }
@@ -119,7 +121,7 @@ generate_makefile_config()
 
       # add distro specific rules
       for MAKEDISTRO in $(list_cfg_distros);do
-         gen_dosubst "${MAKEDISTRO}" "make" "make.boot"
+         gen_dosubst "${MAKEDISTRO}" "make.header" "make.boot" make.footer
       done
    } >  ${BASEDIR}/Makefile.config
    touch "${BASEDIR}/Makefile.config"
@@ -129,11 +131,12 @@ generate_makefile_config()
 gen_dosubst()
 {
    DISTRO="${1}"
-   PREFIX="${2}"
+   HEADER="${2}"
    FILES="${3}"
+   FOOTER="${4}"
 
-   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.header";then
-      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.header"
+   if test -f "${DISTRODIR}/${DISTRO}/${HEADER}";then
+      cat "${DISTRODIR}/${DISTRO}/${HEADER}"
    fi
 
    for VERS in $(list_cfg_vers "${DISTRO}");do
@@ -153,8 +156,8 @@ gen_dosubst()
       done
    done
 
-   if test -f "${DISTRODIR}/${DISTRO}/${PREFIX}.footer";then
-      cat "${DISTRODIR}/${DISTRO}/${PREFIX}.footer"
+   if test -f "${DISTRODIR}/${DISTRO}/${FOOTER}";then
+      cat "${DISTRODIR}/${DISTRO}/${FOOTER}"
    fi
 }
 
@@ -223,7 +226,9 @@ for FILE in ${REGEN_FILE};do
       var/config/isolinux.inc)
       generate_cfg \
          isolinux.inc \
-         cfg.label.iso \
+         "cfg.header" \
+         "cfg.label cfg.label.iso" \
+         "cfg.footer" \
          "broken.iso" \
          || exit 1;
       ;;
@@ -231,7 +236,9 @@ for FILE in ${REGEN_FILE};do
       var/config/isolia32.inc)
       generate_cfg \
          isolia32.inc \
-         cfg.label.iso \
+         "cfg.header.iso.efi" \
+         "cfg.label.iso.efi" \
+         "cfg.footer.iso.efi" \
          "broken.iso broken.efi broken.efi32" \
          || exit 1;
       ;;
@@ -239,7 +246,9 @@ for FILE in ${REGEN_FILE};do
       var/config/isolx64.inc)
       generate_cfg \
          isolx64.inc \
-         cfg.label.iso \
+         "cfg.header.iso.efi" \
+         "cfg.label.iso.efi" \
+         "cfg.footer.iso.efi" \
          "broken.iso broken.efi broken.efi64" \
          || exit 1;
       ;;
@@ -247,7 +256,9 @@ for FILE in ${REGEN_FILE};do
       var/config/pxelinux.inc)
       generate_cfg \
          pxelinux.inc \
-         cfg.label.pxe \
+         "cfg.header" \
+         "cfg.label cfg.label.pxe" \
+         "cfg.footer" \
          "broken.pxe" \
          || exit 1;
       ;;
@@ -255,7 +266,9 @@ for FILE in ${REGEN_FILE};do
       var/config/pxelia32.inc)
       generate_cfg \
          pxelia32.inc \
-         cfg.label.pxe \
+         "cfg.header" \
+         "cfg.label cfg.label.pxe" \
+         "cfg.footer" \
          "broken.pxe broken.efi broken.efi32" \
          || exit 1;
       ;;
@@ -263,7 +276,9 @@ for FILE in ${REGEN_FILE};do
       var/config/pxelx64.inc)
       generate_cfg \
          pxelx64.inc \
-         cfg.label.pxe \
+         "cfg.header" \
+         "cfg.label cfg.label.pxe" \
+         "cfg.footer" \
          "broken.pxe broken.efi broken.efi64" \
          || exit 1;
       ;;
@@ -271,7 +286,9 @@ for FILE in ${REGEN_FILE};do
       var/config/syslinux.inc)
       generate_cfg \
          syslinux.inc \
-         cfg.label.sys \
+         "cfg.header" \
+         "cfg.label cfg.label.sys" \
+         "cfg.footer" \
          "broken.sys" \
          || exit 1;
       ;;
@@ -279,7 +296,9 @@ for FILE in ${REGEN_FILE};do
       var/config/syslia32.inc)
       generate_cfg \
          syslia32.inc \
-         cfg.label.sys \
+         "cfg.header" \
+         "cfg.label cfg.label.sys" \
+         "cfg.footer" \
          "broken.sys broken.efi broken.efi32" \
          || exit 1;
       ;;
@@ -287,7 +306,9 @@ for FILE in ${REGEN_FILE};do
       var/config/syslx64.inc)
       generate_cfg \
          syslx64.inc \
-         cfg.label.sys \
+         "cfg.header" \
+         "cfg.label cfg.label.sys" \
+         "cfg.footer" \
          "broken.sys broken.efi broken.efi64" \
          || exit 1;
       ;;
