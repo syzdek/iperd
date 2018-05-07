@@ -1,0 +1,20 @@
+
+submenu "TinyCore Linux (@VERSION@)" {
+   menuentry "Boot TinyCore" {
+      linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 cde
+      initrd /boot/tinycore/@VERSION@/core.gz
+   }
+   menuentry "Boot TinyCore (on slow devices, waitusb=5)" {
+      linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 cde waitusb=5
+      initrd /boot/tinycore/@VERSION@/core.gz
+   }
+   menuentry "Boot Core (command line only)." {
+      linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3
+      initrd /boot/tinycore/@VERSION@/core.gz
+   }
+   menuentry "Boot Core (command line only on slow devices, waitusb=5)" {
+      linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 waitusb=5
+      initrd /boot/tinycore/@VERSION@/core.gz
+   }
+}
+
