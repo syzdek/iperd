@@ -1,0 +1,8 @@
+   menuentry "Arch Linux @VERSION@ (@ARCH@)" {
+     echo   "Loading /boot/archboot/@VERSION@/@ARCH@/vmlinuz ..."
+     linux  /boot/archboot/@VERSION@/@ARCH@/vmlinuz \
+            modloop=/boot/archboot/@VERSION@/@ARCH@/modloop \
+            archboot_repo=/boot/archboot/@VERSION@/apks/
+     echo   "Loading /boot/archboot/@VERSION@/@ARCH@/initrd ..."
+     initrd /boot/archboot/@VERSION@/@ARCH@/initrd
+   }
