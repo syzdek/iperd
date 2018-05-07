@@ -44,6 +44,8 @@ DATE			= $(shell date +%Y-%m-%d)
 
 
 ALL_FILES		= \
+			  $(GRUB_CONFIGS) \
+			  $(GRUB_BINARIES) \
 			  $(SYSLINUX_CONFIGS) \
 			  $(SYSLINUX_BINARIES) \
 			  $(DOWNLOAD_FILES)
@@ -150,6 +152,7 @@ NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
 NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
 include src/syslinux/Makefile.syslinux
+include src/grub/Makefile.grub
 
 
 images/iperdboot.gpt.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
@@ -173,14 +176,7 @@ images/iperdboot.mbr.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/th
 	@touch "$(@)"
 
 
-EFI/BOOT/efiboot.img: Makefile $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
-	@mkdir -p $$(dirname "$(@)")
-	@rm -f "$(@)"
-	bash src/scripts/iso-efiboot.sh "$(@)"
-	@touch "$(@)"
-
-
-images/iperdboot.iso: $(ALL_FILES) EFI/BOOT/efiboot.img
+images/iperdboot.iso: $(ALL_FILES)
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
 	mkisofs \
@@ -224,7 +220,7 @@ configure:
 	@touch "var/config/iperd.conf"
 
 
-deps: $(SYSLINUX_CONFIGS) Makefile.config
+deps: $(SYSLINUX_CONFIGS) $(GRUB_CONFIGS) Makefile.config
 
 
 clean:

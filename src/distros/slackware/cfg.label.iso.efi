@@ -1,0 +1,7 @@
+   menuentry "Slackware Linux @VERSION@ Install (@CODENAME@ bits)" {
+      echo   "Loading /boot/slack@ARCH@/@VERSION@/bzImage ..."
+      linux  /boot/slack@ARCH@/@VERSION@/bzImage \
+             load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0  nomodeset
+      echo   "Loading /boot/slack@ARCH@/@VERSION@/initrd ..."
+      initrd /boot/slack@ARCH@/@VERSION@/initrd
+   }
