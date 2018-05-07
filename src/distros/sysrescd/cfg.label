@@ -1,11 +1,11 @@
 MENU BEGIN sysrescd
 MENU TITLE SystemRescueCD (@VERSION@)
 
-label rescue32
+label rescue32@VERSION@
     MENU LABEL SystemRescueCd (32bit):
     MENU DISABLE
 
-label rescue32_1
+label rescue32_1@VERSION@
     MENU LABEL SystemRescueCd with default options
     MENU INDENT 3
     KERNEL /boot/sysrescd/@VERSION@/vmlinuz.32
@@ -15,7 +15,7 @@ label rescue32_1
     Boot standard 32bit kernel with default options (should always work)
     ENDTEXT
 
-label rescue32_2
+label rescue32_2@VERSION@
     MENU LABEL SystemRescueCd with all files cached to memory
     MENU INDENT 3
     KERNEL /boot/sysrescd/@VERSION@/vmlinuz.32
@@ -27,11 +27,11 @@ label rescue32_2
     boot process, but the cdrom can be removed and system will be faster.
     ENDTEXT
 
-label rescue64
+label rescue64@VERSION@
     MENU LABEL SystemRescueCd (64bit):
     MENU DISABLE
 
-label rescue64_1
+label rescue64_1@VERSION@
     MENU LABEL SystemRescueCd with default options
     MENU INDENT 3
     KERNEL /boot/sysrescd/@VERSION@/vmlinuz.64
@@ -41,7 +41,7 @@ label rescue64_1
     Boot standard 64bit kernel with default options (should always work)
     ENDTEXT
 
-label rescue64_2
+label rescue64_2@VERSION@
     MENU LABEL SystemRescueCd with all files cached to memory
     MENU INDENT 3
     KERNEL /boot/sysrescd/@VERSION@/vmlinuz.64
@@ -53,11 +53,11 @@ label rescue64_2
     boot process, but the cdrom can be removed and system will be faster.
     ENDTEXT
 
-label rescuemisc
+label rescuemisc@VERSION@
     MENU LABEL SystemRescueCd Misc:
     MENU DISABLE
 
-label ntpass
+label ntpass@VERSION@
     MENU LABEL NTPASSWD: Reset or edit Windows passwords
     MENU INDENT 3
     kernel /boot/sysrescd/@VERSION@/vmlinuz.nt
