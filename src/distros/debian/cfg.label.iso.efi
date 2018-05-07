@@ -3,4 +3,5 @@
       linux  /boot/debian/@VERSION@/@ARCH@/vmlinuz append -- quiet
       echo   "Loading /boot/debian/@VERSION@/@ARCH@/initrd ..."
       initrd /boot/debian/@VERSION@/@ARCH@/initrd
+      echo   "Booting ..."
    }

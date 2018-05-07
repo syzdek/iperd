@@ -5,4 +5,5 @@
             archboot_repo=/boot/archboot/@VERSION@/apks/
      echo   "Loading /boot/archboot/@VERSION@/@ARCH@/initrd ..."
      initrd /boot/archboot/@VERSION@/@ARCH@/initrd
+     echo   "Booting ..."
    }

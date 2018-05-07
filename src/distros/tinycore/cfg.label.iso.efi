@@ -1,20 +1,32 @@
 
 submenu "TinyCore Linux (@VERSION@)" {
    menuentry "Boot TinyCore" {
+      echo   "Loading /boot/tinycore/@VERSION@/vmlinuz ..."
       linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 cde
+      echo   "Loading /boot/tinycore/@VERSION@/core.gz ..."
       initrd /boot/tinycore/@VERSION@/core.gz
+      echo   "Booting ..."
    }
    menuentry "Boot TinyCore (on slow devices, waitusb=5)" {
+      echo   "Loading /boot/tinycore/@VERSION@/vmlinuz ..."
       linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 cde waitusb=5
+      echo   "Loading /boot/tinycore/@VERSION@/core.gz ..."
       initrd /boot/tinycore/@VERSION@/core.gz
+      echo   "Booting ..."
    }
    menuentry "Boot Core (command line only)." {
+      echo   "Loading /boot/tinycore/@VERSION@/vmlinuz ..."
       linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3
+      echo   "Loading /boot/tinycore/@VERSION@/core.gz ..."
       initrd /boot/tinycore/@VERSION@/core.gz
+      echo   "Booting ..."
    }
    menuentry "Boot Core (command line only on slow devices, waitusb=5)" {
+      echo   "Loading /boot/tinycore/@VERSION@/vmlinuz ..."
       linux  /boot/tinycore/@VERSION@/vmlinuz loglevel=3 waitusb=5
+      echo   "Loading /boot/tinycore/@VERSION@/core.gz ..."
       initrd /boot/tinycore/@VERSION@/core.gz
+      echo   "Booting ..."
    }
 }
 

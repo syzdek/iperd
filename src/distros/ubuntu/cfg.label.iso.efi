@@ -3,4 +3,5 @@
       linux  /boot/ubuntu/@VERSION@/@ARCH@/vmlinuz -- quiet
       echo   "Loading /boot/ubuntu/@VERSION@/@ARCH@/initrd ..."
       initrd /boot/ubuntu/@VERSION@/@ARCH@/initrd
+      echo   "Booting ..."
    }
