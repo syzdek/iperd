@@ -1,0 +1,31 @@
+submenu "SystemRescueCD (@VERSION@)" {
+   menuentry "SystemRescueCd with default options (32bit)" {
+      echo   "Loading /boot/sysrescd/vmlinuz.32 ..."
+      linux  /boot/sysrescd/vmlinuz.32 subdir=/boot/sysrescd/
+      echo   "Loading /boot/sysrescd/initram.igz ..."
+      initrd /boot/sysrescd/initram.igz
+   }
+   menuentry "SystemRescueCd with all files cached to memory (32bit)" {
+      echo   "Loading /boot/sysrescd/vmlinuz.32 ..."
+      linux  /boot/sysrescd/vmlinuz.32 docache subdir=/boot/sysrescd/
+      echo   "Loading /boot/sysrescd/initram.igz ..."
+      initrd /boot/sysrescd/initram.igz
+   }
+   menuentry "SystemRescueCd with default options (64bit)" {
+      echo   "Loading /boot/sysrescd/vmlinuz.64 ..."
+      linux  /boot/sysrescd/vmlinuz.64 docache subdir=/boot/sysrescd/
+      echo   "Loading /boot/sysrescd/initram.igz ..."
+      initrd /boot/sysrescd/initram.igz
+   }
+   menuentry "SystemRescueCd with all files cached to memory (64bit)" {
+      echo   "Loading /boot/sysrescd/vmlinuz.64 ..."
+      linux  /boot/sysrescd/vmlinuz.64 docache subdir=/boot/sysrescd/
+      echo   "Loading /boot/sysrescd/initram.igz ..."
+      initrd /boot/sysrescd/initram.igz
+   }
+   menuentry "NTPASSWD: Reset or edit Windows passwords" {
+      linux  /boot/sysrescd/vmlinuz.nt \
+             rw vga=1 \
+      initrd /boot/sysrescd/initrd.cgz /boot/sysrescd/scsi.cgz
+   }
+}
