@@ -95,6 +95,7 @@ generate_makefile_config()
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
       echo "TLSCHECK	?= ${CONFIG_TLS_CHECK}"
+      echo "RUN_ISOHYBRID	?= ${CONFIG_RUN_ISOHYBRID}"
 
       # define standard dependencies
       STD_DEP_FILES="src/scripts/genfiles.sh"

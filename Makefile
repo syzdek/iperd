@@ -205,6 +205,7 @@ images/iperdboot.iso: $(UEFI_FILES)
 	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./
+	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid -u "$(@)"; fi
 	@touch "$(@)"
 
 
@@ -226,6 +227,7 @@ images/iperdboot.bios.iso: $(BIOS_FILES)
 	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./
+	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid "$(@)"; fi
 	@touch "$(@)"
 
 
@@ -245,6 +247,7 @@ images/iperdboot.uefi.iso: $(UEFI_FILES)
 	   -V "IPEngRescueDisk" \
 	   -A "IP Engineering Rescue Disk"  \
 	   ./
+	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid -u "$(@)"; fi
 	@touch "$(@)"
 
 

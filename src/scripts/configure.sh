@@ -78,6 +78,8 @@ configure_all()
    echo "CONFIG_PART_TYPE=${CONFIG_PART_TYPE}" >> ${CONFIG}.new.tmp
    echo "CONFIG_PART_SIZE=${CONFIG_PART_SIZE}" >> ${CONFIG}.new.tmp
    echo "CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_TLS_CHECK=${CONFIG_TLS_CHECK}" >> ${CONFIG}.new.tmp
+   echo "CONFIG_RUN_ISOHYBRID=${CONFIG_RUN_ISOHYBRID}" >> ${CONFIG}.new.tmp
 
    # copy new settings into place
    mv ${CONFIG}.new.tmp ${CONFIG}.new
@@ -107,6 +109,7 @@ configure_disk()
          20 70 13 \
          "usb"       "USB partition type (${CONFIG_PART_TYPE})" \
          "size"      "USB disk image size (${CONFIG_IMG_SIZE} MB)" \
+         "isohybrid" "Support MBR booting ISO (${CONFIG_RUN_ISOHYBRID})" \
          "tls"       "TLS Certificate check (${CONFIG_TLS_CHECK})" \
          2>&1 1>&3)"
       RC=$?
@@ -155,11 +158,34 @@ configure_disk()
                --msgbox "Invalid disk image size.  Size must be specified as number of megabytes." \
                7 40
          fi
+      elif test $RC -eq 0 && test "x${RESULT}" == "xisohybrid";then
+         if test "x${CONFIG_RUN_ISOHYBRID}" == "xno";then
+            YESNO_DEFAULT=--defaultno
+         fi
+         exec 3>&1
+         RESULT="$(echo "" | xargs dialog \
+            --title " MBR Bootable ISO " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            ${YESNO_DEFAULT} \
+            --yesno "\nAdding MBR information to an ISO image allows the image to be\ncopied to a directly to a device such as a USB thumbdrive.\n\nAdd MBR information to ISO images?" \
+            10 70 \
+            2>&1 1>&3)"
+         RC=$?
+         exec 3>&-
+         if test $RC -eq 0;then
+            CONFIG_RUN_ISOHYBRID=yes
+         else
+            CONFIG_RUN_ISOHYBRID=no
+         fi
       elif test $RC -eq 0 && test "x${RESULT}" == "xtls";then
+         if test "x${CONFIG_TLS_CHECK}" == "xno";then
+            YESNO_DEFAULT=--defaultno
+         fi
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
             --title " TLS Certificate Checks " \
             --backtitle "IP Engineering Rescue Disk Setup" \
+            ${YESNO_DEFAULT} \
             --yesno "\nEnable TLS certificate checks when downloading files?" \
             7 70 \
             2>&1 1>&3)"
@@ -263,7 +289,7 @@ configure_distros_image()
 configure_save()
 {
    # save variables
-   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_TLS_CHECK";do
+   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_TLS_CHECK" "CONFIG_RUN_ISOHYBRID";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
       if test $? -ne 0;then
          echo "${STR}=" >> "${CONFIG}.new"
@@ -274,6 +300,7 @@ configure_save()
       -e "s/^CONFIG_PART_TYPE=.*$/CONFIG_PART_TYPE=${CONFIG_PART_TYPE}/g" \
       -e "s/^CONFIG_PART_SIZE=.*$/CONFIG_PART_SIZE=${CONFIG_PART_SIZE}/g" \
       -e "s/^CONFIG_TLS_CHECK=.*$/CONFIG_TLS_CHECK=${CONFIG_TLS_CHECK}/g" \
+      -e "s/^CONFIG_RUN_ISOHYBRID=.*$/CONFIG_RUN_ISOHYBRID=${CONFIG_RUN_ISOHYBRID}/g" \
       "${CONFIG}.new" \
       > "${CONFIG}.new.tmp"
    mv "${CONFIG}.new.tmp" "${CONFIG}.new"
@@ -378,6 +405,7 @@ while test true;do
       CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
       CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
       CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
+      CONFIG_RUN_ISOHYBRID="${DEFAULT_RUN_ISOHYBRID}"
       CONFIG_TLS_CHECK="${DEFAULT_TLS_CHECK}"
       cat /dev/null > ${CONFIG}.new
       dialog \
