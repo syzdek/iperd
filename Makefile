@@ -43,12 +43,14 @@ IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' 
 DATE			= $(shell date +%Y-%m-%d)
 
 
-ALL_FILES		= \
-			  $(GRUB_CONFIGS) \
-			  $(GRUB_BINARIES) \
+BIOS_FILES		= \
 			  $(SYSLINUX_CONFIGS) \
 			  $(SYSLINUX_BINARIES) \
 			  $(DOWNLOAD_FILES)
+UEFI_FILES		= \
+			  $(GRUB_CONFIGS) \
+			  $(GRUB_BINARIES) \
+			  $(BIOS_FILES)
 CLEANFILES		= \
 			  $(SYSLINUX_CONFIGS) \
 			  $(SYSLINUX_BINARIES) \
@@ -109,11 +111,16 @@ all:
 	@echo "   make download"
 	@echo " "
 	@echo "Build:"
-	@echo "   make images"
-	@echo "   make images/iperdboot.iso"
-	@echo "   make images/iperdboot.gpt.img DISKSIZE=1900"
-	@echo "   make images/iperdboot.hybrid.img DISKSIZE=1900"
-	@echo "   make images/iperdboot.mbr.img DISKSIZE=1900"
+	@echo "   make images # builds iperdboot.iso and iperdboot.img"
+	@echo " "
+	@echo "   make images/iperdboot.iso      # UEFI/BIOS hybrid"
+	@echo "   make images/iperdboot.bios.iso # BIOS only"
+	@echo "   make images/iperdboot.uefi.iso # UEFI only"
+	@echo " "
+	@echo "   make images/iperdboot.img     DISKSIZE=1900 # GPT/MBR hybrid"
+	@echo "   make images/iperdboot.gpt.img DISKSIZE=1900 # GPT only"
+	@echo "   make images/iperdboot.mbr.img DISKSIZE=1900 # MBR only"
+	@echo " "
 	@echo "   make thumbdrive DISK=/dev/sdb PARTTYPE=hybrid PARTSIZE=1900M"
 	@echo " "
 
@@ -155,28 +162,28 @@ include src/syslinux/Makefile.syslinux
 include src/grub/Makefile.grub
 
 
-images/iperdboot.gpt.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.gpt.img: $(UEFI_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t gpt -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.hybrid.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.img: $(UEFI_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t hybrid -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.mbr.img: $(ALL_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
+images/iperdboot.mbr.img: $(BIOS_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
 	@mkdir -p "$$(dirname "$(@)")"
 	@rm -f "$(@)"
 	bash ./$(SCRIPTDIR)/diskimage.sh -t mbr -s "$(DISKSIZE)" "." "$(@)"
 	@touch "$(@)"
 
 
-images/iperdboot.iso: $(ALL_FILES)
+images/iperdboot.iso: $(UEFI_FILES)
 	@mkdir -p $$(dirname "$(@)")
 	@rm -f "$(@)"
 	mkisofs \
@@ -201,11 +208,51 @@ images/iperdboot.iso: $(ALL_FILES)
 	@touch "$(@)"
 
 
-thumbdrive: $(ALL_FILES)
+images/iperdboot.bios.iso: $(BIOS_FILES)
+	@mkdir -p $$(dirname "$(@)")
+	@rm -f "$(@)"
+	mkisofs \
+	   -o "$(@)" \
+	   -R -J -v -d -N \
+	   -x '.git' \
+	   -m 'images' \
+	   -m 'tmp' \
+	   -hide-rr-moved \
+	   -no-emul-boot \
+	   -boot-load-size 4 \
+	   -boot-info-table \
+	   -b syslinux/isolinux.bin.mod \
+	   -c syslinux/isolinux.boot \
+	   -V "IPEngRescueDisk" \
+	   -A "IP Engineering Rescue Disk"  \
+	   ./
+	@touch "$(@)"
+
+
+images/iperdboot.uefi.iso: $(UEFI_FILES)
+	@mkdir -p $$(dirname "$(@)")
+	@rm -f "$(@)"
+	mkisofs \
+	   -o "$(@)" \
+	   -R -J -v -d -N \
+	   -x '.git' \
+	   -m 'images' \
+	   -m 'tmp' \
+	   -hide-rr-moved \
+	   -no-emul-boot \
+	   -eltorito-platform efi \
+	   -eltorito-boot EFI/BOOT/efiboot.img \
+	   -V "IPEngRescueDisk" \
+	   -A "IP Engineering Rescue Disk"  \
+	   ./
+	@touch "$(@)"
+
+
+thumbdrive: $(UEFI_FILES)
 	bash src/scripts/thumbdrive.sh -t "$(DISKTYPE)" -s "$(PARTSIZE)" . "$(DISK)"
 
 
-images: images/iperdboot.$(DISKTYPE).img images/iperdboot.iso
+images: images/iperdboot.img images/iperdboot.iso
 
 
 syslinux: $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
