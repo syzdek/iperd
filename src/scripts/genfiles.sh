@@ -91,7 +91,6 @@ generate_makefile_config()
    rm -f ${BASEDIR}/Makefile.config
    {
       # add configured options
-      echo "ISOTYPE	?= ${CONFIG_ISO_TYPE}"
       echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"

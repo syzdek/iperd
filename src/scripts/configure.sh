@@ -78,7 +78,6 @@ configure_all()
    echo "CONFIG_PART_TYPE=${CONFIG_PART_TYPE}" >> ${CONFIG}.new.tmp
    echo "CONFIG_PART_SIZE=${CONFIG_PART_SIZE}" >> ${CONFIG}.new.tmp
    echo "CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}" >> ${CONFIG}.new.tmp
-   echo "CONFIG_ISO_TYPE=${CONFIG_ISO_TYPE}" >> ${CONFIG}.new.tmp
 
    # copy new settings into place
    mv ${CONFIG}.new.tmp ${CONFIG}.new
@@ -108,7 +107,6 @@ configure_disk()
          20 70 13 \
          "usb"       "USB partition type (${CONFIG_PART_TYPE})" \
          "size"      "USB disk image size (${CONFIG_IMG_SIZE} MB)" \
-         "iso"       "ISO partition type (${CONFIG_ISO_TYPE})" \
          "tls"       "TLS Certificate check (${CONFIG_TLS_CHECK})" \
          2>&1 1>&3)"
       RC=$?
@@ -157,27 +155,6 @@ configure_disk()
                --msgbox "Invalid disk image size.  Size must be specified as number of megabytes." \
                7 40
          fi
-      elif test $RC -eq 0 && test "x${RESULT}" == "xiso";then
-         TMP_UEFI=off; TMP_HYBRID=off; TMP_BIOS=off;
-         case "x${CONFIG_ISO_TYPE}" in
-            xuefi)   TMP_UEFI=on;;
-            xhybrid) TMP_HYBRID=on;;
-            xbios)   TMP_BIOS=on;;
-            *)       TMP_BIOS=on;;
-         esac
-         exec 3>&1
-         RESULT="$(echo "" | xargs dialog \
-            --title " ISO Disk Type " \
-            --backtitle "IP Engineering Rescue Disk Setup" \
-            --radiolist "Choose ISO image type:" \
-            20 70 13 \
-            "uefi"   "GUID Partition Table (UEFI)"      ${TMP_UEFI} \
-            "hybrid" "Hybrid (GPT and MBR)"             ${TMP_HYBRID} \
-            "bios"   "Master Boot Record (Legacy BIOS)" ${TMP_BIOS} \
-            2>&1 1>&3)"
-         RC=$?
-         exec 3>&-
-         CONFIG_ISO_TYPE="${RESULT}"
       elif test $RC -eq 0 && test "x${RESULT}" == "xtls";then
          exec 3>&1
          RESULT="$(echo "" | xargs dialog \
@@ -286,14 +263,13 @@ configure_distros_image()
 configure_save()
 {
    # save variables
-   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE" "CONFIG_TLS_CHECK";do
+   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_TLS_CHECK";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
       if test $? -ne 0;then
          echo "${STR}=" >> "${CONFIG}.new"
       fi
    done
    sed \
-      -e "s/^CONFIG_ISO_TYPE=.*$/CONFIG_ISO_TYPE=${CONFIG_ISO_TYPE}/g" \
       -e "s/^CONFIG_IMG_SIZE=.*$/CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}/g" \
       -e "s/^CONFIG_PART_TYPE=.*$/CONFIG_PART_TYPE=${CONFIG_PART_TYPE}/g" \
       -e "s/^CONFIG_PART_SIZE=.*$/CONFIG_PART_SIZE=${CONFIG_PART_SIZE}/g" \
@@ -402,7 +378,6 @@ while test true;do
       CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
       CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
       CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
-      CONFIG_ISO_TYPE="${DEFAULT_ISO_TYPE}"
       CONFIG_TLS_CHECK="${DEFAULT_TLS_CHECK}"
       cat /dev/null > ${CONFIG}.new
       dialog \
