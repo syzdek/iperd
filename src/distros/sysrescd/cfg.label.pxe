@@ -8,9 +8,9 @@ label rescue32
 label rescue32_1
     MENU LABEL SystemRescueCd with default options (netboot)
     MENU INDENT 3
-    KERNEL /boot/sysrescd/vmlinuz.32
-    INITRD /boot/sysrescd/initram.igz
-    APPEND netboot=@NETBOOT_HTTP@/boot/sysrescd/sysrcd.dat
+    KERNEL /boot/sysrescd/@VERSION@/vmlinuz.32
+    INITRD /boot/sysrescd/@VERSION@/initram.igz
+    APPEND netboot=@NETBOOT_HTTP@/boot/sysrescd/@VERSION@/sysrcd.dat
     TEXT HELP
     Boot standard 32bit kernel with default options (should always work)
     ENDTEXT
@@ -18,9 +18,9 @@ label rescue32_1
 label rescue32_2
     MENU LABEL SystemRescueCd with all files cached to memory (netboot)
     MENU INDENT 3
-    KERNEL /boot/sysrescd/vmlinuz.32
-    INITRD /boot/sysrescd/initram.igz
-    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/sysrcd.dat
+    KERNEL /boot/sysrescd/@VERSION@/vmlinuz.32
+    INITRD /boot/sysrescd/@VERSION@/initram.igz
+    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/@VERSION@/sysrcd.dat
     TEXT HELP
     Boot standard 32bit kernel and run system from memory.
     It requires 512 MB of memory to work and takes some time during the
@@ -34,9 +34,9 @@ label rescue64
 label rescue64_1
     MENU LABEL SystemRescueCd with default options (netboot)
     MENU INDENT 3
-    KERNEL /boot/sysrescd/vmlinuz.64
-    INITRD /boot/sysrescd/initram.igz
-    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/sysrcd.dat
+    KERNEL /boot/sysrescd/@VERSION@/vmlinuz.64
+    INITRD /boot/sysrescd/@VERSION@/initram.igz
+    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/@VERSION@/sysrcd.dat
     TEXT HELP
     Boot standard 64bit kernel with default options (should always work)
     ENDTEXT
@@ -44,9 +44,9 @@ label rescue64_1
 label rescue64_2
     MENU LABEL SystemRescueCd with all files cached to memory (netboot)
     MENU INDENT 3
-    KERNEL /boot/sysrescd/vmlinuz.64
-    INITRD /boot/sysrescd/initram.igz
-    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/sysrcd.dat
+    KERNEL /boot/sysrescd/@VERSION@/vmlinuz.64
+    INITRD /boot/sysrescd/@VERSION@/initram.igz
+    APPEND docache netboot=@NETBOOT_HTTP@/boot/sysrescd/@VERSION@/sysrcd.dat
     TEXT HELP
     Boot standard 64bit kernel and run system from RAM (cdrom can be removed)
     It requires 512 MB of memory to work and takes some time during the
@@ -60,8 +60,8 @@ label rescuemisc
 label ntpass
     MENU LABEL NTPASSWD: Reset or edit Windows passwords
     MENU INDENT 3
-    kernel /boot/sysrescd/vmlinuz.nt
-    append rw vga=1 initrd=/boot/sysrescd/initrd.cgz,/boot/sysrescd/scsi.cgz
+    kernel /boot/sysrescd/@VERSION@/vmlinuz.nt
+    append rw vga=1 initrd=/boot/sysrescd/@VERSION@/initrd.cgz,/boot/sysrescd/@VERSION@/scsi.cgz
     TEXT HELP
     This tool can be used to reset windows users accounts. It works with all
     windows user accounts including the administrator. You can use this tool if
