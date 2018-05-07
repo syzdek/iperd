@@ -65,9 +65,11 @@ var/config/grub.inc: Makefile.config $(SYSLINUX_INC_DEPS)
 
 boot/grub/grub.cfg: Makefile var/config/grub.inc src/grub/grub-header.cfg
 	@mkdir -p boot/grub
-	cat \
+	@echo 'do_subst src/grub/grub-header.cfg var/config/grub.inc > $(@)';
+	@$(do_subst) \
 	   src/grub/grub-header.cfg \
 	   var/config/grub.inc \
+	   | sed -e "s,[@]SYSLINUX_FLAVOR[@],iso/UEFI,g" \
 	   > "$(@)" \
 	   || { rm -f "$(@)"; exit 1; }
 	@touch "$(@)"
