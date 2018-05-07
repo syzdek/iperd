@@ -1,0 +1,28 @@
+   submenu "CentOS Linux @VERSION@ Installers (64 bit)" {
+      menuentry --hotkey=i "Install or upgrade an existing system" {
+         echo   "Loading /boot/centos/@VERSION@/vmlinuz ..."
+         linux  /boot/centos/@VERSION@/vmlinuz
+         echo   "Loading /boot/centos/@VERSION@/initrd ..."
+         initrd /boot/centos/@VERSION@/initrd
+      }
+      menuentry --hotkey=b "Install system with basic video driver" {
+         echo   "Loading /boot/centos/@VERSION@/vmlinuz ..."
+         linux  /boot/centos/@VERSION@/vmlinuz nomodeset
+         echo   "Loading /boot/centos/@VERSION@/initrd ..."
+         initrd /boot/centos/@VERSION@/initrd
+      }
+      menuentry --hotkey=n "Install system from network" {
+         echo   "Loading /boot/centos/@VERSION@/vmlinuz ..."
+         linux  /boot/centos/@VERSION@/vmlinuz \
+                nomodeset ramdisk_size=100000 ip=dhcp \
+                repo=https://mirrors.kernel.org/centos/@VERSION@/os/x86_64/ 
+         echo   "Loading /boot/centos/@VERSION@/initrd ..."
+         initrd /boot/centos/@VERSION@/initrd
+      }
+      menuentry --hotkey=r "Rescue installed system" {
+         echo   "Loading /boot/centos/@VERSION@/vmlinuz ..."
+         linux  /boot/centos/@VERSION@/vmlinuz rescue
+         echo   "Loading /boot/centos/@VERSION@/initrd ..."
+         initrd /boot/centos/@VERSION@/initrd
+      }
+   }
