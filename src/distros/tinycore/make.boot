@@ -1,5 +1,5 @@
 
-DOWNLOAD_FILES		=  boot/tinycore/@VERSION@/core.gz \
+DOWNLOAD_FILES		+=  boot/tinycore/@VERSION@/core.gz \
 			   boot/tinycore/@VERSION@/vmlinuz
 CLEANFILES		+= cde/
 
