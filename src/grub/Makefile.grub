@@ -93,7 +93,7 @@ boot/grub/images/bootx64.efi: Makefile
 	   $(GRUB_MODULES)
 
 
-EFI/BOOT/efiboot.img: boot/grub/images/bootia32.efi boot/grub/images/bootx64.efi
+EFI/BOOT/efiboot.img: boot/grub/images/bootx64.efi
 	@rm -f "$(@)"
 	dd \
 	   if=/dev/zero \
