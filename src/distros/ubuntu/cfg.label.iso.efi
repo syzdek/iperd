@@ -1,0 +1,6 @@
+   menuentry "Ubuntu Linux @VERSION@ "@CODENAME@" Install (64 bit)" {
+      echo   "Loading /boot/ubuntu/@VERSION@/@ARCH@/vmlinuz ..."
+      linux  /boot/ubuntu/@VERSION@/@ARCH@/vmlinuz -- quiet
+      echo   "Loading /boot/ubuntu/@VERSION@/@ARCH@/initrd ..."
+      initrd /boot/ubuntu/@VERSION@/@ARCH@/initrd
+   }
