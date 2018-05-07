@@ -39,8 +39,15 @@
 # |           |
 # +-=-=-=-=-=-+
 
-# set program name for errors
+# set PROG_NAME and load profile
 PROG_NAME="$(basename "${0}")"
+IPERD_PROFILE="$(dirname "${0}")/iperd.profile"
+if test ! -f "${IPERD_PROFILE}";then
+   echo "${PROG_NAME}: unable to find iperd.profile" 1>&2;
+   exit 1;
+fi
+. "${IPERD_PROFILE}"
+
 
 # set logging function
 LOGGER="/usr/bin/sed -e s/^/${PROGRAM_NAME}:/g"
@@ -145,6 +152,7 @@ unset HASH_FILE
 unset HASH_DATA
 unset KEEPTEMPFILE
 unset EXTRACT_MKTEMP
+unset WGET_FLAGS
 
 
 # parse CLI arguments
@@ -183,6 +191,9 @@ fi
 
 
 # adjust options
+if test "x${CONFIG_TLS_CHECK}" == "xno";then
+   WGET_FLAGS="${WGET_FLAGS} --no-check-certificate";
+fi
 if test -z "${TMPFILE}";then
    TMPFILE="${FILE}.tmp"
 fi
@@ -240,6 +251,7 @@ trap cleanup SIGHUP SIGINT SIGTERM EXIT
 if test ! -f "${TMPFILE}" && test ! -f "${FILE}";then
    mkdir -p "$(dirname "${TMPFILE}")" || exit 1;
    wget \
+      ${WGET_FLAGS} \
       -q \
       -O "${TMPFILE}.new" \
       "${URL}" \

@@ -95,6 +95,7 @@ generate_makefile_config()
       echo "DISKSIZE	?= ${CONFIG_IMG_SIZE}"
       echo "DISKTYPE	?= ${CONFIG_PART_TYPE}"
       echo "PARTSIZE	?= ${CONFIG_PART_SIZE}"
+      echo "TLSCHECK	?= ${CONFIG_TLS_CHECK}"
 
       # define standard dependencies
       STD_DEP_FILES="src/scripts/genfiles.sh"

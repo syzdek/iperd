@@ -100,7 +100,7 @@ configure_disk()
       # display main menu
       exec 3>&1
       RESULT="$(echo "" | xargs dialog \
-         --title " Disk Options " \
+         --title " Miscellaneous Options " \
          --backtitle "IP Engineering Rescue Disk Setup" \
          --ok-label "Change" \
          --cancel-label "Back" \
@@ -109,6 +109,7 @@ configure_disk()
          "usb"       "USB partition type (${CONFIG_PART_TYPE})" \
          "size"      "USB disk image size (${CONFIG_IMG_SIZE} MB)" \
          "iso"       "ISO partition type (${CONFIG_ISO_TYPE})" \
+         "tls"       "TLS Certificate check (${CONFIG_TLS_CHECK})" \
          2>&1 1>&3)"
       RC=$?
       exec 3>&-
@@ -177,6 +178,21 @@ configure_disk()
          RC=$?
          exec 3>&-
          CONFIG_ISO_TYPE="${RESULT}"
+      elif test $RC -eq 0 && test "x${RESULT}" == "xtls";then
+         exec 3>&1
+         RESULT="$(echo "" | xargs dialog \
+            --title " TLS Certificate Checks " \
+            --backtitle "IP Engineering Rescue Disk Setup" \
+            --yesno "\nEnable TLS certificate checks when downloading files?" \
+            7 70 \
+            2>&1 1>&3)"
+         RC=$?
+         exec 3>&-
+         if test $RC -eq 0;then
+            CONFIG_TLS_CHECK=yes
+         else
+            CONFIG_TLS_CHECK=no
+         fi
       fi
    done
 }
@@ -270,7 +286,7 @@ configure_distros_image()
 configure_save()
 {
    # save variables
-   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE";do
+   for STR in "CONFIG_PART_TYPE" "CONFIG_IMG_SIZE" "CONFIG_ISO_TYPE" "CONFIG_TLS_CHECK";do
       egrep "^${STR}=" "${CONFIG}.new" > /dev/null
       if test $? -ne 0;then
          echo "${STR}=" >> "${CONFIG}.new"
@@ -281,6 +297,7 @@ configure_save()
       -e "s/^CONFIG_IMG_SIZE=.*$/CONFIG_IMG_SIZE=${CONFIG_IMG_SIZE}/g" \
       -e "s/^CONFIG_PART_TYPE=.*$/CONFIG_PART_TYPE=${CONFIG_PART_TYPE}/g" \
       -e "s/^CONFIG_PART_SIZE=.*$/CONFIG_PART_SIZE=${CONFIG_PART_SIZE}/g" \
+      -e "s/^CONFIG_TLS_CHECK=.*$/CONFIG_TLS_CHECK=${CONFIG_TLS_CHECK}/g" \
       "${CONFIG}.new" \
       > "${CONFIG}.new.tmp"
    mv "${CONFIG}.new.tmp" "${CONFIG}.new"
@@ -352,7 +369,7 @@ while test true;do
       --cancel-label "Exit" \
       --menu "Select item to configure:" \
       20 70 13 \
-      "disk"      "Change disk image options" \
+      "options"   "Change miscellaneous options" \
       "images"    "Select individual boot images" \
       "all"       "Select all available images" \
       "defaults"  "Load defaults" \
@@ -375,7 +392,7 @@ while test true;do
    elif test $RC -eq 126;then # (save)
       configure_save
       exit 0
-   elif test $RC -eq 0 && test "x${RESULT}" == "xdisk";then
+   elif test $RC -eq 0 && test "x${RESULT}" == "xoptions";then
       configure_disk
    elif test $RC -eq 0 && test "x${RESULT}" == "ximages";then
       configure_distros
@@ -385,7 +402,8 @@ while test true;do
       CONFIG_PART_TYPE="${DEFAULT_PART_TYPE}"
       CONFIG_PART_SIZE="${DEFAULT_PART_SIZE}"
       CONFIG_IMG_SIZE="${DEFAULT_IMG_SIZE}"
-      CONFIG_ISO_TYPE="${DEFAULT_ISO_SIZE}"
+      CONFIG_ISO_TYPE="${DEFAULT_ISO_TYPE}"
+      CONFIG_TLS_CHECK="${DEFAULT_TLS_CHECK}"
       cat /dev/null > ${CONFIG}.new
       dialog \
          --backtitle "IP Engineering Rescue Disk Setup" \
