@@ -15,11 +15,9 @@ Table of Contents
    * Maintainers
    * Quick Start
    * Directory Structure
-   * Configuring and Downloading Images
-   * Creating Images
-     * Bootable ISO Images
-     * Bootable Disk Images
-     * Bootable USB Pen Drives
+     * Distro Definition
+   * Compatibility
+   * Source Code
 
 
 Disclaimer
@@ -45,6 +43,26 @@ Maintainers
    david@syzdek.net
 
 
+Requirements
+============
+
+Build requirements:
+
+   * Bash shell
+   * GNU Make
+   * GNU Mtools
+   * GNU GCC
+   * wget
+   * GNU Grub 2
+   * cdrtools
+
+Network boot requirements:
+
+   * DHCP Server (dnsmasq configuration included)
+   * TFTP Server (dnsmasq configuration included)
+   * HTTP Server (busybox httpd widget instructions included)
+
+
 Quick Start
 ===========
 
@@ -56,7 +74,7 @@ Quick Start
 
        make download
 
-   Make disk ISO and USB images in `images/`:
+   Make ISO image and USB images in `images/`:
 
        make images
 
@@ -68,25 +86,41 @@ Quick Start
 Directory Structure
 ===================
 
-   * boot/<distro>/<ver>/<arch>
-   * docs/
-   * images/
-   * src/distros/<distro>/broken.efi
-   * src/distros/<distro>/cfg.footer
-   * src/distros/<distro>/cfg.header
-   * src/distros/<distro>/cfg.label
-   * src/distros/<distro>/cfg.label.iso
-   * src/distros/<distro>/cfg.label.pxe
-   * src/distros/<distro>/cfg.label.sys
-   * src/distros/<distro>/make.boot
-   * src/distros/<distro>/make.footer
-   * src/distros/<distro>/make.header
-   * src/distros/<distro>/option
-   * src/distros/<distro>/options
-   * src/scripts/
-   * src/syslinux
-   * tmp/
-   * var/config/
+   * `EFI/BOOT/`              - UEFI boot files
+   * `boot/<distro>/`         - Distribution images
+   * `boot/grub/`             - Grub binaries and configurations
+   * `doc/`                   - Additional documentation
+   * `images/`                - Generated IPERD images
+   * `src/distros/<distro>/`  - Distro definition
+   * `src/grub/`              - Grub templates and build files
+   * `src/scripts/`           - helper scripts
+   * `src/syslinux/`          - Syslinux templates and build files
+   * `tmp/`                   - Download and build cache
+   * `var/config/`            - Configuration files
+
+
+Distro Definition
+-----------------
+
+   * `./broken`             - existence indicates broken distro
+   * `./broken.efi`         - existence indicates broken UEFI implementation
+   * `./broken.iso`         - existence indicates broken ISO implementation
+   * `./broken.pxe`         - existence indicates broken PXE implementation
+   * `./broken.sys`         - existence indicates broken USB implementation
+   * `./cfg.header`         - start of syslinux configuration
+   * `./cfg.header.iso.efi` - start of grub configuration for UEFI ISO
+   * `./cfg.label`          - default syslinux label template
+   * `./cfg.label.iso`      - syslinux label template for ISO images
+   * `./cfg.label.iso.efi`  - grub menuentry template for UEFI ISO images
+   * `./cfg.label.pxe`      - syslinux label template for PXE labels
+   * `./cfg.label.sys`      - syslinux label template for USB labels
+   * `./cfg.footer`         - end of syslinux configuration
+   * `./cfg.footer.iso.efi` - end of grub configuration for UEFI ISO
+   * `./make.header`        - start of Makefile definitions for distro
+   * `./make.boot`          - Makefile targets for distro
+   * `./make.footer`        - end of Makefile definitions for distro
+   * `./option`             - list of distro variants (single option)
+   * `./options`            - list of distro variants (multiple options)
 
 
 Compatibility
@@ -109,36 +143,6 @@ Compatibility
     | TinyCore          |  Y  | n/a | n/a |  Y  | n/a | n/a |  ?  | n/a | n/a |
     | Ubuntu Install    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
     +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-
-
-Configuring and Downloading Images
-==================================
-
-To be written.
-
-
-Creating Images
-===============
-
-To be written.
-
-
-Creating Images: Bootable ISO Images
-------------------------------------
-
-To be written.
-
-
-Creating Images: Bootable Disk Images
--------------------------------------
-
-To be written.
-
-
-Creating Images: Bootable USB Pen Drives
-----------------------------------------
-
-To be written.
 
 
 Source Code
