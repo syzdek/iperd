@@ -235,7 +235,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          isolinux.inc \
          "cfg.header" \
-         "cfg.label cfg.label.iso" \
+         "cfg.label.iso cfg.label" \
          "cfg.footer" \
          "broken.iso" \
          || exit 1;
@@ -245,7 +245,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          pxelinux.inc \
          "cfg.header" \
-         "cfg.label cfg.label.pxe" \
+         "cfg.label.pxe cfg.label" \
          "cfg.footer" \
          "broken.pxe" \
          || exit 1;
@@ -255,7 +255,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          pxelia32.inc \
          "cfg.header" \
-         "cfg.label cfg.label.pxe" \
+         "cfg.label.pxe cfg.label" \
          "cfg.footer" \
          "broken.pxe broken.efi broken.efi32" \
          || exit 1;
@@ -265,7 +265,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          pxelx64.inc \
          "cfg.header" \
-         "cfg.label cfg.label.pxe" \
+         "cfg.label.pxe cfg.label" \
          "cfg.footer" \
          "broken.pxe broken.efi broken.efi64" \
          || exit 1;
@@ -275,7 +275,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          syslinux.inc \
          "cfg.header" \
-         "cfg.label cfg.label.sys" \
+         "cfg.label.sys cfg.label" \
          "cfg.footer" \
          "broken.sys" \
          || exit 1;
@@ -285,7 +285,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          syslia32.inc \
          "cfg.header" \
-         "cfg.label cfg.label.sys" \
+         "cfg.label.sys cfg.label" \
          "cfg.footer" \
          "broken.sys broken.efi broken.efi32" \
          || exit 1;
@@ -295,7 +295,7 @@ for FILE in ${REGEN_FILE};do
       generate_cfg \
          syslx64.inc \
          "cfg.header" \
-         "cfg.label cfg.label.sys" \
+         "cfg.label.sys cfg.label" \
          "cfg.footer" \
          "broken.sys broken.efi broken.efi64" \
          || exit 1;
