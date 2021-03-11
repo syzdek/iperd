@@ -88,7 +88,7 @@ cleanup()
 }
 
 
-extactiso()
+extractiso()
 {
    # create temp mount point
    EXTRACT_MKTEMP="$(mktemp -d -p "tmp/" "$(basename "${EXTRACTDIR}").XXXXXX")"
@@ -107,6 +107,23 @@ extactiso()
 
    # make files user writeable
    chmod -R u+rw "${EXTRACTDIR}" || exit 
+}
+
+
+extracttar()
+{
+   mkdir -p "${EXTRACTDIR}"
+   case "${FILE}" in
+      *.tar.gz)  gzip  -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.tgz)     gzip  -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.tar.bz2) bzip2 -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.tbz)     bzip2 -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.tbz2)    bzip2 -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.tar.xz)  xz    -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *.txz)     xz    -cd "${FILE}" |tar -xf - -C "${EXTRACTDIR}";;
+      *)
+      ;;
+   esac
 }
 
 
@@ -216,19 +233,8 @@ if test ! -z "${HASH_FILE}";then
 fi
 if test ! -z "${EXTRACTDIR}";then
    case "${FILE}" in
-      *.iso)     EXTRACT_CMD="extactiso";;
-      *.tar.gz)  EXTRACT_CMD="gzip  -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.tgz)     EXTRACT_CMD="gzip  -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.tar.bz2) EXTRACT_CMD="bzip2 -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.tbz)     EXTRACT_CMD="bzip2 -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.tbz2)    EXTRACT_CMD="bzip2 -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.tar.xz)  EXTRACT_CMD="xz    -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *.txz)     EXTRACT_CMD="xz    -cd '${FILE}' |tar -xf - -C '${EXTRACTDIR}'";;
-      *)
-         echo "${PROG_NAME}: unknown file extension for extracting archive" 1>&2
-         echo "Try '${PROG_NAME} -h' for more information." 1>&2
-         exit 1
-      ;;
+      *.iso)     EXTRACT_CMD="extractiso";;
+      *)         EXTRACT_CMD="extracttar";;
    esac
 fi
 
