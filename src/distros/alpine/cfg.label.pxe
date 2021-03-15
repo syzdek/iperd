@@ -3,6 +3,6 @@ label alpine@VERSION@@ARCH@
     MENU LABEL Alpine Linux @VERSION@ (@ARCH@)
     kernel /boot/alpine/@VERSION@/@ARCH@/vmlinuz
     initrd /boot/alpine/@VERSION@/@ARCH@/initrd
-    append modloop=@NETBOOT_HTTP@/boot/alpine/@VERSION@/@ARCH@/modloop alpine_repo=@NETBOOT_HTTP@/boot/alpine/@VERSION@/apks/
+    append ip=dhcp modloop=@NETBOOT_HTTP@/boot/alpine/@VERSION@/@ARCH@/modloop modules=loop,squashfs,sd-mod,usb-storage alpine_repo=@NETBOOT_HTTP@/boot/alpine/@VERSION@/apks
 
 
