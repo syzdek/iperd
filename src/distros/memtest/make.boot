@@ -1,8 +1,8 @@
 
-DOWNLOAD_FILES          += boot/memtest/memtest.bin
+DOWNLOAD_FILES          += boot/memtest/memtest-@VERSION@.bin
 
 
-boot/memtest/memtest.bin:
+boot/memtest/memtest-@VERSION@.bin:
 	@rm -f $(@)
 	@mkdir -p $$(dirname "$(@)")
 	./src/scripts/download.sh \
