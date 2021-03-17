@@ -139,7 +139,6 @@ Compatibility
     | Debian Install    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
     | Memtest86+        |  Y  |  -  |  -  |  Y  |  -  |  -  |  ?  |  -  |  -  |
     | Slackware Install |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
-    | SystemRescueCD    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
     | TinyCore          |  Y  | n/a | n/a |  Y  | n/a | n/a |  ?  | n/a | n/a |
     | Ubuntu Install    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
     +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
