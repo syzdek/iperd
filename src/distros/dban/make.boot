@@ -1,5 +1,5 @@
 
-DOWNLOAD_FILES          += $(FILES_DBAN)
+DOWNLOAD_FILES          += boot/dban/dban-@VERSION@-@ARCH@.bzi
 
 
 tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted:
@@ -10,7 +10,7 @@ tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted:
 	   $(MIRROR_DBAN)/dban-@VERSION@/dban-@VERSION@_@ARCH@.iso
 
 
-boot/dban/dban.bzi: tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted
+boot/dban/dban-@VERSION@-@ARCH@.bzi: tmp/boot/dban/dban-@VERSION@_@ARCH@/.iperd-extracted
 	@mkdir -p "$$(dirname "$(@)")"
 	cp tmp/boot/dban/dban-@VERSION@_@ARCH@/dban.bzi "$(@)"
 	@test -f "$(@)" && touch "$(@)"
