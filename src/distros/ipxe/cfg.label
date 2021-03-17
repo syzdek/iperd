@@ -1,5 +1,0 @@
-
-label  ipxe
-    MENU LABEL iPXE Boot
-    linux /boot/ipxe/ipxe.krn
-
