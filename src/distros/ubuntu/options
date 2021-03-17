@@ -1,6 +1,4 @@
 ubuntu                          'Ubuntu Linux (checksum validation unavailable)'
-   ubuntu-12.04-precise-amd64   'Ubuntu 12.04 LTS "Precise Pangolin" (amd64)'
-   ubuntu-12.04-precise-i386    'Ubuntu 12.04 LTS "Precise Pangolin" (i386)'
    ubuntu-14.04-trusty-amd64    'Ubuntu 14.04 LTS "Trusty Tahr" (amd64)'
    ubuntu-14.04-trusty-i386     'Ubuntu 14.04 LTS "Trusty Tahr" (i386)'
    ubuntu-16.04-xenial-amd64    'Ubuntu 16.04 LTS "Xenial Xerus" (amd64)'
