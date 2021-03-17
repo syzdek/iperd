@@ -30,6 +30,7 @@ boot/alpine/@VERSION@/@ARCH@/vmlinuz: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.i
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
 	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/vmlinuz-lts "$(@)"
+	@chmod 644 "$(@)"
 	@touch "$(@)"
 
 
@@ -37,6 +38,7 @@ boot/alpine/@VERSION@/@ARCH@/initrd: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.ip
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
 	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/initramfs-lts "$(@)"
+	@chmod 644 "$(@)"
 	@touch "$(@)"
 
 
@@ -44,6 +46,7 @@ boot/alpine/@VERSION@/@ARCH@/modloop: tmp/boot/alpine/alpine-@VERSION@-@ARCH@/.i
 	@rm -f "$(@)"
 	@mkdir -p "$$(dirname "$(@)")"
 	cp tmp/boot/alpine/alpine-@VERSION@-@ARCH@/boot/modloop-lts "$(@)"
+	@chmod 644 "$(@)"
 	@test -f "$(@)" && touch "$(@)"
 
 
