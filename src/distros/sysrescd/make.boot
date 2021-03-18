@@ -12,7 +12,7 @@ tmp/boot/sysrescd/sysrescd-@VERSION@-@ARCH@/.iperd-extracted:
 	   -H $(SYSRESCD_HASHES)/sysrescd-@VERSION@-@ARCH@.sha512 \
 	   -e tmp/boot/sysrescd/sysrescd-@VERSION@-@ARCH@ \
 	   tmp/boot/sysrescd/sysrescd-@VERSION@-@ARCH@.iso \
-	   $(MIRROR_SYSRESCD)/@VERSION@/systemrescue-@VERSION@-@ARCH@.iso
+	   $(MIRROR_SYSRESCD)/@VERSION@/systemrescue-@VERSION@-@CODENAME@.iso
 
 
 boot/sysrescd/@VERSION@/@ARCH@/airootfs.sfs: tmp/boot/sysrescd/sysrescd-@VERSION@-@ARCH@/.iperd-extracted

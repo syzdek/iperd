@@ -1,3 +1,3 @@
 sysrescd                     "SystemRescueCd"
-   sysrescd-8.01-8.x-x86_64  "SystemRescueCd 8.01 (amd64)"
-   sysrescd-8.01-8.x-i686    "SystemRescueCd 8.01 (i686)"
+   sysrescd-8.01-amd64-x86_64  "SystemRescueCd 8.01 (amd64)"
+   sysrescd-8.01-i686-i686    "SystemRescueCd 8.01 (i686)"
