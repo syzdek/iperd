@@ -1,0 +1,39 @@
+   submenu "SystemRescueCD @VERSION@ (@ARCH@)" {
+      submenu "SystemRescueCD (@VERSION@)" {
+         menuentry "SystemRescueCd with default options" {
+            echo   "Loading /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz ..."
+            linux  /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz archisobasedir=/boot/sysrescd/@VERSION@ archisolabel=RESCUE801
+            echo   "Loading intel_ucode.img amd_ucode.img sysresccd.img ..."
+            initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+            echo   "Booting ..."
+         }
+         menuentry "SystemRescueCd and copy system to RAM (copytoram)" {
+            echo   "Loading /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz ..."
+            linux  /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz archisobasedir=/boot/sysrescd/@VERSION@ archisolabel=RESCUE801 copytoram
+            echo   "Loading intel_ucode.img amd_ucode.img sysresccd.img ..."
+            initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+            echo   "Booting ..."
+         }
+         menuentry "SystemRescueCd using basic display drivers (nomodeset)" {
+            echo   "Loading /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz ..."
+            linux  /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz archisobasedir=/boot/sysrescd/@VERSION@ archisolabel=RESCUE801 nomodeset
+            echo   "Loading intel_ucode.img amd_ucode.img sysresccd.img ..."
+            initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+            echo   "Booting ..."
+         }
+         menuentry "Linux operating system installed on the disk (findroot) " {
+            echo   "Loading /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz ..."
+            linux  /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz archisobasedir=/boot/sysrescd/@VERSION@ archisolabel=RESCUE801 findroot
+            echo   "Loading intel_ucode.img amd_ucode.img sysresccd.img ..."
+            initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+            echo   "Booting ..."
+         }
+         menuentry "SystemRescueCd and boot process prior to mounting filesystem" {
+            echo   "Loading /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz ..."
+            linux  /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz archisobasedir=/boot/sysrescd/@VERSION@ archisolabel=RESCUE801 break
+            echo   "Loading intel_ucode.img amd_ucode.img sysresccd.img ..."
+            initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img /boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+            echo   "Booting ..."
+         }
+      }
+   }

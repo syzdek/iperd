@@ -1,0 +1,12 @@
+
+label sysrescd@VERSION@@ARCH@
+   linux /boot/sysrescd/@VERSION@/@ARCH@/vmlinuz
+   initrd /boot/sysrescd/@VERSION@/@ARCH@/intel_ucode.img,/boot/sysrescd/@VERSION@/@ARCH@/amd_ucode.img,/boot/sysrescd/@VERSION@/@ARCH@/sysresccd.img
+   append archisobasedir=@NETBOOT_HTTP_PATH@/boot/sysrescd/@VERSION@ archiso_http_srv=@NETBOOT_HTTP_SCHEME@://@NETBOOT_HTTP_HOST@
+   SYSAPPEND 3
+   MENU LABEL SystemRescueCd @VERSION@ (@ARCH@)
+   TEXT HELP
+   Boot the SystemRescue live medium (Using HTTP).
+   It allows you to install Arch Linux or perform system maintenance.
+   ENDTEXT
+
