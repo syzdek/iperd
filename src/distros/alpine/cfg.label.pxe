@@ -1,8 +1,22 @@
+MENU BEGIN alpine@VERSION@@ARCH@
+MENU TITLE Alpine Linux @VERSION@ (@ARCH@)
 
 label alpine@VERSION@@ARCH@
-    MENU LABEL Alpine Linux @VERSION@ (@ARCH@)
+    MENU LABEL Alpine Linux (PXE boot any NIC)
     kernel /boot/alpine/@VERSION@/@ARCH@/vmlinuz
     initrd /boot/alpine/@VERSION@/@ARCH@/initrd
     append modloop=@NETBOOT_HTTP@/boot/alpine/@VERSION@/@ARCH@/modloop modules=loop,squashfs,sd-mod,usb-storage alpine_repo=@NETBOOT_HTTP@/boot/alpine/@VERSION@/apks ip=dhcp
 
+label alpine@VERSION@@ARCH@eth0
+    MENU LABEL Alpine Linux (PXE boot eth0)
+    kernel /boot/alpine/@VERSION@/@ARCH@/vmlinuz
+    initrd /boot/alpine/@VERSION@/@ARCH@/initrd
+    append modloop=@NETBOOT_HTTP@/boot/alpine/@VERSION@/@ARCH@/modloop modules=loop,squashfs,sd-mod,usb-storage alpine_repo=@NETBOOT_HTTP@/boot/alpine/@VERSION@/apks ip=dhcp:::::eth0:
 
+label alpine@VERSION@@ARCH@eth1
+    MENU LABEL Alpine Linux (PXE boot eth1)
+    kernel /boot/alpine/@VERSION@/@ARCH@/vmlinuz
+    initrd /boot/alpine/@VERSION@/@ARCH@/initrd
+    append modloop=@NETBOOT_HTTP@/boot/alpine/@VERSION@/@ARCH@/modloop modules=loop,squashfs,sd-mod,usb-storage alpine_repo=@NETBOOT_HTTP@/boot/alpine/@VERSION@/apks ip=dhcp:::::eth1:
+
+MENU END
