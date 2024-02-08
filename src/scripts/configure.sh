@@ -363,7 +363,7 @@ while test true;do
 
    # display main menu
    exec 3>&1
-   RESULT="$(echo "" | xargs dialog \
+   RESULT="$(dialog \
       --title " Main Menu " \
       --backtitle "IP Engineering Rescue Disk Setup" \
       --ok-label "Select" \
@@ -382,7 +382,7 @@ while test true;do
    exec 3>&-
 
    # inteprets selection
-   if test $RC -eq 124;then # (exit)
+   if test $RC -eq 255;then # (exit)
       dialog \
          --title " Exit Setup " \
          --backtitle "IP Engineering Rescue Disk Setup" \
