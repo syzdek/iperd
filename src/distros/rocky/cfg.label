@@ -1,0 +1,55 @@
+MENU BEGIN rocky@VERSION@
+MENU TITLE Rocky Linux @VERSION@ Installers (64 bit)
+
+label rocky@VERSION@
+    MENU LABEL ^Install or upgrade an existing system
+    TEXT HELP
+    Boot 64 bit Rocky @VERSION@ installer for system builds or troubleshooting.
+
+    Press [TAB] to append required boot options (i.e. console=ttyS1,115200).
+    ENDTEXT
+    kernel /boot/rocky/@VERSION@/vmlinuz
+    initrd /boot/rocky/@VERSION@/initrd
+
+label rocky@VERSION@vesa
+    MENU LABEL Install system with ^basic video driver
+    TEXT HELP
+    Boot 64 bit Rocky @VERSION@ installer for system builds or troubleshooting.
+
+    Press [TAB] to append required boot options (i.e. console=ttyS1,115200).
+    ENDTEXT
+    kernel /boot/rocky/@VERSION@/vmlinuz
+    initrd /boot/rocky/@VERSION@/initrd
+    append nomodeset
+
+label rocky@VERSION@net
+    MENU LABEL Install system from ^network
+    TEXT HELP
+    Boot 64 bit Rocky @VERSION@ installer for system builds or troubleshooting.
+
+    Press [TAB] to append required boot options (i.e. console=ttyS1,115200).
+    ENDTEXT
+    kernel /boot/rocky/@VERSION@/vmlinuz
+    initrd /boot/rocky/@VERSION@/initrd
+    append nomodeset ramdisk_size=100000 ip=dhcp repo=https://mirrors.kernel.org/rocky/@VERSION@/os/x86_64/ 
+
+label rocky@VERSION@rescue
+    MENU LABEL ^Rescue installed system
+    TEXT HELP
+    Boot 64 bit Rocky @VERSION@ installer for system builds or troubleshooting.
+
+    Press [TAB] to append required boot options (i.e. console=ttyS1,115200).
+    ENDTEXT
+    kernel /boot/rocky/@VERSION@/vmlinuz
+    initrd /boot/rocky/@VERSION@/initrd
+    append rescue
+
+label rocky@VERSION@local
+    MENU LABEL Boot from ^local drive
+    localboot 0xffff
+
+label rocky@VERSION@memtest
+    MENU LABEL ^Memory test
+    linux /boot/memtest/memtest.bin
+
+MENU END

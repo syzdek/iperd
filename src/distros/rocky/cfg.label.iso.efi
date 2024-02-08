@@ -1,0 +1,32 @@
+   submenu "Rocky Linux @VERSION@ Installers (64 bit)" {
+      menuentry --hotkey=i "Install or upgrade an existing system" {
+         echo   "Loading /boot/rocky/@VERSION@/vmlinuz ..."
+         linux  /boot/rocky/@VERSION@/vmlinuz
+         echo   "Loading /boot/rocky/@VERSION@/initrd ..."
+         initrd /boot/rocky/@VERSION@/initrd
+         echo   "Booting ..."
+      }
+      menuentry --hotkey=b "Install system with basic video driver" {
+         echo   "Loading /boot/rocky/@VERSION@/vmlinuz ..."
+         linux  /boot/rocky/@VERSION@/vmlinuz nomodeset
+         echo   "Loading /boot/rocky/@VERSION@/initrd ..."
+         initrd /boot/rocky/@VERSION@/initrd
+         echo   "Booting ..."
+      }
+      menuentry --hotkey=n "Install system from network" {
+         echo   "Loading /boot/rocky/@VERSION@/vmlinuz ..."
+         linux  /boot/rocky/@VERSION@/vmlinuz \
+                nomodeset ramdisk_size=100000 ip=dhcp \
+                repo=https://mirrors.kernel.org/rocky/@VERSION@/os/x86_64/ 
+         echo   "Loading /boot/rocky/@VERSION@/initrd ..."
+         initrd /boot/rocky/@VERSION@/initrd
+         echo   "Booting ..."
+      }
+      menuentry --hotkey=r "Rescue installed system" {
+         echo   "Loading /boot/rocky/@VERSION@/vmlinuz ..."
+         linux  /boot/rocky/@VERSION@/vmlinuz rescue
+         echo   "Loading /boot/rocky/@VERSION@/initrd ..."
+         initrd /boot/rocky/@VERSION@/initrd
+         echo   "Booting ..."
+      }
+   }

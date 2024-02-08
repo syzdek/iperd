@@ -1,0 +1,5 @@
+MENU BEGIN rocky
+MENU TITLE Rocky Linux Installers
+#label rocky
+#    MENU LABEL Rocky Linux
+#    MENU DISABLE
