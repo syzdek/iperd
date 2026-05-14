@@ -164,7 +164,7 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 include src/syslinux/Makefile.syslinux
 include src/dejavu/Makefile.inc
 include src/unifont/Makefile.inc
-include src/grub/Makefile.grub
+include src/grub/Makefile.inc
 
 
 images/iperdboot.gpt.img: $(UEFI_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
