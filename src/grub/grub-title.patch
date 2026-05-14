@@ -1,0 +1,12 @@
+diff -urN source/grub-core/normal/main.c source.new/grub-core/normal/main.c
+--- source/grub-core/normal/main.c	2025-11-18 04:34:44.000000000 -0900
++++ source.new/grub-core/normal/main.c	2026-05-13 17:03:21.321449879 -0800
+@@ -215,7 +215,7 @@
+ 
+   grub_term_cls (term);
+ 
+-  msg_formatted = grub_xasprintf (_("GNU GRUB  version %s"), PACKAGE_VERSION);
++  msg_formatted = grub_xasprintf ("IP Engineering Rescue Disk");
+   if (!msg_formatted)
+     return;
+ 

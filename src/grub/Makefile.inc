@@ -106,6 +106,7 @@ src/grub/source/.iperd: $(GRUB_DEPENDENCIES)
 	@rm -Rf src/grub/source
 	@mkdir  src/grub/source
 	tar -C  src/grub/source -xf src/grub/grub-$(GRUB_VERSION).tar.xz --strip-components=1
+	( cd src/grub/source && patch -p1 < ../grub-title.patch )
 	@touch $(@)
 
 
@@ -190,7 +191,7 @@ grub/.iperd: $(GRUB_PLATFORMS)
 	@touch $(@)
 
 
-src/grub/.iperd: $(GRUB_PLATFORMS)
+src/grub/.iperd: grub/.iperd
 	@touch $(@)
 
 
