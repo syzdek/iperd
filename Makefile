@@ -279,11 +279,13 @@ deps: $(SYSLINUX_CONFIGS) $(GRUB_CONFIGS) Makefile.config
 
 
 clean:
+	rm -Rf grub tools
 	rm -Rf $(CLEANFILES)
 
 
 distclean: clean
 	rm -Rf $(DISTCLEANFILES)
+	rm -Rf boot src/config tmp
 
 
 # end of makefile
