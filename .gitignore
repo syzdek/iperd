@@ -17,6 +17,8 @@
 /src/config/
 /src/dejavu/dejavu-fonts-ttf-*.tar.bz2
 /src/dejavu/source/
+/src/unifont/unifont-*.bdf.gz
+/src/unifont/unifont.bdf
 /syslinux/
 /var/
 /tmp/

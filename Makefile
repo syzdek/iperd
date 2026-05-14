@@ -163,6 +163,7 @@ NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
 include src/syslinux/Makefile.syslinux
 include src/dejavu/makefile.inc
+include src/unifont/makefile.inc
 include src/grub/Makefile.grub
 
 
