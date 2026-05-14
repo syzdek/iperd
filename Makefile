@@ -162,7 +162,7 @@ NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
 NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
 include src/syslinux/Makefile.syslinux
-include src/dejavu/makefile.inc
+include src/dejavu/Makefile.inc
 include src/unifont/makefile.inc
 include src/grub/Makefile.grub
 
