@@ -103,14 +103,14 @@ do_subst_dt = \
 	touch $(@);
 
 
-.PHONY: all clean configs configure distclean syslinux images deps
+.PHONY: all clean configs configure distclean grub syslinux images deps
 
 
 all:
 	@echo " "
 	@echo "Prepare directory:"
 	@echo "   make configure"
-	@echo "   make syslinux"
+	@echo "   make grub"
 	@echo "   make download"
 	@echo " "
 	@echo "Build:"
@@ -261,6 +261,9 @@ thumbdrive: $(UEFI_FILES)
 
 
 images: images/iperdboot.img images/iperdboot.iso
+
+
+grub: src/grub/.iperd
 
 
 syslinux: $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
