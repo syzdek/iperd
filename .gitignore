@@ -1,4 +1,5 @@
 *.swp
+.iperd
 /.git.old
 /EFI/
 /Makefile.config
@@ -14,6 +15,8 @@
 /pxelinux.0
 /pxelinux.cfg/
 /src/config/
+/src/dejavu/dejavu-fonts-ttf-*.tar.bz2
+/src/dejavu/source/
 /syslinux/
 /var/
 /tmp/

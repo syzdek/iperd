@@ -33,6 +33,8 @@
 #
 
 
+IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
 DISTRODIR		= src/distros
 CONFIGDIR		= var/config
 SCRIPTDIR		= src/scripts
@@ -51,6 +53,7 @@ UEFI_FILES		= \
 			  $(GRUB_CONFIGS) \
 			  $(GRUB_BINARIES) \
 			  $(BIOS_FILES)
+DISTCLEANFILES		=
 CLEANFILES		= \
 			  $(SYSLINUX_CONFIGS) \
 			  $(SYSLINUX_BINARIES) \
@@ -159,6 +162,7 @@ NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
 NETBOOT                 ?= $(NETBOOT_HTTP)
 -include Makefile.config
 include src/syslinux/Makefile.syslinux
+include src/dejavu/makefile.inc
 include src/grub/Makefile.grub
 
 
@@ -278,9 +282,7 @@ clean:
 
 
 distclean: clean
-	rm -Rf boot
-	rm -Rf src/config
-	rm -Rf tmp
+	rm -Rf $(DISTCLEANFILES)
 
 
 # end of makefile
