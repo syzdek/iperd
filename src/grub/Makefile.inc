@@ -182,7 +182,7 @@ tools/iperd/grub_x86_64_efi: $(GRUB_BUILDDIR)_x86_64_efi/.iperd
 # create TFTP boot directory
 #
 grub/.iperd: $(GRUB_PLATFORMS)
-	@rm -Rf boot/grub
+	@rm -Rf grub
 	./tools/bin/grub-mknetdir \
 	   --modules="all_video http net gzio echo serial syslinuxcfg terminal tftp" \
 	   --core-compress=xz \
