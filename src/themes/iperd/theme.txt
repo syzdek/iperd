@@ -1,0 +1,88 @@
+#
+#   IP Engineering Rescue Disk
+#   Copyright (C) 2026 David M. Syzdek <david@syzdek.net>.
+#
+#   Redistribution and use in source and binary forms, with or without
+#   modification, are permitted provided that the following conditions are
+#   met:
+#
+#      * Redistributions of source code must retain the above copyright
+#        notice, this list of conditions and the following disclaimer.
+#      * Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#      * Neither the name of David M. Syzdek nor the
+#        names of its contributors may be used to endorse or promote products
+#        derived from this software without specific prior written permission.
+#
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+#   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DAVID M. SYZDEK BE LIABLE FOR
+#   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+#   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+#   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+#   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+#   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+#   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+#   SUCH DAMAGE.
+#
+
+# title
+title-text: "IP Engineering Rescue Disk"
+title-font: "DejaVu Sans Mono Regular 18"
+title-color: "#fff"
+
+# Terminal theme
+terminal-box: "terminal_*.png"
+terminal-font: "DejaVu Sans Mono Regular 12"
+#terminal-left: "10%"
+#terminal-top: "20%"
+#terminal-width: "80%"
+#terminal-height: "70%"
+#terminal-border: "0"
+
+# desktop image
+desktop-image: "desktop.png"
+desktop-color: "#000"
+
+
+# navitagion
++ label {
+	top = 100%-30
+	left = 0
+	width = 100%
+	height = 26
+	align = "center"
+	font = "DejaVu Sans Mono Regular 14"
+	color = "#FFF"
+	text = "↑/↓ - Navigate     c - Command-line     e - Edit Selection     ↲ - Boot Selection"
+}
+
+
+# menu
++ boot_menu {
+	left = 10%
+	width = 80%
+	top = 20%
+        height = 70%
+	item_font = "DejaVu Sans Mono Regular 14"
+	item_color = "#fff"
+	selected_item_font = "DejaVu Sans Mono Bold 14"
+	selected_item_color= "#fff"
+	selected_item_pixmap_style = "select_*.png"
+	icon_height = 25
+	icon_width = 25
+	item_height = 26
+	item_padding = 0
+	item_icon_space = 5
+	item_spacing = 6
+	scrollbar = true
+	scrollbar_width = 21
+	scrollbar_pad = 21
+	scrollbar_thumb = "slider_*.png"
+	menu_pixmap_style = "menu_*.png"
+}
+
+
+# end of theme
