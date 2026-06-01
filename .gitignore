@@ -1,4 +1,5 @@
 *.swp
+.config
 .iperd
 /.git.old
 /EFI/
@@ -18,6 +19,8 @@
 /src/config/
 /src/dejavu/dejavu-fonts-ttf-*.tar.bz2
 /src/dejavu/source/
+/src/distros/*/grub.inc
+/src/distros/*/grub-*.inc
 /src/grub/grub-*.tar.xz
 /src/grub/grub-*.tar.xz.new
 /src/grub/source/

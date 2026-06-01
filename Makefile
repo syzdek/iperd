@@ -1,8 +1,6 @@
 #
 #   IP Engineering Rescue Disk
-#   Copyright (C) 2017 David M. Syzdek <david@syzdek.net>.
-#
-#   @SYZDEK_BSD_LICENSE_START@
+#   Copyright (C) 2025 David M. Syzdek <david@syzdek.net>.
 #
 #   Redistribution and use in source and binary forms, with or without
 #   modification, are permitted provided that the following conditions are
@@ -29,9 +27,9 @@
 #   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #   SUCH DAMAGE.
 #
-#   @SYZDEK_BSD_LICENSE_END@
-#
 
+
+V			?= 0
 
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -41,69 +39,103 @@ SCRIPTDIR		= src/scripts
 SYSLINDIR		= src/syslinux
 
 
+GRUB_SERIAL_COM		?= 1
+GRUB_SERIAL_DEV		?= 0
+GRUB_SERIAL_BAUD	?= 115200
+GRUB_USE_GFXTERM	?= n
+GRUB_TERM		?= vt100-color
+
+
+GRUB_CFG_INCLUDES	=
+IPERD_DOWNLOADS		=
+IPERD_MIRRORS		=
+
+
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
 DATE			= $(shell date +%Y-%m-%d)
 
 
-BIOS_FILES		= \
-			  $(SYSLINUX_CONFIGS) \
-			  $(SYSLINUX_BINARIES) \
-			  $(DOWNLOAD_FILES)
-UEFI_FILES		= \
-			  $(GRUB_CONFIGS) \
-			  $(GRUB_BINARIES) \
-			  $(BIOS_FILES)
 DISTCLEANFILES		=
-CLEANFILES		= \
-			  $(SYSLINUX_CONFIGS) \
-			  $(SYSLINUX_BINARIES) \
-			  $(SYSLINUX_INCLUDES) \
-			  Makefile.config \
-			  boot \
-			  EFI \
-			  images \
-			  syslinux
+CLEANFILES		=
 
 
 do_subst = sed \
+	-e "s,[@]GRUB_SERIAL_COM[@],$(GRUB_SERIAL_COM),g" \
+	-e "s,[@]GRUB_SERIAL_DEV[@],$(GRUB_SERIAL_DEV),g" \
+	-e "s,[@]GRUB_SERIAL_BAUD[@],$(GRUB_SERIAL_BAUD),g" \
+	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
+	-e "s,[@]GRUB_TERM[@],$(GRUB_TERM),g" \
+	\
+	-e "s,[@]DISTRO_ARCH[@],$${DISTRO_ARCH},g" \
+	-e "s,[@]DISTRO_APPEND[@],$${DISTRO_APPEND},g" \
+	-e "s,[@]DISTRO_VERSION[@],$${DISTRO_VERSION},g" \
+	-e "s,[@]DISTRO_PREFIX[@],$${DISTRO_PREFIX},g" \
+	-e "s,[@]DISTRO_SUFFIX[@],$${DISTRO_SUFFIX},g" \
+	-e "s,[@]DISTRO_URL[@],$${DISTRO_URL},g" \
+	\
 	-e "s,[@]DISTRO[@],$${DISTRO},g" \
 	-e "s,[@]CODENAME[@],$${DISTRO_CODENAME},g" \
 	-e "s,[@]VERSION[@],$${DISTRO_VERSION},g" \
 	-e "s,[@]LABEL[@],$${DISTRO_LABEL},g" \
 	-e "s,[@]ARCH[@],$${DISTRO_ARCH},g" \
-        -e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
-        -e 's,[@]DATE[@],$(DATE),g' \
-        -e 's,[@]NETBOOT[@],$(NETBOOT),g' \
-        -e 's,[@]NETBOOT_HOST[@],$(NETBOOT_HOST),g' \
-        -e 's,[@]NETBOOT_PATH[@],$(NETBOOT_PATH),g' \
-        -e 's,[@]NETBOOT_HTTP[@],$(NETBOOT_HTTP),g' \
-        -e 's,[@]NETBOOT_HTTP_SCHEME[@],$(NETBOOT_HTTP_SCHEME),g' \
-        -e 's,[@]NETBOOT_HTTP_HOST[@],$(NETBOOT_HTTP_HOST),g' \
-        -e 's,[@]NETBOOT_HTTP_PATH[@],$(NETBOOT_HTTP_PATH),g' \
-        -e 's,[@]NETBOOT_NFS[@],$(NETBOOT_NFS),g' \
-        -e 's,[@]NETBOOT_NFS_HOST[@],$(NETBOOT_NFS_HOST),g' \
-        -e 's,[@]NETBOOT_NFS_PATH[@],$(NETBOOT_NFS_PATH),g' \
-        -e 's,[@]NETBOOT_TFTP[@],$(NETBOOT_TFTP),g' \
-        -e 's,[@]NETBOOT_TFTP_HOST[@],$(NETBOOT_TFTP_HOST),g' \
-        -e 's,[@]NETBOOT_TFTP_PATH[@],$(NETBOOT_TFTP_PATH),g' \
+	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
+	-e 's,[@]DATE[@],$(DATE),g' \
+	-e 's,[@]NETBOOT[@],$(NETBOOT),g' \
+	-e 's,[@]NETBOOT_HOST[@],$(NETBOOT_HOST),g' \
+	-e 's,[@]NETBOOT_PATH[@],$(NETBOOT_PATH),g' \
+	-e 's,[@]NETBOOT_HTTP[@],$(NETBOOT_HTTP),g' \
+	-e 's,[@]NETBOOT_HTTP_SCHEME[@],$(NETBOOT_HTTP_SCHEME),g' \
+	-e 's,[@]NETBOOT_HTTP_HOST[@],$(NETBOOT_HTTP_HOST),g' \
+	-e 's,[@]NETBOOT_HTTP_PATH[@],$(NETBOOT_HTTP_PATH),g' \
+	-e 's,[@]NETBOOT_NFS[@],$(NETBOOT_NFS),g' \
+	-e 's,[@]NETBOOT_NFS_HOST[@],$(NETBOOT_NFS_HOST),g' \
+	-e 's,[@]NETBOOT_NFS_PATH[@],$(NETBOOT_NFS_PATH),g' \
+	-e 's,[@]NETBOOT_TFTP[@],$(NETBOOT_TFTP),g' \
+	-e 's,[@]NETBOOT_TFTP_HOST[@],$(NETBOOT_TFTP_HOST),g' \
+	-e 's,[@]NETBOOT_TFTP_PATH[@],$(NETBOOT_TFTP_PATH),g' \
 	$(SUBST_EXPRESSIONS)
-do_subst_fn = \
-	echo "do_subst > $(@)"; \
-	rm -f "$(@)"; \
-	mkdir -p $$(dirname "$(@)") || exit 1; \
-	${do_subst} < $${SRCFILE} > $(@) || exit 1; \
-	chmod 0755 $(@); \
-	touch $(@);
-do_subst_dt = \
-	echo "do_subst > $(@)"; \
-	rm -f "$(@)"; \
-	mkdir -p $$(dirname "$(@)") || exit 1; \
-	${do_subst} < $${SRCFILE} > $(@) || exit 1; \
-	chmod 0644 $(@); \
-	touch $(@);
 
 
-.PHONY: all clean configs configure distclean grub syslinux images deps
+do_subst_start		= if test "x$(V)" == "x0";then \
+			     echo "  SED      $(@)"; \
+			  else \
+			     echo "do_subst $(+) > ${@}"; \
+			  fi; \
+			  rm -f "$(@)" "$(@).new" || exit 1; \
+			  mkdir -p "`dirname "$(@)"`" || exit 1;
+do_subst_finish		= $(do_subst) $(+) > "$(@).new" || exit 1; \
+			  mv "$(@).new" "$(@)" || exit 1; \
+			  touch "$(@)"
+
+do_subst_common		= if test "x$(V)" == "x0";then \
+			     echo "  SED      $(@)"; \
+			  else \
+			     echo "do_subst < ${@}.in > ${@}"; \
+			  fi; \
+			  rm -f "$(@)" "$(@).new" || exit 1; \
+			  mkdir -p "`dirname "$(@)"`" || exit 1; \
+			  $(do_subst) < "$(@).in" > "$(@).new" || exit 1; \
+			  mv "$(@).new" "$(@)" || exit 1; \
+			  touch "$(@)"
+do_subst_fn		= $(do_subst_common); chmod 0755 "$(@)"
+do_subst_dt		= $(do_subst_common); chmod 0644 "$(@)"
+
+
+do_subst_files		= if test "x$(V)" == "x0";then \
+			     echo "  SED      $(@)"; \
+			  else \
+			     echo "do_subst $(+) > ${@}"; \
+			  fi; \
+			  rm -f "$(@)" "$(@).new" || exit 1; \
+			  mkdir -p "`dirname "$(@)"`" || exit 1; \
+			  $(do_subst) $(+) > "$(@).new" || exit 1; \
+			  mv "$(@).new" "$(@)" || exit 1; \
+			  touch "$(@)"
+do_subst_files_fn	= $(do_subst_files); chmod 0755 "$(@)"
+do_subst_files_dt	= $(do_subst_files); chmod 0644 "$(@)"
+
+
+.PHONY: all clean configs configure distclean grub update images deps
 
 
 all:
@@ -128,157 +160,33 @@ all:
 	@echo " "
 
 
-Makefile.local:
+.config:
+	if test ! -e "$(@)"; then echo "creating default $(@) ..."; cp .defaults "$(@)"; fi
 	@touch "$(@)"
 
 
-var/config/iperd.conf: $(SCRIPTDIR)/configure.sh $(SCRIPTDIR)/iperd.profile
-	@mkdir -p var/config
-	bash ./$(SCRIPTDIR)/configure.sh deps
-	@touch "$(@)"
-
-
-Makefile.config: var/config/iperd.conf $(SCRIPTDIR)/genfiles.sh
-	bash ./$(SCRIPTDIR)/genfiles.sh Makefile.config
-	@touch "$(@)"
-
-
--include Makefile.local
-NETBOOT_HOST            ?= 10.0.109.254
-NETBOOT_PATH            ?= /pub/iperd/iperd-current/
-NETBOOT_HTTP_SCHEME     ?= http
-NETBOOT_HTTP_HOST       ?= $(NETBOOT_HOST)
-NETBOOT_HTTP_PATH       ?= /httpboot
-NETBOOT_HTTP            ?= $(NETBOOT_HTTP_SCHEME)://$(NETBOOT_HTTP_HOST)$(NETBOOT_HTTP_PATH)
-NETBOOT_NBD_HOST        ?= $(NETBOOT_HOST)
-NETBOOT_NBD_PATH        ?= $(NETBOOT_PATH)
-NETBOOT_NBD             ?= nbd://$(NETBOOT_NBD_HOST)$(NETBOOT_NBD_PATH)
-NETBOOT_NFS_HOST        ?= $(NETBOOT_HOST)
-NETBOOT_NFS_PATH        ?= $(NETBOOT_PATH)
-NETBOOT_NFS             ?= nfs://$(NETBOOT_NFS_HOST)$(NETBOOT_NFS_HOST)
-NETBOOT_TFTP_HOST       ?= $(NETBOOT_HOST)
-NETBOOT_TFTP_PATH       ?= /
-NETBOOT_TFTP            ?= tftp://$(NETBOOT_TFTP_HOST)$(NETBOOT_TFTP_PATH)
-NETBOOT                 ?= $(NETBOOT_HTTP)
--include Makefile.config
-include src/syslinux/Makefile.syslinux
+-include .config
 include src/dejavu/Makefile.inc
 include src/unifont/Makefile.inc
 include src/grub/Makefile.inc
+include src/themes/Makefile.inc
+include src/grubnet/Makefile.inc
+ifeq ($(DISTRO_ALPINE), y)
+   include src/distros/alpine/Makefile.inc
+endif
+ifeq ($(DISTRO_ROCKY), y)
+   include src/distros/rocky/Makefile.inc
+endif
+ifeq ($(DISTRO_SLACKWARE), y)
+   include src/distros/slackware/Makefile.inc
+endif
+include src/grubcfg/Makefile.inc
 
 
-images/iperdboot.gpt.img: $(UEFI_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
-	@mkdir -p "$$(dirname "$(@)")"
-	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh -t gpt -s "$(DISKSIZE)" "." "$(@)"
-	@touch "$(@)"
+download: $(IPERD_DOWNLOADS)
 
 
-images/iperdboot.img: $(UEFI_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
-	@mkdir -p "$$(dirname "$(@)")"
-	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh -t hybrid -s "$(DISKSIZE)" "." "$(@)"
-	@touch "$(@)"
-
-
-images/iperdboot.mbr.img: $(BIOS_FILES) $(SCRIPTDIR)/diskimage.sh $(SCRIPTDIR)/thumbdrive.sh
-	@mkdir -p "$$(dirname "$(@)")"
-	@rm -f "$(@)"
-	bash ./$(SCRIPTDIR)/diskimage.sh -t mbr -s "$(DISKSIZE)" "." "$(@)"
-	@touch "$(@)"
-
-
-images/iperdboot.iso: $(UEFI_FILES)
-	@mkdir -p $$(dirname "$(@)")
-	@rm -f "$(@)"
-	mkisofs \
-	   -o "$(@)" \
-	   -R -J -v -d -N \
-	   -x '.git' \
-	   -m 'images' \
-	   -m 'tmp' \
-	   -hide-rr-moved \
-	   -no-emul-boot \
-	   -boot-load-size 4 \
-	   -boot-info-table \
-	   -b syslinux/isolinux.bin.mod \
-	   -c syslinux/isolinux.boot \
-	   -eltorito-alt-boot \
-	   -no-emul-boot \
-	   -eltorito-platform efi \
-	   -eltorito-boot EFI/BOOT/efiboot.img \
-	   -V "IPEngRescueDisk" \
-	   -A "IP Engineering Rescue Disk"  \
-	   ./
-	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid -u "$(@)"; fi
-	@touch "$(@)"
-
-
-images/iperdboot.bios.iso: $(BIOS_FILES)
-	@mkdir -p $$(dirname "$(@)")
-	@rm -f "$(@)"
-	mkisofs \
-	   -o "$(@)" \
-	   -R -J -v -d -N \
-	   -x '.git' \
-	   -m 'images' \
-	   -m 'tmp' \
-	   -hide-rr-moved \
-	   -no-emul-boot \
-	   -boot-load-size 4 \
-	   -boot-info-table \
-	   -b syslinux/isolinux.bin.mod \
-	   -c syslinux/isolinux.boot \
-	   -V "IPEngRescueDisk" \
-	   -A "IP Engineering Rescue Disk"  \
-	   ./
-	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid "$(@)"; fi
-	@touch "$(@)"
-
-
-images/iperdboot.uefi.iso: $(UEFI_FILES)
-	@mkdir -p $$(dirname "$(@)")
-	@rm -f "$(@)"
-	mkisofs \
-	   -o "$(@)" \
-	   -R -J -v -d -N \
-	   -x '.git' \
-	   -m 'images' \
-	   -m 'tmp' \
-	   -hide-rr-moved \
-	   -no-emul-boot \
-	   -eltorito-platform efi \
-	   -eltorito-boot EFI/BOOT/efiboot.img \
-	   -V "IPEngRescueDisk" \
-	   -A "IP Engineering Rescue Disk"  \
-	   ./
-	@if test "x$(RUN_ISOHYBRID)" == "xyes";then isohybrid -u "$(@)"; fi
-	@touch "$(@)"
-
-
-thumbdrive: $(UEFI_FILES)
-	bash src/scripts/thumbdrive.sh -t "$(DISKTYPE)" -s "$(PARTSIZE)" . "$(DISK)"
-
-
-images: images/iperdboot.img images/iperdboot.iso
-
-
-grub: src/grub/.iperd
-
-
-syslinux: $(SYSLINUX_CONFIGS) $(SYSLINUX_BINARIES)
-
-
-download: syslinux $(DOWNLOAD_FILES)
-
-
-configure:
-	@mkdir -p var/config
-	bash ./$(SCRIPTDIR)/configure.sh configure
-	@touch "var/config/iperd.conf"
-
-
-deps: $(SYSLINUX_CONFIGS) $(GRUB_CONFIGS) Makefile.config
+update: src/grubnet/.iperd src/grubcfg/.iperd $(IPERD_DOWNLOADS)
 
 
 clean:
@@ -288,7 +196,6 @@ clean:
 
 distclean: clean
 	rm -Rf $(DISTCLEANFILES)
-	rm -Rf boot src/config tmp
 
 
 # end of makefile
