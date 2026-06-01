@@ -1,0 +1,38 @@
+   submenu 'Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)' {
+      menuentry "Alpine Linux (vga)" {
+         echo   'Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz ...'
+         linux  ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz \
+                modloop=http://10.0.109.254/httpboot/boot/alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/modloop \
+                modules=loop,squashfs,sd-mod,usb-storage \
+                alpine_repo=http://10.0.109.254/httpboot/boot/alpine/@DISTRO_VERSION@/apks \
+                ip=dhcp:::::eth0: \
+                console=tty0
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd ...'
+         initrd ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd
+      }
+      menuentry "Alpine Linux (serial)" {
+         echo   'Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz ...'
+         linux  ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz \
+                modloop=http://10.0.109.254/httpboot/boot/alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/modloop \
+                modules=loop,squashfs,sd-mod,usb-storage \
+                alpine_repo=http://10.0.109.254/httpboot/boot/alpine/@DISTRO_VERSION@/apks \
+                ip=dhcp:::::eth0: \
+                console=ttyS0,9600
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd ...'
+         initrd ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd
+      }
+      menuentry "Alpine Linux (ipmi)" {
+         echo   'Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz ...'
+         linux  ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/vmlinuz \
+                modloop=http://10.0.109.254/httpboot/boot/alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/modloop \
+                modules=loop,squashfs,sd-mod,usb-storage \
+                alpine_repo=${alpine_url}/@DISTRO_VERSION@/apks \
+                ip=dhcp:::::eth0: \
+                console=ttyS1,115200
+         echo   'Loading alpine/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd ...'
+         initrd ${alpine_prefix}/@DISTRO_VERSION@/@DISTRO_ARCH@/initrd
+      }
+   }

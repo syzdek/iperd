@@ -1,0 +1,8 @@
+submenu 'Alpine Linux Installers' {
+   set alpine_append='@DISTRO_APPEND@'
+   set alpine_url='@DISTRO_URL@'
+   set alpine_prefix="(http,10.0.109.254)/boot/alpine"
+   export alpine_append
+   export alpine_url
+   export alpine_prefix
+
