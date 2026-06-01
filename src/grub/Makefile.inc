@@ -29,9 +29,8 @@
 #
 
 DISTCLEANFILES			+= src/grub/grub-*.tar.xz \
-				   src/grub/source/ \
-				   src/grub/.iperd
-CLEANFILES			+= src/grub/grub-*.tar.xz.new
+				   src/grub/source
+CLEANFILES			+=
 
 
 GRUB_VERSION			:= 2.14
@@ -160,7 +159,7 @@ tools/iperd/grub_x86_64_efi: $(GRUB_BUILDDIR)_x86_64_efi/.iperd
 #
 # default grub target
 #
-src/grub/.iperd: tools/iperd/grub
+src/grub/.iperd: $(GRUB_PLATFORMS)
 	@touch $(@)
 
 

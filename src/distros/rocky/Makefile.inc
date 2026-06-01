@@ -30,10 +30,7 @@
 
 
 DISTCLEANFILES			+=
-CLEANFILES			+= src/distros/rocky/grub.inc \
-				   src/distros/rocky/grub-rocky-8.inc \
-				   src/distros/rocky/grub-rocky-9.inc \
-				   src/distros/rocky/grub-rocky-10.inc
+CLEANFILES			+=
 
 
 DISTRO_ROCKY_INCLUDES	:=

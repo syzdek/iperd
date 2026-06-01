@@ -30,21 +30,7 @@
 
 
 DISTCLEANFILES			+=
-CLEANFILES			+= src/distros/alpine/grub.inc \
-				   src/distros/alpine/grub-alpine-3.18-x86.inc \
-				   src/distros/alpine/grub-alpine-3.19-x86.inc \
-				   src/distros/alpine/grub-alpine-3.20-x86.inc \
-				   src/distros/alpine/grub-alpine-3.21-x86.inc \
-				   src/distros/alpine/grub-alpine-3.22-x86.inc \
-				   src/distros/alpine/grub-alpine-3.23-x86.inc \
-				   src/distros/alpine/grub-alpine-3.24-x86.inc \
-				   src/distros/alpine/grub-alpine-3.18-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.19-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.20-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.21-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.22-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.23-x86_64.inc \
-				   src/distros/alpine/grub-alpine-3.20-x86_64.inc
+CLEANFILES			+=
 
 
 DISTRO_ALPINE_INCLUDES	:=

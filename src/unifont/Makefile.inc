@@ -30,9 +30,8 @@
 
 
 DISTCLEANFILES		+= src/unifont/unifont-*.bdf.gz \
-			   src/unifont/unifont.bdf \
-			   src/unifont/.iperd
-CLEANFILES              += src/unifont/unifont-*.bdf.gz.new
+			   src/unifont/unifont.bdf
+CLEANFILES              +=
 
 
 UNIFONT_VERSION		:= 17.0.04

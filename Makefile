@@ -1,6 +1,6 @@
 #
 #   IP Engineering Rescue Disk
-#   Copyright (C) 2025 David M. Syzdek <david@syzdek.net>.
+#   Copyright (C) 2026 David M. Syzdek <david@syzdek.net>.
 #
 #   Redistribution and use in source and binary forms, with or without
 #   modification, are permitted provided that the following conditions are
@@ -55,8 +55,13 @@ IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' 
 DATE			= $(shell date +%Y-%m-%d)
 
 
-DISTCLEANFILES		=
-CLEANFILES		=
+DISTCLEANFILES		= boot \
+			  src/*/.iperd
+CLEANFILES		= grub \
+			  tools \
+			  src/*/*.new \
+			  src/distros/*/grub.inc \
+			  src/distros/*/grub-*.inc
 
 
 do_subst = sed \
@@ -190,7 +195,6 @@ update: src/grubnet/.iperd src/grubcfg/.iperd $(IPERD_DOWNLOADS)
 
 
 clean:
-	rm -Rf grub tools
 	rm -Rf $(CLEANFILES)
 
 

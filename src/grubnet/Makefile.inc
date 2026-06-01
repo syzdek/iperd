@@ -29,7 +29,7 @@
 #
 
 DISTCLEANFILES			+=
-CLEANFILES			+= src/grubnet/.iperd
+CLEANFILES			+=
 
 
 GRUBNET_MODULES			= http tftp net gzio \

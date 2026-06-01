@@ -30,15 +30,7 @@
 
 
 DISTCLEANFILES			+=
-CLEANFILES			+= src/distros/slackware/grub.inc \
-				   src/distros/slackware/grub-slackware-14.0.inc \
-				   src/distros/slackware/grub-slackware-14.1.inc \
-				   src/distros/slackware/grub-slackware-14.2.inc \
-				   src/distros/slackware/grub-slackware-15.0.inc \
-				   src/distros/slackware/grub-slackware64-14.0.inc \
-				   src/distros/slackware/grub-slackware64-14.1.inc \
-				   src/distros/slackware/grub-slackware64-14.2.inc \
-				   src/distros/slackware/grub-slackware64-15.0.inc
+CLEANFILES			+=
 
 
 DISTRO_SLACKWARE_CFG		:=

@@ -29,7 +29,7 @@
 #
 
 DISTCLEANFILES			+=
-CLEANFILES			+= src/grubcfg/.iperd
+CLEANFILES			+=
 
 
 grub/grub.cfg: src/grubcfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/grubcfg/grub-footer.cfg.in

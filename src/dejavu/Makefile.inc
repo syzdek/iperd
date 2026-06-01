@@ -30,9 +30,8 @@
 
 
 DISTCLEANFILES		+= src/dejavu/dejavu-fonts-ttf-*.tar.bz2 \
-			   src/dejavu/source/ \
-			   src/dejavu/.iperd
-CLEANFILES              += src/dejavu/dejavu-fonts-ttf-*.tar.bz2.new
+			   src/dejavu/source
+CLEANFILES              +=
 
 
 DEJAVU_VERSION		:= 2.37
