@@ -1,0 +1,53 @@
+   submenu 'Rocky Linux @DISTRO_VERSION@ Installers (64 bit)' {
+      menuentry "Install or upgrade an existing system" {
+         echo   'Rocky Linux @DISTRO_VERSION@ (64 bit)'
+         echo   'Loading vmlinuz ...'
+         linux  (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+         echo   'Loading initrd.img ...'
+         initrd (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
+         echo   'booting system ...'
+      }
+      menuentry "Install system with basic video driver" {
+         echo   'Rocky Linux @DISTRO_VERSION@ (64 bit)'
+         echo   'Loading vmlinuz ...'
+         linux  (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz \
+                nomodeset
+         echo   'Loading initrd.img ...'
+         initrd (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
+         echo   'booting system ...'
+      }
+      menuentry "Install system from kickstart over network" {
+         echo   'Rocky Linux @DISTRO_VERSION@ (64 bit)'
+         echo   'Loading vmlinuz ...'
+         linux  (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/kickstart/images/pxeboot/vmlinuz
+                nomodeset ramdisk_size=100000 net.ifnames=0 \
+                inst.repo=http://10.0.109.254/pub_ro/dist/rocky/9/BaseOS/x86_64/os/ \
+                inst.stage2=http://10.0.109.254/pub_ro/dist/rocky/9/BaseOS/x86_64/kickstart \
+                inst.ks=http://10.0.109.254/pub_ro/dist/rocky-pkgs/akcom-ipeng/9/kickstart/akcom.cfg\
+                inst.text ip=eth0:dhcp
+         echo   'Loading initrd.img ...'
+         initrd (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/kickstart/images/pxeboot/initrd.img
+         echo   'booting system ...'
+      }
+      menuentry "Install system from network" {
+         echo   'Rocky Linux @DISTRO_VERSION@ (64 bit)'
+         echo   'Loading vmlinuz ...'
+         linux  (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz \
+                nomodeset ramdisk_size=100000 net.ifnames=0 \
+                inst.repo=http://10.0.109.254/pub_ro/dist/rocky/9/os/x86_64/ \
+                inst.stage2=http://10.0.109.254/pub_ro/dist/rocky/9/BaseOS/x86_64/os \
+                ip=eth0:dhcp
+         echo   'Loading initrd.img ...'
+         initrd (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
+         echo   'booting system ...'
+      }
+      menuentry "Rescue installed system" {
+         echo   'Rocky Linux @DISTRO_VERSION@ (64 bit)'
+         echo   'Loading vmlinuz ...'
+         linux  (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz \
+                rescue
+         echo   'Loading initrd.img ...'
+         initrd (http,10.0.109.254)/pub_ro/dist/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
+         echo   'booting system ...'
+      }
+   }

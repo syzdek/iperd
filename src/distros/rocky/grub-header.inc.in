@@ -1,0 +1,6 @@
+submenu 'Rocky Linux Installers' {
+   set rocky_append='@DISTRO_APPEND@'
+   set rocky_prefix="(http,10.0.109.254)/boot/rocky"
+   export rocky_append
+   export rocky_prefix
+
