@@ -1,0 +1,108 @@
+#                         
+#   IP Engineering Rescue Disk
+#   Copyright (C) 2026 David M. Syzdek <david@syzdek.net>.
+#                         
+#   Redistribution and use in source and binary forms, with or without
+#   modification, are permitted provided that the following conditions are
+#   met:
+#
+#      * Redistributions of source code must retain the above copyright
+#        notice, this list of conditions and the following disclaimer.
+#      * Redistributions in binary form must reproduce the above copyright
+#        notice, this list of conditions and the following disclaimer in the
+#        documentation and/or other materials provided with the distribution.
+#      * Neither the name of David M. Syzdek nor the
+#        names of its contributors may be used to endorse or promote products
+#        derived from this software without specific prior written permission.
+#       
+#   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+#   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+#   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+#   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DAVID M. SYZDEK BE LIABLE FOR
+#   ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+#   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+#   SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+#   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+#   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+#   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+#   SUCH DAMAGE.  
+#
+#   Generated on: @DATE@
+#
+
+serial --unit @GRUB_SERIAL_DEV@ --speed @GRUB_SERIAL_BAUD@
+terminal_input  serial console
+terminal_output serial console
+
+
+insmod all_video
+
+insmod net
+insmod http
+insmod vbe
+insmod fat
+insmod chain
+insmod usb
+insmod usb_keyboard
+insmod usbms
+insmod serial
+insmod regexp
+
+
+if [ ${grub_platform} == "efi" ]; then
+   insmod efifwsetup
+   insmod efi_gop
+   insmod efi_uga
+fi
+
+
+terminfo --utf8 serial @GRUB_TERM@
+#terminfo --utf8 -g 80x24 serial vt100-color
+
+
+set color_normal='white/black'
+set color_highlight='white/black'
+set menu_color_normal='white/blue'
+set menu_color_highlight='blue/white'
+export color_normal
+export color_highlight
+export menu_color_normal
+export menu_color_highlight
+
+
+set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
+if [ ${iperd_use_gfxterm} == "y" ]; then
+   insmod png
+   insmod jpeg
+   insmod gfxterm
+   insmod font
+   loadfont /grub/themes/iperd/dejavu_10.pf2
+   loadfont /grub/themes/iperd/dejavu_12.pf2
+   loadfont /grub/themes/iperd/dejavu_14.pf2
+   loadfont /grub/themes/iperd/dejavu_14_bold.pf2
+   loadfont /grub/themes/iperd/dejavu_14_bolditalic.pf2
+   loadfont /grub/themes/iperd/dejavu_16.pf2
+   loadfont /grub/themes/iperd/dejavu_18.pf2
+   set theme=/grub/themes/iperd/theme.txt
+   set gfxmode=1024x768x32,auto
+   set gfxterm_font="/grub/themes/iperd/dejavu_12.pf2"
+   export theme
+   export gfxmode
+   export gfxterm_font
+   terminal_output serial gfxterm
+fi
+
+
+set iperd_console_dev="ttyS@GRUB_SERIAL_DEV@"
+set iperd_console_rate="@GRUB_SERIAL_BAUD@"
+set iperd_console="${iperd_console_dev}"
+if [ ${iperd_console} != "tty0" ]; then
+   set iperd_console="${iperd_console_dev},${iperd_console_rate}"
+fi
+export iperd_console
+
+
+set pager=1
+export pager
+
+

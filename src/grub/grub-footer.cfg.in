@@ -1,0 +1,91 @@
+submenu 'System Information' {
+   menuentry "ACPI Hardware" {
+      lsacpi
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "APM Information" {
+      lsapm
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Network Information" {
+      set pager=0
+      echo "Network Interfaces:"
+      net_ls_cards
+      echo ""
+      echo "IP Addresses:"
+      net_ls_addr
+      echo ""
+      echo "DNS:"
+      net_ls_dns
+      echo ""
+      echo "Routes:"
+      net_ls_routes
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+      set pager=1
+   }
+   menuentry "PCI Information" {
+      lspci
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Terminal  Information" {
+      terminfo
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "USB Information" {
+      usb
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "VBE Information" {
+      vbeinfo
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Video Information" {
+      videoinfo
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Grub Variables" {
+      set pager=1
+      export pager
+      set
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+}
+
+menuentry "Reboot System" {
+   echo "rebooting system ..."
+   reboot
+}
+if [ ${grub_platform} == "efi" ]; then
+   fwsetup --is-supported
+   if [ $? -eq 0 ]; then
+      menuentry "System Setup" {
+         echo "rebooting system into setup ..."
+         fwsetup
+      }
+   fi
+fi
+menuentry "Power Off System" {
+   echo "halting system ..."
+   halt
+}
+
+
+# end of config

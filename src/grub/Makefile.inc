@@ -60,6 +60,7 @@ GRUB_CONFIGURE		:= ../configure\
 			      --enable-grub-themes \
 			      --enable-grub-mount \
 			      --enable-device-mapper \
+			      --enable-mm-debug \
 			      --enable-liblzma \
 			      --enable-grub-protect \
 			      --enable-boot-time \
@@ -185,6 +186,7 @@ grub/.iperd: $(GRUB_PLATFORMS)
 	@rm -Rf grub
 	./tools/bin/grub-mknetdir \
 	   --modules="all_video http net gzio echo serial syslinuxcfg terminal tftp" \
+           --compress=xz \
 	   --core-compress=xz \
 	   --net-directory=$(IPERD_ROOT) \
 	   --subdir=/grub
