@@ -102,6 +102,15 @@ fi
 export iperd_console
 
 
+regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
+if [ ${iperd_tftp_ip} != "" ]; then
+   set iperd_prefix="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
+else
+   set iperd_prefix="(${root})@IPERD_PREFIX@"
+fi
+export iperd_prefix
+
+
 set pager=1
 export pager
 

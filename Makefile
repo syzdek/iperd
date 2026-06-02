@@ -65,6 +65,9 @@ CLEANFILES		= grub \
 
 
 do_subst = sed \
+	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
+	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
+	\
 	-e "s,[@]GRUB_SERIAL_COM[@],$(GRUB_SERIAL_COM),g" \
 	-e "s,[@]GRUB_SERIAL_DEV[@],$(GRUB_SERIAL_DEV),g" \
 	-e "s,[@]GRUB_SERIAL_BAUD[@],$(GRUB_SERIAL_BAUD),g" \
@@ -74,9 +77,11 @@ do_subst = sed \
 	-e "s,[@]DISTRO_ARCH[@],$${DISTRO_ARCH},g" \
 	-e "s,[@]DISTRO_APPEND[@],$${DISTRO_APPEND},g" \
 	-e "s,[@]DISTRO_VERSION[@],$${DISTRO_VERSION},g" \
-	-e "s,[@]DISTRO_PREFIX[@],$${DISTRO_PREFIX},g" \
+	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s,[@]DISTRO_SUFFIX[@],$${DISTRO_SUFFIX},g" \
 	-e "s,[@]DISTRO_URL[@],$${DISTRO_URL},g" \
+	-e "s,[@]DISTRO_OPT[@],$${DISTRO_OPT},g" \
+	-e "s,[@]DISTRO_CODENAME[@],$${DISTRO_CODENAME},g" \
 	\
 	-e "s,[@]DISTRO[@],$${DISTRO},g" \
 	-e "s,[@]CODENAME[@],$${DISTRO_CODENAME},g" \

@@ -1,11 +1,17 @@
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)" {
+      if [ "@DISTRO_OPT@x" == "dx" ]; then
+         set slackware_prefix="${iperd_prefix}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+      else
+         set slackware_prefix="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+      fi
       echo   'Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      echo   "${slackware_prefix}"
       echo   'Loading bzImage ...'
-      linux  ${slackware_prefix}/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@/kernels/hugesmp.s/bzImage \
+      linux  ${slackware_prefix}/kernels/huge.s/bzImage \
              load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0  nomodeset \
              SLACK_KERNEL=hugesmp.s console=${iperd_console} \
              ${slackware_append}
       echo   'Loading initrd ...'
-      initrd initrd ${slackware_prefix}/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@/isolinux/initrd.img
+      initrd ${slackware_prefix}/isolinux/initrd.img
       echo   'booting system ...'
    }

@@ -1,6 +1,6 @@
 submenu 'Slackware Linux Installers' {
    set slackware_append='@DISTRO_APPEND@'
-   set slackware_prefix="(http,10.0.109.254)/boot/slack"
+   set slackware_prefix='@DISTRO_PREFIX@'
    export slackware_append
    export slackware_prefix
 

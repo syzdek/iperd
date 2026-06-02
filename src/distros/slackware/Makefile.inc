@@ -39,9 +39,9 @@ DISTRO_SLACKWARE_BOOT		:=
 
 DISTRO_SLACKWARE		?= n
 DISTRO_SLACKWARE_MIRROR		?= n
-DISTRO_SLACKWARE_RSYNC		?=
 DISTRO_SLACKWARE_URL		?= https://mirrors.edge.kernel.org/slackware
 DISTRO_SLACKWARE_GRUB		?= (http,mirrors.edge.kernel.org)/slackware
+DISTRO_SLACKWARE_APPEND		?= SLACK_KERNEL=hugesmp.s
 DISTRO_SLACKWARE_140		?= n
 DISTRO_SLACKWARE_141		?= n
 DISTRO_SLACKWARE_142		?= n
@@ -50,6 +50,11 @@ DISTRO_SLACKWARE64_140		?= n
 DISTRO_SLACKWARE64_141		?= n
 DISTRO_SLACKWARE64_142		?= n
 DISTRO_SLACKWARE64_150		?= n
+
+
+DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
+				   DISTRO_GRUB='$(DISTRO_SLACKWARE_GRUB)'; \
+				   DISTRO_URL='$(DISTRO_SLACKWARE_URL)';
 
 
 ifeq ($(DISTRO_SLACKWARE), y)
@@ -63,6 +68,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_140), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE_140	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE_141), n)
@@ -71,6 +78,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_141), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE_141	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE_142), n)
@@ -79,6 +88,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_142), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE_142	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE_150), n)
@@ -87,6 +98,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_150), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE_150	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE64_140), n)
@@ -95,6 +108,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_140), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE64_140	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE64_141), n)
@@ -103,6 +118,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_141), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE64_141	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE64_142), n)
@@ -111,6 +128,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_142), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE64_142	:= y
    endif
 
    ifneq ($(DISTRO_SLACKWARE64_150), n)
@@ -119,6 +138,8 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_150), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/kernels/huge.s/bzImage
+   else
+      DISTRO_SLACKWARE64_150	:= y
    endif
 
    DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub-footer.inc.in
@@ -153,42 +174,82 @@ slackware-download: $(DISTRO_SLACKWARE_BOOT)
 #
 src/distros/slackware/grub-slackware-14.0.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.0; DISTRO_ARCH=x86; DISTRO_SUFFIX=; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.0; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE_140); \
+		DISTRO_ARCH=x86; \
+		DISTRO_SUFFIX=; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware64-14.0.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.0; DISTRO_ARCH=x86_64; DISTRO_SUFFIX=64; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.0; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE64_140); \
+		DISTRO_ARCH=x86_64; \
+		DISTRO_SUFFIX=64; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware-14.1.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.1; DISTRO_ARCH=x86; DISTRO_SUFFIX=; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.1; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE_141); \
+		DISTRO_ARCH=x86; \
+		DISTRO_SUFFIX=; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware64-14.1.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.1; DISTRO_ARCH=x86_64; DISTRO_SUFFIX=64; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.1; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE64_141); \
+		DISTRO_ARCH=x86_64; \
+		DISTRO_SUFFIX=64; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware-14.2.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.2; DISTRO_ARCH=x86; DISTRO_SUFFIX=; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.2; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE_142); \
+		DISTRO_ARCH=x86; \
+		DISTRO_SUFFIX=; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware64-14.2.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=14.2; DISTRO_ARCH=x86_64; DISTRO_SUFFIX=64; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=14.2; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE64_142); \
+		DISTRO_ARCH=x86_64; \
+		DISTRO_SUFFIX=64; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware-15.0.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=15.0; DISTRO_ARCH=x86; DISTRO_SUFFIX=; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=15.0; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE_150); \
+		DISTRO_ARCH=x86; \
+		DISTRO_SUFFIX=; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub-slackware64-15.0.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=15.0; DISTRO_ARCH=x86_64; DISTRO_SUFFIX=64; $(do_subst_finish)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=15.0; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE64_150); \
+		DISTRO_ARCH=x86_64; \
+		DISTRO_SUFFIX=64; \
+		$(do_subst_finish)
 
 
 src/distros/slackware/grub.inc: $(DISTRO_SLACKWARE_CFG)
