@@ -76,6 +76,8 @@ do_subst = sed \
 	\
 	-e "s,[@]DISTRO_ARCH[@],$${DISTRO_ARCH},g" \
 	-e "s,[@]DISTRO_APPEND[@],$${DISTRO_APPEND},g" \
+	-e "s;[@]DISTRO_ALT_APPEND[@];$${DISTRO_ALT_APPEND};g" \
+	-e "s;[@]DISTRO_ALT_URL[@];$${DISTRO_ALT_URL};g" \
 	-e "s,[@]DISTRO_VERSION[@],$${DISTRO_VERSION},g" \
 	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s,[@]DISTRO_SUFFIX[@],$${DISTRO_SUFFIX},g" \
