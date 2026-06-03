@@ -33,37 +33,87 @@ DISTCLEANFILES			+=
 CLEANFILES			+=
 
 
-DISTRO_ROCKY_INCLUDES	:=
+DISTRO_ROCKY_CFG		:=
+DISTRO_ROCKY_BOOT		:=
 
 
 DISTRO_ROCKY			?= n
 DISTRO_ROCKY_MIRROR		?= n
-DISTRO_ROCKY_RSYNC		?=
 DISTRO_ROCKY_URL		?= https://mirrors.edge.kernel.org/rocky
 DISTRO_ROCKY_GRUB		?= (http,mirrors.edge.kernel.org)/rocky
+DISTRO_ROCKY_APPEND		?=
 DISTRO_ROCKY_8			?= n
 DISTRO_ROCKY_9			?= n
 DISTRO_ROCKY_10			?= n
 
 
+DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
+				   DISTRO_GRUB='$(DISTRO_ROCKY_GRUB)'; \
+				   DISTRO_URL='$(DISTRO_ROCKY_URL)'; \
+				   DISTRO_ALT_APPEND='$(DISTRO_ROCKY_ALT_APPEND)'; \
+				   DISTRO_ALT_URL='$(DISTRO_ROCKY_ALT_URL)';
+
+
 ifeq ($(DISTRO_ROCKY), y)
    GRUB_CFG_INCLUDES		+= src/distros/rocky/grub.inc
-   DISTRO_ROCKY_INCLUDES	+= src/distros/rocky/grub-header.inc.in
+   IPERD_DOWNLOADS		+= rocky-download
+   DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
 
    ifneq ($(DISTRO_ROCKY_8), n)
-      DISTRO_ROCKY_INCLUDES	+= src/distros/rocky/grub-rocky-8.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-8.inc
+   endif
+   ifeq ($(DISTRO_ROCKY_8), d)
+      DISTRO_ROCKY_BOOT		+= boot/rocky/8/BaseOS/x86_64/os/images/pxeboot/initrd.img
+      DISTRO_ROCKY_BOOT		+= boot/rocky/8/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+   else
+      DISTRO_ROCKY_8		:= y
    endif
 
    ifneq ($(DISTRO_ROCKY_9), n)
-      DISTRO_ROCKY_INCLUDES	+= src/distros/rocky/grub-rocky-9.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-9.inc
+   endif
+   ifeq ($(DISTRO_ROCKY_9), d)
+      DISTRO_ROCKY_BOOT		+= boot/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
+      DISTRO_ROCKY_BOOT		+= boot/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+   else
+      DISTRO_ROCKY_9		:= y
    endif
 
    ifneq ($(DISTRO_ROCKY_10), n)
-      DISTRO_ROCKY_INCLUDES	+= src/distros/rocky/grub-rocky-10.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-10.inc
+   endif
+   ifeq ($(DISTRO_ROCKY_10), d)
+      DISTRO_ROCKY_BOOT		+= boot/rocky/10/BaseOS/x86_64/os/images/pxeboot/initrd.img
+      DISTRO_ROCKY_BOOT		+= boot/rocky/10/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+   else
+      DISTRO_ROCKY_10		:= y
    endif
 
-   DISTRO_ROCKY_INCLUDES	+= src/distros/rocky/grub-footer.inc.in
+   DISTRO_ROCKY_CFG	+= src/distros/rocky/grub-footer.inc.in
 endif
+
+
+.PHONY: rocky-download
+
+
+#
+# Distro downloads
+#
+boot/rocky/%/initrd.img:
+	@mkdir -p "$(@D)"
+	wget -q -O "$(@).new" "$(DISTRO_ROCKY_URL)/$(*)/$(@F)"
+	@mv "$(@).new" "$(@)"
+	@touch "$(@)"
+
+
+boot/rocky/%/vmlinuz:
+	@mkdir -p "$(@D)"
+	wget -q -O "$(@).new" "$(DISTRO_ROCKY_URL)/$(*)/$(@F)"
+	@mv "$(@).new" "$(@)"
+	@touch "$(@)"
+
+
+rocky-download: $(DISTRO_ROCKY_BOOT)
 
 
 #
@@ -71,20 +121,32 @@ endif
 #
 src/distros/rocky/grub-rocky-8.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=8; DISTRO_ARCH=x86_64; $(do_subst_finish)
+	@$(DISTRO_ROCKY_KEYWORDS) \
+		DISTRO_VERSION=8; \
+		DISTRO_OPT=$(DISTRO_ROCKY_8); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
 
 
 src/distros/rocky/grub-rocky-9.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=9; DISTRO_ARCH=x86_64; $(do_subst_finish)
+	@$(DISTRO_ROCKY_KEYWORDS) \
+		DISTRO_VERSION=9; \
+		DISTRO_OPT=$(DISTRO_ROCKY_9); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
 
 
 src/distros/rocky/grub-rocky-10.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
-	@DISTRO_VERSION=10; DISTRO_ARCH=x86_64; $(do_subst_finish)
+	@$(DISTRO_ROCKY_KEYWORDS) \
+		DISTRO_VERSION=10; \
+		DISTRO_OPT=$(DISTRO_ROCKY_10); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
 
 
-src/distros/rocky/grub.inc: $(DISTRO_ROCKY_INCLUDES)
+src/distros/rocky/grub.inc: $(DISTRO_ROCKY_CFG)
 	@$(do_subst_files_dt)
 
 
