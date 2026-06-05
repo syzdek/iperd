@@ -160,16 +160,12 @@ endif
 #
 boot/slackware/%/initrd.img:
 	@mkdir -p "$(@D)"
-	wget -q -O "$(@).new" "$(DISTRO_SLACKWARE_URL)/$(*)/$(@F)"
-	@mv "$(@).new" "$(@)"
-	@touch "$(@)"
+	@WGET_FILE="$(@)"; WGET_URL="$(DISTRO_SLACKWARE_URL)/$(*)/$(@F)"; $(do_wget);
 
 
 boot/slackware/%/bzImage:
 	@mkdir -p "$(@D)"
-	wget -q -O "$(@).new" "$(DISTRO_SLACKWARE_URL)/$(*)/$(@F)"
-	@mv "$(@).new" "$(@)"
-	@touch "$(@)"
+	@WGET_FILE="$(@)"; WGET_URL="$(DISTRO_SLACKWARE_URL)/$(*)/$(@F)"; $(do_wget);
 
 
 slackware-download: $(DISTRO_SLACKWARE_BOOT)
