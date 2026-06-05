@@ -1,6 +1,4 @@
 submenu 'Slackware Linux Installers' {
    set slackware_append='@DISTRO_APPEND@'
-   set slackware_prefix='@DISTRO_PREFIX@'
    export slackware_append
-   export slackware_prefix
 

@@ -1,9 +1,10 @@
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)" {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set slackware_prefix="${iperd_prefix}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+         set slackware_prefix="${iperd_grub}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       else
          set slackware_prefix="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       fi
+      export slackware_prefix
       echo   'Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
       echo   "${slackware_prefix}"
       echo   'Loading bzImage ...'
