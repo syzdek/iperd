@@ -1,6 +1,8 @@
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)" {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
          set slackware_grub="${iperd_grub}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+      elif [ "@DISTRO_OPT@x" == "lx" ]; then
+         set slackware_grub="@DISTRO_LOCAL_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       else
          set slackware_grub="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       fi

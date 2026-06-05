@@ -42,6 +42,9 @@ DISTRO_SLACKWARE_MIRROR		?= n
 DISTRO_SLACKWARE_URL		?= https://mirrors.edge.kernel.org/slackware
 DISTRO_SLACKWARE_GRUB		?= (http,mirrors.edge.kernel.org)/slackware
 DISTRO_SLACKWARE_APPEND		?= SLACK_KERNEL=hugesmp.s
+DISTRO_SLACKWARE_LOCAL_URL	?= https://mirrors.edge.kernel.org/slackware
+DISTRO_SLACKWARE_LOCAL_GRUB	?= (http,mirrors.edge.kernel.org)/slackware
+DISTRO_SLACKWARE_LOCAL_APPEND	?= SLACK_KERNEL=hugesmp.s
 DISTRO_SLACKWARE_140		?= n
 DISTRO_SLACKWARE_141		?= n
 DISTRO_SLACKWARE_142		?= n
@@ -54,7 +57,10 @@ DISTRO_SLACKWARE64_150		?= n
 
 DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 				   DISTRO_GRUB='$(DISTRO_SLACKWARE_GRUB)'; \
-				   DISTRO_URL='$(DISTRO_SLACKWARE_URL)';
+				   DISTRO_URL='$(DISTRO_SLACKWARE_URL)'; \
+				   DISTRO_LOCAL_APPEND='$(DISTRO_SLACKWARE_LOCAL_APPEND)'; \
+				   DISTRO_LOCAL_GRUB='$(DISTRO_SLACKWARE_LOCAL_GRUB)'; \
+				   DISTRO_LOCAL_URL='$(DISTRO_SLACKWARE_LOCAL_URL)';
 
 
 ifeq ($(DISTRO_SLACKWARE), y)
@@ -68,7 +74,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_140), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE_140), l)
       DISTRO_SLACKWARE_140	:= y
    endif
 
@@ -78,7 +84,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_141), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE_141), l)
       DISTRO_SLACKWARE_141	:= y
    endif
 
@@ -88,7 +94,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_142), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE_142), l)
       DISTRO_SLACKWARE_142	:= y
    endif
 
@@ -98,7 +104,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE_150), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE_150), l)
       DISTRO_SLACKWARE_150	:= y
    endif
 
@@ -108,7 +114,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_140), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE64_140), l)
       DISTRO_SLACKWARE64_140	:= y
    endif
 
@@ -118,7 +124,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_141), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE64_141), l)
       DISTRO_SLACKWARE64_141	:= y
    endif
 
@@ -128,7 +134,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_142), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE64_142), l)
       DISTRO_SLACKWARE64_142	:= y
    endif
 
@@ -138,7 +144,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    ifeq ($(DISTRO_SLACKWARE64_150), d)
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/isolinux/initrd.img
       DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/kernels/huge.s/bzImage
-   else
+   else ifneq ($(DISTRO_SLACKWARE64_150), l)
       DISTRO_SLACKWARE64_150	:= y
    endif
 
@@ -266,6 +272,9 @@ slackware-defconfig:
 	@echo "DISTRO_SLACKWARE_URL=https://mirrors.edge.kernel.org/slackware"
 	@echo "DISTRO_SLACKWARE_GRUB=(http,mirrors.edge.kernel.org)/slackware"
 	@echo "DISTRO_SLACKWARE_APPEND="
+	@echo "DISTRO_SLACKWARE_LOCAL_URL=https://mirrors.edge.kernel.org/slackware"
+	@echo "DISTRO_SLACKWARE_LOCAL_GRUB=(http,mirrors.edge.kernel.org)/slackware"
+	@echo "DISTRO_SLACKWARE_LOCAL_APPEND="
 	@for REL in 140 141 142 150; do \
 	   echo "DISTRO_SLACKWARE_$${REL}=y"; \
 	   echo "DISTRO_SLACKWARE64_$${REL}=y"; \
