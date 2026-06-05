@@ -1,5 +1,0 @@
-
-
-MIRROR_ROCKY           ?= https://mirrors.acsalaska.net/rocky/
-ROCKY_HASHES		= src/distros/rocky/hashes/
-
