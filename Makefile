@@ -33,11 +33,6 @@ V			?= 0
 
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-DISTRODIR		= src/distros
-CONFIGDIR		= var/config
-SCRIPTDIR		= src/scripts
-SYSLINDIR		= src/syslinux
-
 
 GRUB_SERIAL_COM		?= 1
 GRUB_SERIAL_DEV		?= 0
