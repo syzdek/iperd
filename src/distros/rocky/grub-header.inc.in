@@ -1,4 +1,8 @@
 submenu 'Rocky Linux Installers' {
-   set rocky_append='@DISTRO_APPEND@'
+   if [ "@DISTRO_OPT@x" == "lx" ]; then
+      set rocky_append='@DISTRO_APPEND@'
+   else
+      set rocky_append='@DISTRO_APPEND@'
+   fi
    export rocky_append
 
