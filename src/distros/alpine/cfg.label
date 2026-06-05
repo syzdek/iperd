@@ -1,7 +1,0 @@
-
-label alpine@VERSION@@ARCH@
-    MENU LABEL Alpine Linux @VERSION@ (@ARCH@)
-    kernel /boot/alpine/@VERSION@/@ARCH@/vmlinuz
-    initrd /boot/alpine/@VERSION@/@ARCH@/initrd
-    append modules=loop,squashfs,sd-mod,usb-storage modloop=/boot/alpine/@VERSION@/@ARCH@/modloop alpine_repo=/boot/alpine/@VERSION@/apks
-
