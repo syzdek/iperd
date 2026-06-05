@@ -2,45 +2,52 @@
 IP Engineering Rescue Disk
 ==========================
 
+Copyright
+=========
+
+IP Engineering Rescue Disk  
+Copyright (C) 2026 David M. Syzdek <david@syzdek.net>.  
+All rights reserved.  
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+   * Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+   * Neither the name of David M. Syzdek nor the
+     names of its contributors may be used to endorse or promote products
+     derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DAVID M. SYZDEK BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+Overview
+========
+
 The IP Egineering Rescue Disk is not a disk or set of disks, but rather
 a framework which allows an administrator to download collections of boot
 images for packaging into either bootable ISO images, bootable USB pen drives,
 or network shares for PXE booting.
 
 
-Table of Contents
------------------
-
-   * Disclaimer
-   * Maintainers
-   * Quick Start
-   * Directory Structure
-     * Distro Definition
-   * Compatibility
-   * Source Code
-
-
-Disclaimer
-==========
-
-   This software is provided by the copyright holders and contributors "as
-   is" and any express or implied warranties, including, but not limited to,
-   the implied warranties of merchantability and fitness for a particular
-   purpose are disclaimed. In no event shall David M. Syzdek be liable for
-   any direct, indirect, incidental, special, exemplary, or consequential
-   damages (including, but not limited to, procurement of substitute goods or
-   services; loss of use, data, or profits; or business interruption) however
-   caused and on any theory of liability, whether in contract, strict
-   liability, or tort (including negligence or otherwise) arising in any way
-   out of the use of this software, even if advised of the possibility of
-   such damage.
-
-
 Maintainers
 ===========
 
-   David M. Syzdek
-   david@syzdek.net
+* David M. Syzdek <david@syzdek.net>
 
 
 Requirements
@@ -53,7 +60,7 @@ Build requirements:
    * GNU Mtools
    * GNU GCC
    * wget
-   * GNU Grub 2
+   * bsdtar
    * cdrtools
 
 Network boot requirements:
@@ -87,40 +94,11 @@ Directory Structure
 ===================
 
    * `EFI/BOOT/`              - UEFI boot files
-   * `boot/<distro>/`         - Distribution images
-   * `boot/grub/`             - Grub binaries and configurations
+   * `boot/`                  - Boot images
    * `doc/`                   - Additional documentation
    * `images/`                - Generated IPERD images
-   * `src/distros/<distro>/`  - Distro definition
-   * `src/grub/`              - Grub templates and build files
-   * `src/scripts/`           - helper scripts
-   * `src/syslinux/`          - Syslinux templates and build files
-   * `tmp/`                   - Download and build cache
-   * `var/config/`            - Configuration files
-
-
-Distro Definition
------------------
-
-   * `./broken`             - existence indicates broken distro
-   * `./broken.efi`         - existence indicates broken UEFI implementation
-   * `./broken.iso`         - existence indicates broken ISO implementation
-   * `./broken.pxe`         - existence indicates broken PXE implementation
-   * `./broken.sys`         - existence indicates broken USB implementation
-   * `./cfg.header`         - start of syslinux configuration
-   * `./cfg.header.iso.efi` - start of grub configuration for UEFI ISO
-   * `./cfg.label`          - default syslinux label template
-   * `./cfg.label.iso`      - syslinux label template for ISO images
-   * `./cfg.label.iso.efi`  - grub menuentry template for UEFI ISO images
-   * `./cfg.label.pxe`      - syslinux label template for PXE labels
-   * `./cfg.label.sys`      - syslinux label template for USB labels
-   * `./cfg.footer`         - end of syslinux configuration
-   * `./cfg.footer.iso.efi` - end of grub configuration for UEFI ISO
-   * `./make.header`        - start of Makefile definitions for distro
-   * `./make.boot`          - Makefile targets for distro
-   * `./make.footer`        - end of Makefile definitions for distro
-   * `./option`             - list of distro variants (single option)
-   * `./options`            - list of distro variants (multiple options)
+   * `src/distros/<distro>/`  - Distro build/configuration files
+   * `src/`                   - Source files/packages
 
 
 Compatibility
@@ -131,16 +109,16 @@ Compatibility
     |                   |   BIOS     UEFI |   BIOS     UEFI |   BIOS     UEFI |
     |    Boot Images    +-----------------+-----------------+-----------------+
     |                   |  32 |  64 |  64 |  32 |  64 |  64 |  32 |  64 |  64 |
-    +--------------+----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-    | Alpine Linux      |  Y  |  Y  |  N  |  N  |  N  |  N  |  Y  |  Y  |  N  |
-    | Archboot          |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |
-    | CentOS Install    | n/a |  Y  |  Y  | n/a |  Y  |  Y  | n/a |  Y  |  Y  |
-    | DBAN              |  Y  |  -  |  -  |  Y  |  -  |  -  |  -  |  -  |  -  |
-    | Debian Install    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
-    | Memtest86+        |  Y  |  -  |  -  |  Y  |  -  |  -  |  Y  |  -  |  -  |
-    | Slackware Install |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
-    | TinyCore          |  Y  | n/a | n/a |  Y  | n/a | n/a |  Y  | n/a | n/a |
-    | Ubuntu Install    |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
+    +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+    | Alpine Linux      |  N  |  N  |  N  |  N  |  N  |  N  |  Y  |  Y  |  Y  |
+    | Arch Linux        |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Debian Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Gentoo Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | openSUSE          |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Rocky Linux       |  N  |  N  |  N  |  N  |  N  |  N  |  Y  |  Y  |  Y  |
+    | Slackware Linux   |  N  |  N  |  N  |  N  |  N  |  N  |  Y  |  Y  |  Y  |
+    | TinyCore          |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Ubuntu Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
     +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 
 
