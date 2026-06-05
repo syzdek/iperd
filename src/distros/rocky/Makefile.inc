@@ -55,12 +55,12 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 
 
 ifeq ($(DISTRO_ROCKY), y)
-   GRUB_CFG_INCLUDES		+= src/distros/rocky/grub.inc
+   GRUB_CFG_INCLUDES		+= src/distros/rocky/grub.d/grub.inc
    IPERD_DOWNLOADS		+= rocky-download
    DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
 
    ifneq ($(DISTRO_ROCKY_8), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-8.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-8.inc
    endif
    ifeq ($(DISTRO_ROCKY_8), d)
       DISTRO_ROCKY_BOOT		+= boot/rocky/8/BaseOS/x86_64/os/images/pxeboot/initrd.img
@@ -70,7 +70,7 @@ ifeq ($(DISTRO_ROCKY), y)
    endif
 
    ifneq ($(DISTRO_ROCKY_9), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-9.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-9.inc
    endif
    ifeq ($(DISTRO_ROCKY_9), d)
       DISTRO_ROCKY_BOOT		+= boot/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
@@ -80,7 +80,7 @@ ifeq ($(DISTRO_ROCKY), y)
    endif
 
    ifneq ($(DISTRO_ROCKY_10), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-rocky-10.inc
+      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-10.inc
    endif
    ifeq ($(DISTRO_ROCKY_10), d)
       DISTRO_ROCKY_BOOT		+= boot/rocky/10/BaseOS/x86_64/os/images/pxeboot/initrd.img
@@ -119,7 +119,7 @@ rocky-download: $(DISTRO_ROCKY_BOOT)
 #
 # Grub include targets
 #
-src/distros/rocky/grub-rocky-8.inc: src/distros/rocky/grub-distro.inc.in
+src/distros/rocky/grub.d/rocky-8.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=8; \
@@ -128,7 +128,7 @@ src/distros/rocky/grub-rocky-8.inc: src/distros/rocky/grub-distro.inc.in
 		$(do_subst_finish)
 
 
-src/distros/rocky/grub-rocky-9.inc: src/distros/rocky/grub-distro.inc.in
+src/distros/rocky/grub.d/rocky-9.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=9; \
@@ -137,7 +137,7 @@ src/distros/rocky/grub-rocky-9.inc: src/distros/rocky/grub-distro.inc.in
 		$(do_subst_finish)
 
 
-src/distros/rocky/grub-rocky-10.inc: src/distros/rocky/grub-distro.inc.in
+src/distros/rocky/grub.d/rocky-10.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=10; \
@@ -146,7 +146,7 @@ src/distros/rocky/grub-rocky-10.inc: src/distros/rocky/grub-distro.inc.in
 		$(do_subst_finish)
 
 
-src/distros/rocky/grub.inc: $(DISTRO_ROCKY_CFG)
+src/distros/rocky/grub.d/grub.inc: $(DISTRO_ROCKY_CFG)
 	@$(do_subst_files_dt)
 
 

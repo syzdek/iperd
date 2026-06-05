@@ -61,8 +61,7 @@ DISTCLEANFILES		= boot \
 CLEANFILES		= grub \
 			  tools \
 			  src/*/*.new \
-			  src/distros/*/grub.inc \
-			  src/distros/*/grub-*.inc
+			  src/distros/*/grub.d/
 
 
 do_subst = sed \
