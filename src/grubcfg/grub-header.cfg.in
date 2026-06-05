@@ -105,10 +105,16 @@ export iperd_console
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_prefix="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
+   set iperd_grub="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
+   set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
 else
    set iperd_prefix="(${root})@IPERD_PREFIX@"
+   set iperd_grub="(${root})@IPERD_PREFIX@"
+   set iperd_url="@IPERD_PREFIX@"
 fi
 export iperd_prefix
+export iperd_grub
+export iperd_url
 
 
 set pager=1
