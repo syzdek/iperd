@@ -1,4 +1,5 @@
 *.swp
+*.iso
 .config
 .iperd
 /.git.old
@@ -21,6 +22,7 @@
 /src/dejavu/source/
 /src/distros/*/grub.inc
 /src/distros/*/grub-*.inc
+/src/distros/*/source/
 /src/grub/grub-*.tar.xz
 /src/grub/grub-*.tar.xz.new
 /src/grub/source/
