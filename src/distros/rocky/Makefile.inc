@@ -50,8 +50,9 @@ DISTRO_ROCKY_10			?= n
 DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 				   DISTRO_GRUB='$(DISTRO_ROCKY_GRUB)'; \
 				   DISTRO_URL='$(DISTRO_ROCKY_URL)'; \
-				   DISTRO_ALT_APPEND='$(DISTRO_ROCKY_ALT_APPEND)'; \
-				   DISTRO_ALT_URL='$(DISTRO_ROCKY_ALT_URL)';
+				   DISTRO_EXTRA_APPEND='$(DISTRO_ROCKY_EXTRA_APPEND)'; \
+				   DISTRO_EXTRA_APPEND='$(DISTRO_ROCKY_EXTRA_APPEND)'; \
+				   DISTRO_EXTRA_URL='$(DISTRO_ROCKY_EXTRA_URL)';
 
 
 ifeq ($(DISTRO_ROCKY), y)
@@ -160,8 +161,8 @@ rocky-defconfig:
 	@echo "DISTRO_ROCKY_URL=https://mirrors.edge.kernel.org/rocky"
 	@echo "DISTRO_ROCKY_GRUB=(http,mirrors.edge.kernel.org)/rocky"
 	@echo "DISTRO_ROCKY_APPEND="
-	@echo "DISTRO_ROCKY_ALT_URL="
-	@echo "DISTRO_ROCKY_ALT_APPEND="
+	@echo "DISTRO_ROCKY_EXTRA_URL="
+	@echo "DISTRO_ROCKY_EXTRA_APPEND="
 	@for REL in 8 9 10; do \
 	   echo "DISTRO_ROCKY_$${REL}=y"; \
 	done;

@@ -36,11 +36,11 @@
                 nomodeset ramdisk_size=100000 net.ifnames=0 \
                 inst.repo=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/os/ \
                 inst.stage2=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/kickstart \
-                inst.ks=@DISTRO_ALT_URL@ \
+                inst.ks=@DISTRO_EXTRA_URL@ \
                 inst.text \
                 ip=eth0:dhcp \
                 console=${iperd_console} \
-                ${rocky_append} @DISTRO_ALT_APPEND@
+                ${rocky_append} @DISTRO_EXTRA_APPEND@
          echo   'Loading initrd.img ...'
          initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
