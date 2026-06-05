@@ -160,8 +160,6 @@ tools/iperd/grub_x86_64_efi: $(GRUB_BUILDDIR)_x86_64_efi/.iperd
 # default grub target
 #
 src/grub/.iperd: $(GRUB_PLATFORMS)
-	find grub -type f -exec chmod go+r  {} \; || exit 1;
-	find grub -type d -exec chmod go+rx {} \; || exit 1;
 	@touch $(@)
 
 

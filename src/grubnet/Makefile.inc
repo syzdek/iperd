@@ -56,6 +56,8 @@ src/grubnet/.iperd: src/grub/.iperd src/themes/.iperd
 	   --core-compress=xz \
 	   --net-directory=$(IPERD_ROOT) \
 	   --subdir=/grub
+	find grub -type f -exec chmod go+r  {} \; || exit 1;
+	find grub -type d -exec chmod go+rx {} \; || exit 1;
 	@touch $(@)
 
 
