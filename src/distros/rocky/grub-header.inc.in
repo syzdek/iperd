@@ -1,6 +1,4 @@
 submenu 'Rocky Linux Installers' {
    set rocky_append='@DISTRO_APPEND@'
-   set rocky_prefix='@DISTRO_PREFIX@'
    export rocky_append
-   export rocky_prefix
 

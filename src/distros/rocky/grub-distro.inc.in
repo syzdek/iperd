@@ -1,38 +1,38 @@
    submenu 'Rocky Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@)' {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set rocky_prefix="${iperd_prefix}/boot/rocky/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set rocky_grub="${iperd_grub}/boot/rocky/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
       else
-         set rocky_prefix="@DISTRO_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set rocky_grub="@DISTRO_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
       fi
-      export rocky_prefix
+      export rocky_grub
       menuentry "Install or upgrade an existing system" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_prefix}"
+         echo   "${rocky_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_prefix}/os/images/pxeboot/vmlinuz \
+         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
                 console=${iperd_console} \
                 ${rocky_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_prefix}/os/images/pxeboot/initrd.img
+         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system with basic video driver" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_prefix}"
+         echo   "${rocky_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_prefix}/os/images/pxeboot/vmlinuz \
+         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset \
                 console=${iperd_console} \
                 ${rocky_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_prefix}/os/images/pxeboot/initrd.img
+         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system from kickstart over network" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_prefix}"
+         echo   "${rocky_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_prefix}/os/images/pxeboot/vmlinuz \
+         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 net.ifnames=0 \
                 inst.repo=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/os/ \
                 inst.stage2=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/kickstart \
@@ -42,33 +42,33 @@
                 console=${iperd_console} \
                 ${rocky_append} @DISTRO_ALT_APPEND@
          echo   'Loading initrd.img ...'
-         initrd ${rocky_prefix}/os/images/pxeboot/initrd.img
+         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system from network" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_prefix}"
+         echo   "${rocky_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_prefix}/os/images/pxeboot/vmlinuz \
+         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 ip=dhcp net.ifnames=0 \
                 inst.repo=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/os/ \
                 inst.stage2=@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@/os \
                 console=${iperd_console} \
                 ${rocky_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_prefix}/os/images/pxeboot/initrd.img
+         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Rescue installed system" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_prefix}"
+         echo   "${rocky_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_prefix}/os/images/pxeboot/vmlinuz \
+         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
                 rescue \
                 console=${iperd_console} \
                 ${rocky_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_prefix}/os/images/pxeboot/initrd.img
+         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
    }
