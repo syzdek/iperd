@@ -33,6 +33,9 @@ DISTCLEANFILES			+= src/grub/grub-*.tar.xz \
 CLEANFILES			+=
 
 
+IPERD_PRUNE			+= grub-prune
+
+
 GRUB_VERSION			:= 2.14
 GRUB_MIRROR			:= https://ftp.gnu.org/gnu/grub/grub-$(GRUB_VERSION).tar.xz
 GRUB_SHA1			:= b8370fa991f63027764f41d58b90aa8a0871f1e9
@@ -162,5 +165,13 @@ tools/iperd/grub_x86_64_efi: $(GRUB_BUILDDIR)_x86_64_efi/.iperd
 src/grub/.iperd: $(GRUB_PLATFORMS)
 	@touch $(@)
 
+
+grub-prune:
+	test -f src/grub/source/build_i386_efi/Makefile \
+		&& $(MAKE) -C src/grub/source/build_i386_efi clean
+	test -f src/grub/source/build_i386_pc/Makefile \
+		&& $(MAKE) -C src/grub/source/build_i386_pc clean
+	test -f src/grub/source/build_x86_64_efi/Makefile \
+		&& $(MAKE) -C src/grub/source/build_x86_64_efi clean
 
 # end of makefile

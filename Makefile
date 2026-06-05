@@ -46,6 +46,7 @@ GRUB_TERM		?= vt100-color
 GRUB_CFG_INCLUDES	=
 IPERD_DOWNLOADS		=
 IPERD_MIRRORS		=
+IPERD_PRUNE		=
 IPERD_DEFCONFIGS	= alpine \
 			  rocky \
 			  slackware
@@ -260,6 +261,9 @@ clean:
 
 distclean: clean
 	rm -Rf $(DISTCLEANFILES)
+
+
+prune: $(IPERD_PRUNE)
 
 
 # end of makefile
