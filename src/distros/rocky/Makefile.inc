@@ -110,16 +110,12 @@ endif
 #
 boot/rocky/%/initrd.img:
 	@mkdir -p "$(@D)"
-	wget -q -O "$(@).new" "$(DISTRO_ROCKY_URL)/$(*)/$(@F)"
-	@mv "$(@).new" "$(@)"
-	@touch "$(@)"
+	@WGET_FILE="$(@)"; WGET_URL="$(DISTRO_ROCKY_URL)/$(*)/$(@F)"; $(do_wget);
 
 
 boot/rocky/%/vmlinuz:
 	@mkdir -p "$(@D)"
-	wget -q -O "$(@).new" "$(DISTRO_ROCKY_URL)/$(*)/$(@F)"
-	@mv "$(@).new" "$(@)"
-	@touch "$(@)"
+	@WGET_FILE="$(@)"; WGET_URL="$(DISTRO_ROCKY_URL)/$(*)/$(@F)"; $(do_wget);
 
 
 rocky-download: $(DISTRO_ROCKY_BOOT)
