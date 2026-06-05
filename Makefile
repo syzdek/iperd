@@ -57,7 +57,7 @@ DATE			= $(shell date +%Y-%m-%d)
 
 DISTCLEANFILES		= boot \
 			  src/*/.iperd \
-			  src/distros/alpine/source
+			  src/distros/*/source
 CLEANFILES		= grub \
 			  tools \
 			  src/*/*.new \
