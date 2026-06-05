@@ -30,6 +30,8 @@
 
 
 V			?= 0
+IPERD_NUMJOBS		?= 1
+
 
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
