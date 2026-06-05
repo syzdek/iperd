@@ -147,6 +147,17 @@ do_subst_files_fn	= $(do_subst_files); chmod 0755 "$(@)"
 do_subst_files_dt	= $(do_subst_files); chmod 0644 "$(@)"
 
 
+do_wget			= if test "x$(V)" == "x0";then \
+			     echo "  WGET     $${WGET_FILE}"; \
+			  else \
+			     echo "wget -q -O $${WGET_FILE} $${WGET_URL}"; \
+			  fi; \
+			  rm -f "$${WGET_FILE}" || exit 1; \
+			  wget -q -O "$${WGET_FILE}" "$${WGET_URL}" || exit; \
+			  chmod 644 "$${WGET_FILE}" || exit 1; \
+			  touch "$${WGET_FILE}"
+
+
 .PHONY: all clean configs configure distclean grub update images deps
 
 
