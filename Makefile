@@ -177,7 +177,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configs configure defconfig distclean grub update images deps
+.PHONY: all clean configure defconfig distclean download update images prune
 
 
 all:
