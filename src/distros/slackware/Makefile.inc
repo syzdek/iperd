@@ -256,4 +256,20 @@ src/distros/slackware/grub.d/grub.inc: $(DISTRO_SLACKWARE_CFG)
 	@$(do_subst_files_dt)
 
 
+#
+# IPERD config  targets
+#
+slackware-defconfig:
+	@echo "#"
+	@echo "# Slackware Linux"
+	@echo "DISTRO_SLACKWARE=y"
+	@echo "DISTRO_SLACKWARE_URL=https://mirrors.edge.kernel.org/slackware"
+	@echo "DISTRO_SLACKWARE_GRUB=(http,mirrors.edge.kernel.org)/slackware"
+	@echo "DISTRO_SLACKWARE_APPEND="
+	@for REL in 140 141 142 150; do \
+	   echo "DISTRO_SLACKWARE_$${REL}=y"; \
+	   echo "DISTRO_SLACKWARE64_$${REL}=y"; \
+	done;
+
+
 # end of Makefile.inc

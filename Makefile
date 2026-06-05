@@ -49,6 +49,9 @@ GRUB_TERM		?= vt100-color
 GRUB_CFG_INCLUDES	=
 IPERD_DOWNLOADS		=
 IPERD_MIRRORS		=
+IPERD_DEFCONFIGS	= alpine \
+			  rocky \
+			  slackware
 
 
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
@@ -172,7 +175,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configs configure distclean grub update images deps
+.PHONY: all clean configs configure defconfig distclean grub update images deps
 
 
 all:
@@ -198,7 +201,10 @@ all:
 
 
 .config:
-	if test ! -e "$(@)"; then echo "creating default $(@) ..."; cp .defaults "$(@)"; fi
+	@if test ! -e "$(@)"; then \
+	   echo "creating default $(@) ..."; \
+	   $(MAKE) -s defconfig > "$(@)"; \
+	fi;
 	@touch "$(@)"
 
 
@@ -218,6 +224,27 @@ ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
 endif
 include src/grubcfg/Makefile.inc
+
+
+defconfig:
+	@echo "#"
+	@echo "# IP Engineering Rescue Disk Configuration"
+	@echo "#"
+	@echo "# GRUB options"
+	@echo "GRUB_SERIAL_COM=1"
+	@echo "GRUB_SERIAL_DEV=0"
+	@echo "GRUB_SERIAL_BAUD=115200"
+	@echo "GRUB_USE_GFXTERM=n"
+	@echo "GRUB_TERM=vt100-color"
+	@echo "#"
+	@echo "# IPERD"
+	@echo "IPERD_PREFIX="
+	@echo "IPERD_NET_PREFIX=/httpboot"
+	@for CFG in $(IPERD_DEFCONFIGS); do \
+	   $(MAKE) -s -f  src/distros/$${CFG}/Makefile.inc $${CFG}-defconfig; \
+	done
+	@echo "#"
+	@echo "# end of config"
 
 
 download: $(IPERD_DOWNLOADS)

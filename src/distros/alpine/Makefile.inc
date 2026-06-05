@@ -185,7 +185,7 @@ ifeq ($(DISTRO_ALPINE), y)
 endif
 
 
-.PHONY: alpine-download
+.PHONY: alpine-download alpine-defconfig
 
 
 #
@@ -377,5 +377,20 @@ src/distros/alpine/grub.d/alpine-3.23-x86_64.inc: src/distros/alpine/grub-distro
 src/distros/alpine/grub.d/grub.inc: $(DISTRO_ALPINE_CFG)
 	@$(do_subst_files_dt)
 
+
+#
+# IPERD config targets
+#
+alpine-defconfig:
+	@echo "#"
+	@echo "# Alpine Linux"
+	@echo "DISTRO_ALPINE=y"
+	@echo "DISTRO_ALPINE_URL=https://mirrors.edge.kernel.org/alpine"
+	@echo "DISTRO_ALPINE_GRUB=(http,mirrors.edge.kernel.org)/alpine"
+	@echo "DISTRO_ALPINE_APPEND="
+	@for REL in 318 319 320 321 322 323; do \
+	   echo "DISTRO_ALPINE_$${REL}_x86=y"; \
+	   echo "DISTRO_ALPINE_$${REL}_x8664=y"; \
+	done;
 
 # end of Makefile.inc

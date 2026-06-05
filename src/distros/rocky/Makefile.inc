@@ -150,4 +150,21 @@ src/distros/rocky/grub.d/grub.inc: $(DISTRO_ROCKY_CFG)
 	@$(do_subst_files_dt)
 
 
+#
+# IPERD config  targets
+#
+rocky-defconfig:
+	@echo "#"
+	@echo "# Rocky Linux"
+	@echo "DISTRO_ROCKY=y"
+	@echo "DISTRO_ROCKY_URL=https://mirrors.edge.kernel.org/rocky"
+	@echo "DISTRO_ROCKY_GRUB=(http,mirrors.edge.kernel.org)/rocky"
+	@echo "DISTRO_ROCKY_APPEND="
+	@echo "DISTRO_ROCKY_ALT_URL="
+	@echo "DISTRO_ROCKY_ALT_APPEND="
+	@for REL in 8 9 10; do \
+	   echo "DISTRO_ROCKY_$${REL}=y"; \
+	done;
+
+
 # end of Makefile.inc
