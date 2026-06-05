@@ -158,6 +158,20 @@ do_wget			= if test "x$(V)" == "x0";then \
 			  touch "$${WGET_FILE}"
 
 
+do_bsdtar		= if test "x$(V)" == "x0";then \
+			     echo "  BSDTAR   $${BSDTAR_FILE}"; \
+			  else \
+			     echo "( cd '$${BSDTAR_DIR}' && bsdtar -xf '$${BSD_PWD}/$${BSDTAR_FILE}'; )"; \
+			  fi; \
+			  BSD_PWD="$$(pwd)"; \
+			  rm -Rf "$${BSDTAR_DIR}" || exit 1; \
+			  mkdir -p "$${BSDTAR_DIR}" || exit 1; \
+			  ( cd "$${BSDTAR_DIR}" && \
+			    bsdtar -xf "$${BSD_PWD}/$${BSDTAR_FILE}" && \
+			    chmod -R u+w .; \
+			  )
+
+
 .PHONY: all clean configs configure distclean grub update images deps
 
 
