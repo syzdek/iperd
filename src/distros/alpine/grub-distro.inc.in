@@ -2,6 +2,9 @@
       if [ "@DISTRO_OPT@x" == "dx" ]; then
          set alpine_grub="${iperd_grub}/boot/alpine/v@DISTRO_VERSION@"
          set alpine_url="${iperd_url}/boot/alpine/v@DISTRO_VERSION@"
+      elif [ "@DISTRO_OPT@x" == "lx" ]; then
+         set alpine_grub="@DISTRO_LOCAL_GRUB@/v@DISTRO_VERSION@"
+         set alpine_url="@DISTRO_LOCAL_URL@/v@DISTRO_VERSION@"
       else
          set alpine_grub="@DISTRO_GRUB@/v@DISTRO_VERSION@"
          set alpine_url="@DISTRO_URL@/v@DISTRO_VERSION@"

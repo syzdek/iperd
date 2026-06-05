@@ -43,6 +43,9 @@ DISTRO_ALPINE_MIRROR		?= n
 DISTRO_ALPINE_URL		?= https://mirrors.edge.kernel.org/alpine
 DISTRO_ALPINE_GRUB		?= (http,mirrors.edge.kernel.org)/alpine
 DISTRO_ALPINE_APPEND		?=
+DISTRO_ALPINE_LOCAL_URL		?= https://mirrors.edge.kernel.org/alpine
+DISTRO_ALPINE_LOCAL_GRUB	?= (http,mirrors.edge.kernel.org)/alpine
+DISTRO_ALPINE_LOCAL_APPEND	?=
 DISTRO_ALPINE_318_x86		?= n
 DISTRO_ALPINE_318_x8664		?= n
 DISTRO_ALPINE_319_x86		?= n
@@ -59,7 +62,10 @@ DISTRO_ALPINE_323_x8664		?= n
 
 DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 				   DISTRO_GRUB='$(DISTRO_ALPINE_GRUB)'; \
-				   DISTRO_URL='$(DISTRO_ALPINE_URL)';
+				   DISTRO_URL='$(DISTRO_ALPINE_URL)'; \
+				   DISTRO_LOCAL_APPEND='$(DISTRO_ALPINE_LOCAL_APPEND)'; \
+				   DISTRO_LOCAL_GRUB='$(DISTRO_ALPINE_LOCAL_GRUB)'; \
+				   DISTRO_LOCAL_URL='$(DISTRO_ALPINE_LOCAL_URL)';
 
 
 ifeq ($(DISTRO_ALPINE), y)
@@ -73,7 +79,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_318_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.18/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_318_x86), l)
       DISTRO_ALPINE_318_x86	:= y
    endif
 
@@ -82,7 +88,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_318_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.18/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_318_x8664), l)
       DISTRO_ALPINE_318_x8664	:= y
    endif
 
@@ -92,7 +98,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_319_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.19/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_319_x86), l)
       DISTRO_ALPINE_319_x86	:= y
    endif
 
@@ -101,7 +107,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_319_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.19/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_319_x8664), l)
       DISTRO_ALPINE_319_x8664	:= y
    endif
 
@@ -111,7 +117,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_320_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.20/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_320_x86), l)
       DISTRO_ALPINE_320_x86	:= y
    endif
 
@@ -120,7 +126,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_320_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.20/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_320_x8664), l)
       DISTRO_ALPINE_320_x8664	:= y
    endif
 
@@ -130,7 +136,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_321_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.21/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_321_x86), l)
       DISTRO_ALPINE_321_x86	:= y
    endif
 
@@ -139,7 +145,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_321_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.21/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_321_x8664), l)
       DISTRO_ALPINE_321_x8664	:= y
    endif
 
@@ -149,7 +155,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_322_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.22/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_322_x86), l)
       DISTRO_ALPINE_322_x86	:= y
    endif
 
@@ -158,7 +164,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_322_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.22/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_322_x8664), l)
       DISTRO_ALPINE_322_x8664	:= y
    endif
 
@@ -168,7 +174,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_323_x86), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.23/main/x86/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_323_x86), l)
       DISTRO_ALPINE_323_x86	:= y
    endif
 
@@ -177,7 +183,7 @@ ifeq ($(DISTRO_ALPINE), y)
    endif
    ifeq ($(DISTRO_ALPINE_323_x8664), d)
       DISTRO_ALPINE_BOOT	+= boot/alpine/v3.23/main/x86_64/.iperd
-   else
+   else ifneq ($(DISTRO_ALPINE_323_x8664), l)
       DISTRO_ALPINE_323_x8664	:= y
    endif
 
@@ -388,6 +394,9 @@ alpine-defconfig:
 	@echo "DISTRO_ALPINE_URL=https://mirrors.edge.kernel.org/alpine"
 	@echo "DISTRO_ALPINE_GRUB=(http,mirrors.edge.kernel.org)/alpine"
 	@echo "DISTRO_ALPINE_APPEND="
+	@echo "DISTRO_ALPINE_LOCAL_URL=https://mirrors.edge.kernel.org/alpine"
+	@echo "DISTRO_ALPINE_LOCAL_GRUB=(http,mirrors.edge.kernel.org)/alpine"
+	@echo "DISTRO_ALPINE_LOCAL_APPEND="
 	@for REL in 318 319 320 321 322 323; do \
 	   echo "DISTRO_ALPINE_$${REL}_x86=y"; \
 	   echo "DISTRO_ALPINE_$${REL}_x8664=y"; \
