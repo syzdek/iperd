@@ -74,16 +74,16 @@ do_subst = sed \
 	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
 	-e "s,[@]GRUB_TERM[@],$(GRUB_TERM),g" \
 	\
-	-e "s,[@]DISTRO_ARCH[@],$${DISTRO_ARCH},g" \
-	-e "s,[@]DISTRO_APPEND[@],$${DISTRO_APPEND},g" \
+	-e "s;[@]DISTRO_ARCH[@];$${DISTRO_ARCH};g" \
+	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
 	-e "s;[@]DISTRO_ALT_APPEND[@];$${DISTRO_ALT_APPEND};g" \
 	-e "s;[@]DISTRO_ALT_URL[@];$${DISTRO_ALT_URL};g" \
-	-e "s,[@]DISTRO_VERSION[@],$${DISTRO_VERSION},g" \
+	-e "s;[@]DISTRO_VERSION[@];$${DISTRO_VERSION};g" \
 	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s,[@]DISTRO_SUFFIX[@],$${DISTRO_SUFFIX},g" \
-	-e "s,[@]DISTRO_URL[@],$${DISTRO_URL},g" \
-	-e "s,[@]DISTRO_OPT[@],$${DISTRO_OPT},g" \
-	-e "s,[@]DISTRO_CODENAME[@],$${DISTRO_CODENAME},g" \
+	-e "s;[@]DISTRO_URL[@];$${DISTRO_URL};g" \
+	-e "s;[@]DISTRO_OPT[@];$${DISTRO_OPT};g" \
+	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
 	\
 	-e "s,[@]DISTRO[@],$${DISTRO},g" \
 	-e "s,[@]CODENAME[@],$${DISTRO_CODENAME},g" \
