@@ -1,80 +1,80 @@
    submenu 'Rocky Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@)' {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set rocky_grub="${iperd_grub}/boot/rocky/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
-         set rocky_url="@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_grub="${iperd_grub}/boot/rocky/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_url="@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
       elif [ "@DISTRO_OPT@x" == "lx" ]; then
-         set rocky_grub="@DISTRO_LOCAL_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
-         set rocky_url="@DISTRO_LOCAL_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_grub="@DISTRO_LOCAL_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_url="@DISTRO_LOCAL_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
       else
-         set rocky_grub="@DISTRO_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
-         set rocky_url="@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_grub="@DISTRO_GRUB@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
+         set distro_ver_url="@DISTRO_URL@/@DISTRO_VERSION@/BaseOS/@DISTRO_ARCH@"
       fi
-      export rocky_grub
-      export rocky_url
+      export distro_ver_grub
+      export distro_ver_url
       menuentry "Install or upgrade an existing system" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_grub}"
+         echo   "${distro_ver_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
+         linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 console=${iperd_console} \
-                ${rocky_append}
+                ${distro_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
+         initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system with basic video driver" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_grub}"
+         echo   "${distro_ver_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
+         linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset \
                 console=${iperd_console} \
-                ${rocky_append}
+                ${distro_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
+         initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system from kickstart over network" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_grub}"
+         echo   "${distro_ver_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
+         linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 net.ifnames=0 \
-                inst.repo=${rocky_url}/os/ \
-                inst.stage2=${rocky_url}/kickstart \
+                inst.repo=${distro_ver_url}/os/ \
+                inst.stage2=${distro_ver_url}/kickstart \
                 inst.ks=@DISTRO_EXTRA_URL@ \
                 inst.text \
                 ip=eth0:dhcp \
                 console=${iperd_console} \
-                ${rocky_append} @DISTRO_EXTRA_APPEND@
+                ${distro_append} @DISTRO_EXTRA_APPEND@
          echo   'Loading initrd.img ...'
-         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
+         initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install system from network" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_grub}"
+         echo   "${distro_ver_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
+         linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 ip=dhcp net.ifnames=0 \
-                inst.repo=${rocky_url}/os/ \
-                inst.stage2=${rocky_url}/os \
+                inst.repo=${distro_ver_url}/os/ \
+                inst.stage2=${distro_ver_url}/os \
                 console=${iperd_console} \
-                ${rocky_append}
+                ${distro_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
+         initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Rescue installed system" {
          echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${rocky_grub}"
+         echo   "${distro_ver_grub}"
          echo   'Loading vmlinuz ...'
-         linux  ${rocky_grub}/os/images/pxeboot/vmlinuz \
+         linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 rescue \
                 console=${iperd_console} \
-                ${rocky_append}
+                ${distro_append}
          echo   'Loading initrd.img ...'
-         initrd ${rocky_grub}/os/images/pxeboot/initrd.img
+         initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
    }
