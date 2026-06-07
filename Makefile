@@ -50,6 +50,9 @@ IPERD_PRUNE		=
 IPERD_DEFCONFIGS	= alpine \
 			  rocky \
 			  slackware
+IPERD_DEPS		= src/grubnet/.iperd \
+			  src/grubcfg/.iperd \
+			  $(IPERD_DOWNLOADS)
 
 
 IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
@@ -177,7 +180,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configure defconfig distclean download update images prune
+.PHONY: all clean configure defconfig distclean download update images prune VERSION.md
 
 
 all:
@@ -229,6 +232,7 @@ ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
 endif
 include src/grubcfg/Makefile.inc
+include src/images/Makefile.inc
 
 
 defconfig:
@@ -255,7 +259,10 @@ defconfig:
 download: $(IPERD_DOWNLOADS)
 
 
-update: src/grubnet/.iperd src/grubcfg/.iperd $(IPERD_DOWNLOADS)
+images: src/images/.iperd
+
+
+update: $(IPERD_DEPS)
 
 
 clean:
