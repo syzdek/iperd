@@ -1,8 +1,8 @@
 submenu 'Alpine Linux Installers' {
    if [ "@DISTRO_OPT@x" == "lx" ]; then
-      set alpine_append='@DISTRO_LOCAL_APPEND@'
+      set distro_append='@DISTRO_LOCAL_APPEND@'
    else
-      set alpine_append='@DISTRO_APPEND@'
+      set distro_append='@DISTRO_APPEND@'
    fi
-   export alpine_append
+   export distro_append
 

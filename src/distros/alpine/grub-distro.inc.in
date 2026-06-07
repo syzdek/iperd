@@ -1,27 +1,27 @@
    menuentry 'Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@)' {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set alpine_grub="${iperd_grub}/boot/alpine/v@DISTRO_VERSION@"
-         set alpine_url="${iperd_url}/boot/alpine/v@DISTRO_VERSION@"
+         set distro_ver_grub="${iperd_grub}/boot/alpine/v@DISTRO_VERSION@"
+         set distro_ver_url="${iperd_url}/boot/alpine/v@DISTRO_VERSION@"
       elif [ "@DISTRO_OPT@x" == "lx" ]; then
-         set alpine_grub="@DISTRO_LOCAL_GRUB@/v@DISTRO_VERSION@"
-         set alpine_url="@DISTRO_LOCAL_URL@/v@DISTRO_VERSION@"
+         set distro_ver_grub="@DISTRO_LOCAL_GRUB@/v@DISTRO_VERSION@"
+         set distro_ver_url="@DISTRO_LOCAL_URL@/v@DISTRO_VERSION@"
       else
-         set alpine_grub="@DISTRO_GRUB@/v@DISTRO_VERSION@"
-         set alpine_url="@DISTRO_URL@/v@DISTRO_VERSION@"
+         set distro_ver_grub="@DISTRO_GRUB@/v@DISTRO_VERSION@"
+         set distro_ver_url="@DISTRO_URL@/v@DISTRO_VERSION@"
       fi
-      export alpine_grub
-      export alpine_url
+      export distro_ver_grub
+      export distro_ver_url
       echo   'Booting Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-      echo   "${alpine_grub}"
+      echo   "${distro_ver_grub}"
       echo   'loading vmlinuz-lts ...'
-      linux  ${alpine_grub}/releases/@DISTRO_ARCH@/netboot/vmlinuz-lts \
-             modloop=${alpine_url}/releases/@DISTRO_ARCH@/netboot//modloop-lts \
+      linux  ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/vmlinuz-lts \
+             modloop=${distro_ver_url}/releases/@DISTRO_ARCH@/netboot//modloop-lts \
              modules=loop,squashfs,sd-mod,usb-storage \
-             alpine_repo=${alpine_url}/main \
+             alpine_repo=${distro_ver_url}/main \
              ip=dhcp:::::eth0: \
              console=${iperd_console} \
-             ${alpine_append}
+             ${distro_append}
       echo   'loading initramfs-lts ...'
-      initrd ${alpine_grub}/releases/@DISTRO_ARCH@/netboot/initramfs-lts
+      initrd ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/initramfs-lts
       echo   'booting system ...'
    }
