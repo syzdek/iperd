@@ -1,8 +1,8 @@
 submenu 'Slackware Linux Installers' {
    if [ "@DISTRO_OPT@x" == "lx" ]; then
-      set slackware_append='@DISTRO_LOCAL_APPEND@'
+      set distro_append='@DISTRO_LOCAL_APPEND@'
    else
-      set slackware_append='@DISTRO_APPEND@'
+      set distro_append='@DISTRO_APPEND@'
    fi
-   export slackware_append
+   export distro_append
 

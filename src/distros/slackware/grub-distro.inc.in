@@ -1,20 +1,20 @@
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)" {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set slackware_grub="${iperd_grub}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+         set distro_ver_grub="${iperd_grub}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       elif [ "@DISTRO_OPT@x" == "lx" ]; then
-         set slackware_grub="@DISTRO_LOCAL_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+         set distro_ver_grub="@DISTRO_LOCAL_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       else
-         set slackware_grub="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
+         set distro_ver_grub="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
       fi
-      export slackware_grub
+      export distro_ver_grub
       echo   'Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-      echo   "${slackware_grub}"
+      echo   "${distro_ver_grub}"
       echo   'Loading bzImage ...'
-      linux  ${slackware_grub}/kernels/huge.s/bzImage \
+      linux  ${distro_ver_grub}/kernels/huge.s/bzImage \
              load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0  nomodeset \
              SLACK_KERNEL=hugesmp.s console=${iperd_console} \
-             ${slackware_append}
+             ${distro_append}
       echo   'Loading initrd ...'
-      initrd ${slackware_grub}/isolinux/initrd.img
+      initrd ${distro_ver_grub}/isolinux/initrd.img
       echo   'booting system ...'
    }
