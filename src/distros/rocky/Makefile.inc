@@ -65,7 +65,6 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 
 ifeq ($(DISTRO_ROCKY), y)
    GRUB_CFG_INCLUDES		+= src/distros/rocky/grub.d/grub.inc
-   IPERD_DOWNLOADS		+= rocky-download
    DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
 
    ifneq ($(DISTRO_ROCKY_8), n)
@@ -98,8 +97,9 @@ ifeq ($(DISTRO_ROCKY), y)
       DISTRO_ROCKY_10		:= y
    endif
 
-   DISTRO_ROCKY_CFG	+= src/distros/rocky/grub-footer.inc.in
+   DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
 endif
+IPERD_DOWNLOADS			+= $(DISTRO_ROCKY_BOOT)
 
 
 .PHONY: rocky-download
