@@ -1,0 +1,8 @@
+submenu 'Fedora Linux Installers' {
+   if [ "@DISTRO_OPT@x" == "lx" ]; then
+      set distro_append='@DISTRO_APPEND@'
+   else
+      set distro_append='@DISTRO_APPEND@'
+   fi
+   export distro_append
+
