@@ -61,7 +61,7 @@ boot/grub/.iperd: src/grub/.iperd src/themes/.iperd
 	@touch $(@)
 
 
-src/grubnet/.iperd: boot/grub/.iperd
+src/netdir/.iperd: boot/grub/.iperd
 	@touch $(@)
 
 

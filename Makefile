@@ -50,7 +50,7 @@ IPERD_PRUNE		=
 IPERD_DEFCONFIGS	= alpine \
 			  rocky \
 			  slackware
-IPERD_DEPS		= src/grubnet/.iperd \
+IPERD_DEPS		= src/netdir/.iperd \
 			  src/cfg/.iperd \
 			  $(IPERD_DOWNLOADS)
 
@@ -221,7 +221,7 @@ include src/dejavu/Makefile.inc
 include src/unifont/Makefile.inc
 include src/grub/Makefile.inc
 include src/themes/Makefile.inc
-include src/grubnet/Makefile.inc
+include src/netdir/Makefile.inc
 ifeq ($(DISTRO_ALPINE), y)
    include src/distros/alpine/Makefile.inc
 endif
