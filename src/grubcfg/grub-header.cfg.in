@@ -106,15 +106,34 @@ regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_grub="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
    set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
+   set iperd_pxe=1
 else
    set iperd_grub="(${root})@IPERD_PREFIX@"
    set iperd_url="@IPERD_PREFIX@"
+   set iperd_pxe=0
 fi
 export iperd_grub
 export iperd_url
+export iperd_pxe
 
 
 set pager=1
 export pager
+
+
+function iperd_location_desc {
+   if [ "${distro_ver_opt}x" == "dx" ]; then
+      if [ "${iperd_pxe}x" == "0x" ]; then
+         set distro_ver_loc="Local Media";
+      else
+         set distro_ver_loc="Netboot Server";
+      fi
+   elif [ "${distro_ver_opt}x" == "lx" ]; then
+      set distro_ver_loc="Local Mirror";
+   else
+      set distro_ver_loc="Internet";
+   fi;
+   export distro_ver_loc;
+}
 
 
