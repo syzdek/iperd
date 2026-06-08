@@ -295,7 +295,7 @@ update: $(IPERD_DEPS)
 
 
 clean:
-	rm -Rf $(CLEANFILES)
+	rm -Rf $(CLEANFILES) *.iso
 
 
 distclean: clean
