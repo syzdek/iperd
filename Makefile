@@ -204,7 +204,7 @@ all:
 	@echo " "
 	@echo "Build:"
 	@echo "   make distiso      # build ISO image using config"
-	@echo "   make dist-xz      # build archive using config"
+	@echo "   make dist         # build archive using config"
 	@echo " "
 
 
@@ -274,6 +274,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	   -m '.git' \
 	   -m '.gitignore' \
 	   -m '.iperd' \
+	   -m 'iperd-*.tar.xz' \
 	   -m 'src/*/source' \
 	   -m 'src/distros/*/grub.d' \
 	   -m 'src/distros/*/source' \
@@ -283,6 +284,34 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	   ./
 	@mv "$(@).new" "$(@)"
 	@touch "$(@)"
+
+
+iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS)
+	@rm -f "$(@)" 'iperd-*.tar.new*'
+	tar -c \
+	   -f iperd-$(IPERD_VERSION).tar.new \
+	   --transform='flags=r;s|^.|iperd-$(IPERD_VERSION)|g' \
+	   --exclude='*.iso' \
+	   --exclude='*.new' \
+	   --exclude='*.swp' \
+	   --exclude='.git' \
+	   --exclude='.gitignore' \
+	   --exclude='.iperd' \
+	   --exclude='iperd-$(IPERD_VERSION)/iperd-*.tar.xz' \
+	   --exclude='src/*/source' \
+	   --exclude='src/distros/*/grub.d' \
+	   --exclude='src/distros/*/source' \
+	   --exclude='tools' \
+	   .
+	xz --threads=0 -z iperd-$(IPERD_VERSION).tar.new
+	@mv "iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"
+	@touch "$(@)"
+
+
+dist: iperd-$(IPERD_VERSION).tar.xz
+
+
+dist-xz: iperd-$(IPERD_VERSION).tar.xz
 
 
 distiso: iperd-$(IPERD_VERSION).iso
