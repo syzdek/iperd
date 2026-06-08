@@ -37,6 +37,7 @@ boot/grub/grub.cfg: src/cfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/cfg/grub
 
 
 src/cfg/.iperd: boot/grub/grub.cfg
+	@touch $(@)
 
 
 # end of makefile
