@@ -189,7 +189,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configure defconfig distclean distiso download selfupdate update prune
+.PHONY: all clean configure defconfig distclean dist-all dist-iso download selfupdate update prune
 
 
 all:
@@ -205,8 +205,9 @@ all:
 	@echo "   make clean        # remove generated files"
 	@echo "   make distclean    # remove generated and downloaded files"
 	@echo " "
-	@echo "   make distiso      # build ISO image using config"
 	@echo "   make dist         # build archive using config"
+	@echo "   make dist-iso     # build ISO image using config"
+	@echo "   make dist-all     # build ISO and archive"
 	@echo " "
 
 
@@ -316,7 +317,10 @@ dist: iperd-$(IPERD_VERSION).tar.xz
 dist-xz: iperd-$(IPERD_VERSION).tar.xz
 
 
-distiso: iperd-$(IPERD_VERSION).iso
+dist-iso: iperd-$(IPERD_VERSION).iso
+
+
+dist-all: iperd-$(IPERD_VERSION).iso iperd-$(IPERD_VERSION).tar.xz
 
 
 download: $(IPERD_DOWNLOADS)
