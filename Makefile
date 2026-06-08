@@ -55,8 +55,10 @@ IPERD_DEPS		= src/netdir/.iperd \
 			  $(IPERD_DOWNLOADS)
 
 
-IPERD_VERSION		= $(shell git describe --long --abbrev=7 HEAD |sed -e 's/\-/./g' -e 's/^v//g')
 DATE			= $(shell date +%Y-%m-%d)
+
+
+IPERD_GIT_REF		:= $(git rev-parse --abbrev-ref HEAD 2> /dev/null)
 
 
 DISTCLEANFILES		= boot \
@@ -66,6 +68,13 @@ CLEANFILES		= boot/grub \
 			  tools \
 			  src/*/*.new \
 			  src/distros/*/grub.d/
+
+
+ifdef IPERD_GIT_REF
+   IPERD_VERSION_DEPS	:= .git/refs/heads/$(IPERD_GIT_REF)
+else
+   IPERD_VERSION_DEPS	:=
+endif
 
 
 do_subst = sed \
@@ -180,7 +189,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configure defconfig distclean download update images prune VERSION.md
+.PHONY: all clean configure defconfig distclean download update images prune
 
 
 all:
@@ -216,7 +225,14 @@ all:
 	@touch "$(@)"
 
 
+.version: $(IPERD_VERSION_DEPS)
+	@rm -f "$(@)"
+	echo "IPERD_VERSION=$(shell git describe --long --abbrev=7 |sed -e 's/^v//g' -e 's/-/./g' )" > "$(@)"
+	touch "$(@)"
+
+
 -include .config
+-include .version
 include src/dejavu/Makefile.inc
 include src/unifont/Makefile.inc
 include src/grub/Makefile.inc

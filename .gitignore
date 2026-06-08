@@ -2,10 +2,12 @@
 *.iso
 .config
 .iperd
+.version
 /.git.old
 /EFI/
 /Makefile.config
 /Makefile.local
+/VERSION.md
 /boot/
 /cde/
 /grub/
