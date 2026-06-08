@@ -51,7 +51,7 @@ IPERD_DEFCONFIGS	= alpine \
 			  rocky \
 			  slackware
 IPERD_DEPS		= src/grubnet/.iperd \
-			  src/grubcfg/.iperd \
+			  src/cfg/.iperd \
 			  $(IPERD_DOWNLOADS)
 
 
@@ -231,7 +231,7 @@ endif
 ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
 endif
-include src/grubcfg/Makefile.inc
+include src/cfg/Makefile.inc
 include src/images/Makefile.inc
 
 

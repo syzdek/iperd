@@ -32,11 +32,11 @@ DISTCLEANFILES			+=
 CLEANFILES			+=
 
 
-boot/grub/grub.cfg: src/grubcfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/grubcfg/grub-footer.cfg.in
+boot/grub/grub.cfg: src/cfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
 	@$(do_subst_files_dt)
 
 
-src/grubcfg/.iperd: boot/grub/grub.cfg
+src/cfg/.iperd: boot/grub/grub.cfg
 
 
 # end of makefile
