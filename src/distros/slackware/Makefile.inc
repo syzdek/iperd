@@ -65,7 +65,6 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 
 ifeq ($(DISTRO_SLACKWARE), y)
    GRUB_CFG_INCLUDES		+= src/distros/slackware/grub.d/grub.inc
-   IPERD_DOWNLOADS		+= slackware-download
    DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
 
    ifneq ($(DISTRO_SLACKWARE_140), n)
@@ -148,8 +147,9 @@ ifeq ($(DISTRO_SLACKWARE), y)
       DISTRO_SLACKWARE64_150	:= y
    endif
 
-   DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub-footer.inc.in
+   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
 endif
+IPERD_DOWNLOADS			+= $(DISTRO_SLACKWARE_BOOT)
 
 
 .PHONY: slackware-download
