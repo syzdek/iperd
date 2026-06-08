@@ -189,20 +189,22 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configure defconfig distclean distiso download update prune
+.PHONY: all clean configure defconfig distclean distiso download selfupdate update prune
 
 
 all:
 	@echo " "
-	@echo "Prepare directory:"
+	@echo "   IP Engineering Rescue Disk $(IPERD_VERSION)"
+	@echo " "
+	@echo "   make selfupdate   # update source and build rules"
+	@echo " "
 	@echo "   make download     # download boot images"
 	@echo "   make update       # update configurations and boot images"
-	@echo "   make prune        # clean non-essential files"
 	@echo " "
+	@echo "   make prune        # clean non-essential files"
 	@echo "   make clean        # remove generated files"
 	@echo "   make distclean    # remove generated and downloaded files"
 	@echo " "
-	@echo "Build:"
 	@echo "   make distiso      # build ISO image using config"
 	@echo "   make dist         # build archive using config"
 	@echo " "
@@ -332,6 +334,19 @@ distclean: clean
 
 
 prune: $(IPERD_PRUNE)
+
+
+selfupdate:
+	if test ! -e .git; then \
+	   git \
+	      clone \
+	      --no-checkout \
+	      https://github.com/syzdek/iperd.git iperd-git.new \
+	      || exit 1; \
+	   mv iperd-git.new/.git .git || exit 1; \
+	fi;
+	git fetch origin || exit 1;
+	git merge origin/$$(git rev-parse --abbrev-ref HEAD) || exit 1;
 
 
 # end of makefile
