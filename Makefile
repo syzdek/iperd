@@ -68,6 +68,7 @@ DISTCLEANFILES		= boot \
 CLEANFILES		= boot/grub \
 			  tools \
 			  src/*/*.new \
+			  src/distros/*/gen.d/ \
 			  src/distros/*/grub.d/
 
 
@@ -283,6 +284,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	   -m '.iperd' \
 	   -m 'iperd-*.tar.xz' \
 	   -m 'src/*/source' \
+	   -m 'src/distros/*/gen.d' \
 	   -m 'src/distros/*/grub.d' \
 	   -m 'src/distros/*/source' \
 	   -m 'tools/' \
@@ -306,6 +308,7 @@ iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS)
 	   --exclude='.iperd' \
 	   --exclude='iperd-$(IPERD_VERSION)/iperd-*.tar.xz' \
 	   --exclude='src/*/source' \
+	   --exclude='src/distros/*/gen.d' \
 	   --exclude='src/distros/*/grub.d' \
 	   --exclude='src/distros/*/source' \
 	   --exclude='tools' \

@@ -37,20 +37,27 @@ DISTRO_ROCKY_CFG		:=
 DISTRO_ROCKY_BOOT		:=
 
 
+DEFAULT_ROCKY			:= y
+DEFAULT_ROCKY_URL		:= https://dl.rockylinux.org/pub/rocky
+DEFAULT_ROCKY_GRUB		:= (http,dl.rockylinux.org)/pub/rocky
+DEFAULT_ROCKY_APPEND		:=
+DEFAULT_ROCKY_OPT		:= $(DEFAULT_ROCKY)
+DEFAULT_ROCKY_VERSIONS		:= 8 \
+				   9 \
+				   10
+
+
 DISTRO_ROCKY			?= n
 DISTRO_ROCKY_MIRROR		?= n
-DISTRO_ROCKY_URL		?= https://dl.rockylinux.org/pub/rocky
-DISTRO_ROCKY_GRUB		?= (http,dl.rockylinux.org)/pub/rocky
-DISTRO_ROCKY_APPEND		?=
+DISTRO_ROCKY_URL		?= $(DEFAULT_ROCKY_URL)
+DISTRO_ROCKY_GRUB		?= $(DEFAULT_ROCKY_GRUB)
+DISTRO_ROCKY_APPEND		?= $(DEFAULT_ROCKY_APPEND)
 DISTRO_ROCKY_EXTRA_URL		?=
 DISTRO_ROCKY_EXTRA_GRUB		?=
 DISTRO_ROCKY_EXTRA_APPEND	?=
-DISTRO_ROCKY_LOCAL_URL		?= https://dl.rockylinux.org/pub/rocky
-DISTRO_ROCKY_LOCAL_GRUB		?= (http,dl.rockylinux.org)/pub/rocky
-DISTRO_ROCKY_LOCAL_APPEND	?=
-DISTRO_ROCKY_8			?= n
-DISTRO_ROCKY_9			?= n
-DISTRO_ROCKY_10			?= n
+DISTRO_ROCKY_LOCAL_URL		?= $(DISTRO_ROCKY_URL)
+DISTRO_ROCKY_LOCAL_GRUB		?= $(DISTRO_ROCKY_GRUB)
+DISTRO_ROCKY_LOCAL_APPEND	?= $(DISTRO_ROCKY_APPEND)
 
 
 DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
@@ -63,46 +70,29 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_ROCKY_LOCAL_URL)';
 
 
-ifeq ($(DISTRO_ROCKY), y)
-   GRUB_CFG_INCLUDES		+= src/distros/rocky/grub.d/grub.inc
-   DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
+.PHONY: rocky-download
 
-   ifneq ($(DISTRO_ROCKY_8), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-8.inc
-   endif
-   ifeq ($(DISTRO_ROCKY_8), d)
-      DISTRO_ROCKY_BOOT		+= boot/rocky/8/BaseOS/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_ROCKY_BOOT		+= boot/rocky/8/BaseOS/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_ROCKY_8), l)
-      DISTRO_ROCKY_8		:= y
-   endif
 
-   ifneq ($(DISTRO_ROCKY_9), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-9.inc
-   endif
-   ifeq ($(DISTRO_ROCKY_9), d)
-      DISTRO_ROCKY_BOOT		+= boot/rocky/9/BaseOS/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_ROCKY_BOOT		+= boot/rocky/9/BaseOS/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_ROCKY_9), l)
-      DISTRO_ROCKY_9		:= y
-   endif
+src/distros/rocky/gen.d/Makefile.inc: .config src/distros/rocky/Makefile.distro.in
+	@rm -f "$(@)"
+	@mkdir -p src/distros/rocky/gen.d
+	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \
+	   sed \
+	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
+	      src/distros/rocky/Makefile.distro.in; \
+	done > "$(@)";
+	@touch "$(@)"
 
-   ifneq ($(DISTRO_ROCKY_10), n)
-      DISTRO_ROCKY_CFG		+= src/distros/rocky/grub.d/rocky-10.inc
-   endif
-   ifeq ($(DISTRO_ROCKY_10), d)
-      DISTRO_ROCKY_BOOT		+= boot/rocky/10/BaseOS/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_ROCKY_BOOT		+= boot/rocky/10/BaseOS/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_ROCKY_10), l)
-      DISTRO_ROCKY_10		:= y
-   endif
 
-   DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
-endif
+GRUB_CFG_INCLUDES		+= src/distros/rocky/gen.d/grub.inc
+DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
+-include src/distros/rocky/gen.d/Makefile.inc
+DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ROCKY_BOOT)
 
 
-.PHONY: rocky-download
+src/distros/rocky/gen.d/grub.inc: $(DISTRO_ROCKY_CFG)
+	@$(do_subst_files_dt)
 
 
 #
@@ -122,56 +112,22 @@ rocky-download: $(DISTRO_ROCKY_BOOT)
 
 
 #
-# Grub include targets
-#
-src/distros/rocky/grub.d/rocky-8.inc: src/distros/rocky/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ROCKY_KEYWORDS) \
-		DISTRO_VERSION=8; \
-		DISTRO_OPT=$(DISTRO_ROCKY_8); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/rocky/grub.d/rocky-9.inc: src/distros/rocky/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ROCKY_KEYWORDS) \
-		DISTRO_VERSION=9; \
-		DISTRO_OPT=$(DISTRO_ROCKY_9); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/rocky/grub.d/rocky-10.inc: src/distros/rocky/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ROCKY_KEYWORDS) \
-		DISTRO_VERSION=10; \
-		DISTRO_OPT=$(DISTRO_ROCKY_10); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/rocky/grub.d/grub.inc: $(DISTRO_ROCKY_CFG)
-	@$(do_subst_files_dt)
-
-
-#
 # IPERD config  targets
 #
 rocky-defconfig:
-	@echo "#"
-	@echo "# Rocky Linux"
-	@echo "DISTRO_ROCKY=y"
-	@echo "DISTRO_ROCKY_URL=https://dl.rockylinux.org/pub/rocky"
-	@echo "DISTRO_ROCKY_GRUB=(http,dl.rockylinux.org)/pub/rocky"
-	@echo "DISTRO_ROCKY_APPEND="
-	@echo "DISTRO_ROCKY_EXTRA_URL="
-	@echo "DISTRO_ROCKY_EXTRA_APPEND="
-	@echo "DISTRO_ROCKY_LOCAL_URL=https://dl.rockylinux.org/pub/rocky"
-	@echo "DISTRO_ROCKY_LOCAL_GRUB=(http,dl.rockylinux.org)/pub/rocky"
-	@echo "DISTRO_ROCKY_LOCAL_APPEND="
-	@for REL in 8 9 10; do \
-	   echo "DISTRO_ROCKY_$${REL}=y"; \
+	@echo '#'
+	@echo '# Rocky Linux'
+	@echo 'DISTRO_ROCKY=$(DEFAULT_ROCKY)'
+	@echo 'DISTRO_ROCKY_URL=$(DEFAULT_ROCKY_URL)'
+	@echo 'DISTRO_ROCKY_GRUB=$(DEFAULT_ROCKY_GRUB)'
+	@echo 'DISTRO_ROCKY_APPEND=$(DEFAULT_ROCKY_APPEND)'
+	@echo 'DISTRO_ROCKY_EXTRA_URL='
+	@echo 'DISTRO_ROCKY_EXTRA_APPEND='
+	@echo 'DISTRO_ROCKY_LOCAL_URL=$(DEFAULT_ROCKY_URL)'
+	@echo 'DISTRO_ROCKY_LOCAL_GRUB=$(DEFAULT_ROCKY_GRUB)'
+	@echo 'DISTRO_ROCKY_LOCAL_APPEND=$(DEFAULT_ROCKY_APPEND)'
+	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \
+	   echo "DISTRO_ROCKY_$${REL}=$(DEFAULT_ROCKY_OPT)"; \
 	done;
 
 

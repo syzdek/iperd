@@ -1,0 +1,24 @@
+
+#
+# Rocky Linux @DISTRO_VERSION@
+#
+DISTRO_ROCKY_@DISTRO_VERSION@			?= n
+ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), n)
+   DISTRO_ROCKY_CFG		+= src/distros/rocky/gen.d/rocky-@DISTRO_VERSION@.inc
+endif
+ifeq ($(DISTRO_ROCKY_@DISTRO_VERSION@), d)
+   DISTRO_ROCKY_BOOT		+= boot/rocky/@DISTRO_VERSION@/BaseOS/x86_64/os/images/pxeboot/initrd.img
+   DISTRO_ROCKY_BOOT		+= boot/rocky/@DISTRO_VERSION@/BaseOS/x86_64/os/images/pxeboot/vmlinuz
+else ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), l)
+   DISTRO_ROCKY_@DISTRO_VERSION@		:= y
+endif
+
+
+src/distros/rocky/gen.d/rocky-@DISTRO_VERSION@.inc: src/distros/rocky/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_ROCKY_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_ROCKY_@DISTRO_VERSION@); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
+

@@ -12,8 +12,10 @@
 /EFI/
 /boot/
 /src/*/source/
+/src/distros/*/gen.d/
 /src/distros/*/grub.d/
 /src/distros/*/source/
 /src/unifont/unifont-*.bdf.gz
 /src/unifont/unifont.bdf
 /tools/
+Makefile.distro.inc
