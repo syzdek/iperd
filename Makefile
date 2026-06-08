@@ -189,7 +189,7 @@ do_bsdtar		= if test "x$(V)" == "x0";then \
 			  )
 
 
-.PHONY: all clean configure defconfig distclean download update images prune
+.PHONY: all clean configure defconfig distclean distiso download update prune
 
 
 all:
@@ -248,7 +248,6 @@ ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
 endif
 include src/cfg/Makefile.inc
-include src/images/Makefile.inc
 
 
 defconfig:
@@ -272,10 +271,33 @@ defconfig:
 	@echo "# end of config"
 
 
+iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
+	@rm -f "$(@)"
+	./tools/bin/grub-mkrescue \
+	   --compress=xz  \
+	   --core-compress=xz \
+	   -o "$(@).new" \
+	   -m '*.iso' \
+	   -m '*.new' \
+	   -m '*.swp' \
+	   -m '.git' \
+	   -m '.gitignore' \
+	   -m '.iperd' \
+	   -m 'src/*/source' \
+	   -m 'src/distros/*/grub.d' \
+	   -m 'src/distros/*/source' \
+	   -m 'tools/' \
+	   -volid IPERD \
+	   -publisher "IP Engineering Rescue Disk $(IPERD_VERSION) (iperd.org)" \
+	   ./
+	@mv "$(@).new" "$(@)"
+	@touch "$(@)"
+
+
+distiso: iperd-$(IPERD_VERSION).iso
+
+
 download: $(IPERD_DOWNLOADS)
-
-
-images: src/images/.iperd
 
 
 update: $(IPERD_DEPS)
