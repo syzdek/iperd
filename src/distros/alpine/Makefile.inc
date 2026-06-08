@@ -70,7 +70,6 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 
 ifeq ($(DISTRO_ALPINE), y)
    GRUB_CFG_INCLUDES		+= src/distros/alpine/grub.d/grub.inc
-   IPERD_DOWNLOADS		+= alpine-download
    DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-header.inc.in
 
    # Alpine Linux 3.18
@@ -189,6 +188,7 @@ ifeq ($(DISTRO_ALPINE), y)
 
    DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-footer.inc.in
 endif
+IPERD_DOWNLOADS			+= $(DISTRO_ALPINE_BOOT)
 
 
 .PHONY: alpine-download alpine-defconfig
