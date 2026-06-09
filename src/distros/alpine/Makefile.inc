@@ -38,26 +38,27 @@ DISTRO_ALPINE_BOOT		:=
 DISTRO_ALPINE_SOURCE		:=
 
 
+DEFAULT_ALPINE			?= y
+DEFAULT_ALPINE_URL		?= https://mirrors.edge.kernel.org/alpine
+DEFAULT_ALPINE_GRUB		?= (http,mirrors.edge.kernel.org)/alpine
+DEFAULT_ALPINE_APPEND		?=
+DEFAULT_ALPINE_OPT		:= $(DEFAULT_ALPINE)
+DEFAULT_ALPINE_VERSIONS		:= 3.18 \
+				   3.19 \
+				   3.20 \
+				   3.21 \
+				   3.22 \
+				   3.23
+
+
 DISTRO_ALPINE			?= n
 DISTRO_ALPINE_MIRROR		?= n
-DISTRO_ALPINE_URL		?= https://mirrors.edge.kernel.org/alpine
-DISTRO_ALPINE_GRUB		?= (http,mirrors.edge.kernel.org)/alpine
-DISTRO_ALPINE_APPEND		?=
-DISTRO_ALPINE_LOCAL_URL		?= https://mirrors.edge.kernel.org/alpine
-DISTRO_ALPINE_LOCAL_GRUB	?= (http,mirrors.edge.kernel.org)/alpine
-DISTRO_ALPINE_LOCAL_APPEND	?=
-DISTRO_ALPINE_318_x86		?= n
-DISTRO_ALPINE_318_x8664		?= n
-DISTRO_ALPINE_319_x86		?= n
-DISTRO_ALPINE_319_x8664		?= n
-DISTRO_ALPINE_320_x86		?= n
-DISTRO_ALPINE_320_x8664		?= n
-DISTRO_ALPINE_321_x86		?= n
-DISTRO_ALPINE_321_x8664		?= n
-DISTRO_ALPINE_322_x86		?= n
-DISTRO_ALPINE_322_x8664		?= n
-DISTRO_ALPINE_323_x86		?= n
-DISTRO_ALPINE_323_x8664		?= n
+DISTRO_ALPINE_URL		?= $(DEFAULT_ALPINE_URL)
+DISTRO_ALPINE_GRUB		?= $(DEFAULT_ALPINE_GRUB)
+DISTRO_ALPINE_APPEND		?= $(DEFAULT_ALPINE_APPEND)
+DISTRO_ALPINE_LOCAL_URL		?= $(DISTRO_ALPINE_URL)
+DISTRO_ALPINE_LOCAL_GRUB	?= $(DISTRO_ALPINE_GRUB)
+DISTRO_ALPINE_LOCAL_APPEND	?= $(DISTRO_ALPINE_APPEND)
 
 
 DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
@@ -68,130 +69,32 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_ALPINE_LOCAL_URL)';
 
 
-ifeq ($(DISTRO_ALPINE), y)
-   GRUB_CFG_INCLUDES		+= src/distros/alpine/grub.d/grub.inc
-   DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-header.inc.in
+.PHONY: alpine-download alpine-defconfig
 
-   # Alpine Linux 3.18
-   ifneq ($(DISTRO_ALPINE_318_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.18-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_318_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.18/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_318_x86), l)
-      DISTRO_ALPINE_318_x86	:= y
-   endif
 
-   ifneq ($(DISTRO_ALPINE_318_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.18-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_318_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.18/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_318_x8664), l)
-      DISTRO_ALPINE_318_x8664	:= y
-   endif
+src/distros/alpine/gen.d/Makefile.inc: .config src/distros/alpine/Makefile.distro.in
+	@echo "  SED      $(@)"
+	@rm -f "$(@)"
+	@mkdir -p src/distros/alpine/gen.d
+	@for REL in $(DEFAULT_ALPINE_VERSIONS); do \
+	   TAG="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
+	   sed \
+	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
+	      -e "s/[@]DISTRO_TAG[@]/$${TAG}/g" \
+	      src/distros/alpine/Makefile.distro.in; \
+	done > "$(@)";
+	@touch "$(@)"
 
-   # Alpine Linux 3.19
-   ifneq ($(DISTRO_ALPINE_319_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.19-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_319_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.19/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_319_x86), l)
-      DISTRO_ALPINE_319_x86	:= y
-   endif
 
-   ifneq ($(DISTRO_ALPINE_319_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.19-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_319_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.19/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_319_x8664), l)
-      DISTRO_ALPINE_319_x8664	:= y
-   endif
-
-   # Alpine Linux 3.20
-   ifneq ($(DISTRO_ALPINE_320_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.20-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_320_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.20/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_320_x86), l)
-      DISTRO_ALPINE_320_x86	:= y
-   endif
-
-   ifneq ($(DISTRO_ALPINE_320_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.20-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_320_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.20/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_320_x8664), l)
-      DISTRO_ALPINE_320_x8664	:= y
-   endif
-
-   # Alpine Linux 3.21
-   ifneq ($(DISTRO_ALPINE_321_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.21-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_321_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.21/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_321_x86), l)
-      DISTRO_ALPINE_321_x86	:= y
-   endif
-
-   ifneq ($(DISTRO_ALPINE_321_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.21-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_321_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.21/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_321_x8664), l)
-      DISTRO_ALPINE_321_x8664	:= y
-   endif
-
-   # Alpine Linux 3.22
-   ifneq ($(DISTRO_ALPINE_322_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.22-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_322_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.22/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_322_x86), l)
-      DISTRO_ALPINE_322_x86	:= y
-   endif
-
-   ifneq ($(DISTRO_ALPINE_322_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.22-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_322_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.22/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_322_x8664), l)
-      DISTRO_ALPINE_322_x8664	:= y
-   endif
-
-   # Alpine Linux 3.23
-   ifneq ($(DISTRO_ALPINE_323_x86), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.23-x86.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_323_x86), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.23/main/x86/.iperd
-   else ifneq ($(DISTRO_ALPINE_323_x86), l)
-      DISTRO_ALPINE_323_x86	:= y
-   endif
-
-   ifneq ($(DISTRO_ALPINE_323_x8664), n)
-      DISTRO_ALPINE_CFG		+= src/distros/alpine/grub.d/alpine-3.23-x86_64.inc
-   endif
-   ifeq ($(DISTRO_ALPINE_323_x8664), d)
-      DISTRO_ALPINE_BOOT	+= boot/alpine/v3.23/main/x86_64/.iperd
-   else ifneq ($(DISTRO_ALPINE_323_x8664), l)
-      DISTRO_ALPINE_323_x8664	:= y
-   endif
-
-   DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-footer.inc.in
-endif
+GRUB_CFG_INCLUDES		+= src/distros/alpine/gen.d/grub.inc
+DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-header.inc.in
+-include src/distros/alpine/gen.d/Makefile.inc
+DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ALPINE_BOOT)
 
 
-.PHONY: alpine-download alpine-defconfig
+src/distros/alpine/gen.d/grub.inc: $(DISTRO_ALPINE_CFG)
+	@$(do_subst_files_dt)
 
 
 #
@@ -269,137 +172,23 @@ alpine-download: $(DISTRO_ALPINE_BOOT)
 
 
 #
-# Grub include targets
-#
-# Alpine Linux 3.18.x
-src/distros/alpine/grub.d/alpine-3.18-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.18; \
-		DISTRO_OPT=$(DISTRO_ALPINE_318_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.18-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.18; \
-		DISTRO_OPT=$(DISTRO_ALPINE_318_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux 3.19.x
-src/distros/alpine/grub.d/alpine-3.19-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.19; \
-		DISTRO_OPT=$(DISTRO_ALPINE_319_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.19-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.19; \
-		DISTRO_OPT=$(DISTRO_ALPINE_319_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux 3.20.x
-src/distros/alpine/grub.d/alpine-3.20-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.20; \
-		DISTRO_OPT=$(DISTRO_ALPINE_320_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.20-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.20; \
-		DISTRO_OPT=$(DISTRO_ALPINE_320_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux 3.21.x
-src/distros/alpine/grub.d/alpine-3.21-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.21; \
-		DISTRO_OPT=$(DISTRO_ALPINE_321_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.21-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.21; \
-		DISTRO_OPT=$(DISTRO_ALPINE_321_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux 3.22.x
-src/distros/alpine/grub.d/alpine-3.22-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.22; \
-		DISTRO_OPT=$(DISTRO_ALPINE_322_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.22-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.22; \
-		DISTRO_OPT=$(DISTRO_ALPINE_322_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux 3.23.x
-src/distros/alpine/grub.d/alpine-3.23-x86.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.23; \
-		DISTRO_OPT=$(DISTRO_ALPINE_323_x86); \
-		DISTRO_ARCH=x86; \
-		$(do_subst_finish)
-
-src/distros/alpine/grub.d/alpine-3.23-x86_64.inc: src/distros/alpine/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_ALPINE_KEYWORDS) \
-		DISTRO_VERSION=3.23; \
-		DISTRO_OPT=$(DISTRO_ALPINE_323_x8664); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-# Alpine Linux Section
-src/distros/alpine/grub.d/grub.inc: $(DISTRO_ALPINE_CFG)
-	@$(do_subst_files_dt)
-
-
-#
 # IPERD config targets
 #
 alpine-defconfig:
 	@echo "#"
 	@echo "# Alpine Linux"
-	@echo "DISTRO_ALPINE=y"
-	@echo "DISTRO_ALPINE_URL=https://mirrors.edge.kernel.org/alpine"
-	@echo "DISTRO_ALPINE_GRUB=(http,mirrors.edge.kernel.org)/alpine"
-	@echo "DISTRO_ALPINE_APPEND="
-	@echo "DISTRO_ALPINE_LOCAL_URL=https://mirrors.edge.kernel.org/alpine"
-	@echo "DISTRO_ALPINE_LOCAL_GRUB=(http,mirrors.edge.kernel.org)/alpine"
-	@echo "DISTRO_ALPINE_LOCAL_APPEND="
-	@for REL in 318 319 320 321 322 323; do \
-	   echo "DISTRO_ALPINE_$${REL}_x86=y"; \
-	   echo "DISTRO_ALPINE_$${REL}_x8664=y"; \
+	@echo "DISTRO_ALPINE=$(DEFAULT_ALPINE)"
+	@echo "DISTRO_ALPINE_URL=$(DEFAULT_ALPINE_URL)"
+	@echo "DISTRO_ALPINE_GRUB=$(DEFAULT_ALPINE_GRUB)"
+	@echo "DISTRO_ALPINE_APPEND=$(DEFAULT_ALPINE_APPEND)"
+	@echo "DISTRO_ALPINE_LOCAL_URL=$(DEFAULT_ALPINE_URL)"
+	@echo "DISTRO_ALPINE_LOCAL_GRUB=$(DEFAULT_ALPINE_GRUB)"
+	@echo "DISTRO_ALPINE_LOCAL_APPEND=$(DEFAULT_ALPINE_APPEND)"
+	@for REL in $(DEFAULT_ALPINE_VERSIONS); do \
+	   REL="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
+	   echo "DISTRO_ALPINE_$${REL}_x86=$(DEFAULT_ALPINE_OPT)"; \
+	   echo "DISTRO_ALPINE_$${REL}_x8664=$(DEFAULT_ALPINE_OPT)"; \
 	done;
+
 
 # end of Makefile.inc

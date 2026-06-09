@@ -1,0 +1,46 @@
+
+#
+# Alpine Linux @DISTRO_VERSION@ (x86)
+#
+DISTRO_ALPINE_@DISTRO_TAG@_x86		?= n
+ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), n)
+   DISTRO_ALPINE_CFG		+= src/distros/alpine/gen.d/alpine-@DISTRO_VERSION@-x86.inc
+endif
+ifeq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), d)
+   DISTRO_ALPINE_BOOT		+= boot/alpine/v@DISTRO_VERSION@/main/x86/.iperd
+else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), l)
+   DISTRO_ALPINE_@DISTRO_TAG@_x86	:= y
+endif
+
+
+src/distros/alpine/gen.d/alpine-@DISTRO_VERSION@-x86.inc: src/distros/alpine/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_ALPINE_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_ALPINE_@DISTRO_TAG@_x86); \
+		DISTRO_ARCH=x86; \
+		$(do_subst_finish)
+
+
+#
+# Alpine Linux @DISTRO_VERSION@ (x86_64)
+#
+DISTRO_ALPINE_@DISTRO_TAG@_x8664		?= n
+ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), n)
+   DISTRO_ALPINE_CFG		+= src/distros/alpine/gen.d/alpine-@DISTRO_VERSION@-x86_64.inc
+endif
+ifeq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), d)
+   DISTRO_ALPINE_BOOT		+= boot/alpine/v@DISTRO_VERSION@/main/x86_64/.iperd
+else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), l)
+   DISTRO_ALPINE_@DISTRO_TAG@_x8664	:= y
+endif
+
+
+src/distros/alpine/gen.d/alpine-@DISTRO_VERSION@-x86_64.inc: src/distros/alpine/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_ALPINE_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_ALPINE_@DISTRO_TAG@_x8664); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
+
