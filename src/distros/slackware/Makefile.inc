@@ -37,22 +37,25 @@ DISTRO_SLACKWARE_CFG		:=
 DISTRO_SLACKWARE_BOOT		:=
 
 
+DEFAULT_SLACKWARE		?= y
+DEFAULT_SLACKWARE_URL		?= https://mirrors.edge.kernel.org/slackware
+DEFAULT_SLACKWARE_GRUB		?= (http,mirrors.edge.kernel.org)/slackware
+DEFAULT_SLACKWARE_APPEND	?=
+DEFAULT_SLACKWARE_OPT		:= $(DEFAULT_SLACKWARE)
+DEFAULT_SLACKWARE_VERSIONS	:= 14.0 \
+				   14.1 \
+				   14.2 \
+				   15.0
+
+
 DISTRO_SLACKWARE		?= n
 DISTRO_SLACKWARE_MIRROR		?= n
-DISTRO_SLACKWARE_URL		?= https://mirrors.edge.kernel.org/slackware
-DISTRO_SLACKWARE_GRUB		?= (http,mirrors.edge.kernel.org)/slackware
-DISTRO_SLACKWARE_APPEND		?= SLACK_KERNEL=hugesmp.s
-DISTRO_SLACKWARE_LOCAL_URL	?= https://mirrors.edge.kernel.org/slackware
-DISTRO_SLACKWARE_LOCAL_GRUB	?= (http,mirrors.edge.kernel.org)/slackware
-DISTRO_SLACKWARE_LOCAL_APPEND	?= SLACK_KERNEL=hugesmp.s
-DISTRO_SLACKWARE_140		?= n
-DISTRO_SLACKWARE_141		?= n
-DISTRO_SLACKWARE_142		?= n
-DISTRO_SLACKWARE_150		?= n
-DISTRO_SLACKWARE64_140		?= n
-DISTRO_SLACKWARE64_141		?= n
-DISTRO_SLACKWARE64_142		?= n
-DISTRO_SLACKWARE64_150		?= n
+DISTRO_SLACKWARE_URL		?= $(DEFAULT_SLACKWARE_URL)
+DISTRO_SLACKWARE_GRUB		?= $(DEFAULT_SLACKWARE_GRUB)
+DISTRO_SLACKWARE_APPEND		?= $(DEFAULT_SLACKWARE_APPEND)
+DISTRO_SLACKWARE_LOCAL_URL	?= $(DISTRO_SLACKWARE_URL)
+DISTRO_SLACKWARE_LOCAL_GRUB	?= $(DISTRO_SLACKWARE_GRUB)
+DISTRO_SLACKWARE_LOCAL_APPEND	?= $(DISTRO_SLACKWARE_APPEND)
 
 
 DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
@@ -63,96 +66,32 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_SLACKWARE_LOCAL_URL)';
 
 
-ifeq ($(DISTRO_SLACKWARE), y)
-   GRUB_CFG_INCLUDES		+= src/distros/slackware/grub.d/grub.inc
-   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
+.PHONY: slackware-download slackware-defconfig
 
-   ifneq ($(DISTRO_SLACKWARE_140), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware-14.0.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE_140), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.0/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE_140), l)
-      DISTRO_SLACKWARE_140	:= y
-   endif
 
-   ifneq ($(DISTRO_SLACKWARE_141), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware-14.1.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE_141), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.1/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE_141), l)
-      DISTRO_SLACKWARE_141	:= y
-   endif
+src/distros/slackware/gen.d/Makefile.inc: .config src/distros/slackware/Makefile.distro.in
+	@echo "  SED      $(@)"
+	@rm -f "$(@)"
+	@mkdir -p src/distros/slackware/gen.d
+	@for REL in $(DEFAULT_SLACKWARE_VERSIONS); do \
+	   TAG="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
+	   sed \
+	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
+	      -e "s/[@]DISTRO_TAG[@]/$${TAG}/g" \
+	      src/distros/slackware/Makefile.distro.in; \
+	done > "$(@)";
+	@touch "$(@)"
 
-   ifneq ($(DISTRO_SLACKWARE_142), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware-14.2.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE_142), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-14.2/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE_142), l)
-      DISTRO_SLACKWARE_142	:= y
-   endif
 
-   ifneq ($(DISTRO_SLACKWARE_150), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware-15.0.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE_150), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-15.0/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE_150), l)
-      DISTRO_SLACKWARE_150	:= y
-   endif
-
-   ifneq ($(DISTRO_SLACKWARE64_140), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware64-14.0.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE64_140), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.0/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE64_140), l)
-      DISTRO_SLACKWARE64_140	:= y
-   endif
-
-   ifneq ($(DISTRO_SLACKWARE64_141), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware64-14.1.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE64_141), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.1/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE64_141), l)
-      DISTRO_SLACKWARE64_141	:= y
-   endif
-
-   ifneq ($(DISTRO_SLACKWARE64_142), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware64-14.2.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE64_142), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-14.2/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE64_142), l)
-      DISTRO_SLACKWARE64_142	:= y
-   endif
-
-   ifneq ($(DISTRO_SLACKWARE64_150), n)
-      DISTRO_SLACKWARE_CFG	+= src/distros/slackware/grub.d/slackware64-15.0.inc
-   endif
-   ifeq ($(DISTRO_SLACKWARE64_150), d)
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/isolinux/initrd.img
-      DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-15.0/kernels/huge.s/bzImage
-   else ifneq ($(DISTRO_SLACKWARE64_150), l)
-      DISTRO_SLACKWARE64_150	:= y
-   endif
-
-   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
-endif
+GRUB_CFG_INCLUDES		+= src/distros/slackware/gen.d/grub.inc
+DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
+-include src/distros/slackware/gen.d/Makefile.inc
+DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_SLACKWARE_BOOT)
 
 
-.PHONY: slackware-download
+src/distros/slackware/gen.d/grub.inc: $(DISTRO_SLACKWARE_CFG)
+	@$(do_subst_files_dt)
 
 
 #
@@ -172,108 +111,21 @@ slackware-download: $(DISTRO_SLACKWARE_BOOT)
 
 
 #
-# Grub include targets
-#
-src/distros/slackware/grub.d/slackware-14.0.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.0; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE_140); \
-		DISTRO_ARCH=x86; \
-		DISTRO_SUFFIX=; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware64-14.0.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.0; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE64_140); \
-		DISTRO_ARCH=x86_64; \
-		DISTRO_SUFFIX=64; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware-14.1.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.1; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE_141); \
-		DISTRO_ARCH=x86; \
-		DISTRO_SUFFIX=; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware64-14.1.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.1; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE64_141); \
-		DISTRO_ARCH=x86_64; \
-		DISTRO_SUFFIX=64; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware-14.2.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.2; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE_142); \
-		DISTRO_ARCH=x86; \
-		DISTRO_SUFFIX=; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware64-14.2.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=14.2; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE64_142); \
-		DISTRO_ARCH=x86_64; \
-		DISTRO_SUFFIX=64; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware-15.0.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=15.0; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE_150); \
-		DISTRO_ARCH=x86; \
-		DISTRO_SUFFIX=; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/slackware64-15.0.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_SLACKWARE_KEYWORDS) \
-		DISTRO_VERSION=15.0; \
-		DISTRO_OPT=$(DISTRO_SLACKWARE64_150); \
-		DISTRO_ARCH=x86_64; \
-		DISTRO_SUFFIX=64; \
-		$(do_subst_finish)
-
-
-src/distros/slackware/grub.d/grub.inc: $(DISTRO_SLACKWARE_CFG)
-	@$(do_subst_files_dt)
-
-
-#
 # IPERD config  targets
 #
 slackware-defconfig:
 	@echo "#"
 	@echo "# Slackware Linux"
-	@echo "DISTRO_SLACKWARE=y"
-	@echo "DISTRO_SLACKWARE_URL=https://mirrors.edge.kernel.org/slackware"
-	@echo "DISTRO_SLACKWARE_GRUB=(http,mirrors.edge.kernel.org)/slackware"
-	@echo "DISTRO_SLACKWARE_APPEND="
-	@echo "DISTRO_SLACKWARE_LOCAL_URL=https://mirrors.edge.kernel.org/slackware"
-	@echo "DISTRO_SLACKWARE_LOCAL_GRUB=(http,mirrors.edge.kernel.org)/slackware"
-	@echo "DISTRO_SLACKWARE_LOCAL_APPEND="
-	@for REL in 140 141 142 150; do \
-	   echo "DISTRO_SLACKWARE_$${REL}=y"; \
-	   echo "DISTRO_SLACKWARE64_$${REL}=y"; \
+	@echo "DISTRO_SLACKWARE=$(DEFAULT_SLACKWARE)"
+	@echo "DISTRO_SLACKWARE_URL=$(DEFAULT_SLACKWARE_URL)"
+	@echo "DISTRO_SLACKWARE_GRUB=$(DEFAULT_SLACKWARE_GRUB)"
+	@echo "DISTRO_SLACKWARE_APPEND=$(DEFAULT_SLACKWARE_APPEND)"
+	@echo "DISTRO_SLACKWARE_LOCAL_URL=$(DEFAULT_SLACKWARE_URL)"
+	@echo "DISTRO_SLACKWARE_LOCAL_GRUB=$(DEFAULT_SLACKWARE_GRUB)"
+	@echo "DISTRO_SLACKWARE_LOCAL_APPEND=$(DEFAULT_SLACKWARE_APPEND)"
+	@for REL in $(DEFAULT_SLACKWARE_VERSIONS); do \
+	   echo "DISTRO_SLACKWARE_$${REL}=$(DEFAULT_SLACKWARE_OPT)"; \
+	   echo "DISTRO_SLACKWARE64_$${REL}=$(DEFAULT_SLACKWARE_OPT)"; \
 	done;
 
 

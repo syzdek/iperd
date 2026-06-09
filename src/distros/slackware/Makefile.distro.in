@@ -1,0 +1,50 @@
+
+#
+# Slackware Linux @DISTRO_VERSION@ (x86)
+#
+DISTRO_SLACKWARE_@DISTRO_TAG@		?= n
+ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), n)
+   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/gen.d/slackware-@DISTRO_VERSION@.inc
+endif
+ifeq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), d)
+   DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-@DISTRO_VERSION@/isolinux/initrd.img
+   DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-@DISTRO_VERSION@/kernels/huge.s/bzImage
+else ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), l)
+   DISTRO_SLACKWARE_@DISTRO_TAG@		:= y
+endif
+
+
+src/distros/slackware/gen.d/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE_@DISTRO_TAG@); \
+		DISTRO_ARCH=x86; \
+		DISTRO_SUFFIX=; \
+		$(do_subst_finish)
+
+
+#
+# Slackware Linux @DISTRO_VERSION@ (x86_64)
+#
+DISTRO_SLACKWARE64_@DISTRO_TAG@		?= n
+ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), n)
+   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/gen.d/slackware64-@DISTRO_VERSION@.inc
+endif
+ifeq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), d)
+   DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-@DISTRO_VERSION@/isolinux/initrd.img
+   DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-@DISTRO_VERSION@/kernels/huge.s/bzImage
+else ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), l)
+   DISTRO_SLACKWARE64_@DISTRO_TAG@	:= y
+endif
+
+
+src/distros/slackware/gen.d/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_SLACKWARE_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_SLACKWARE64_@DISTRO_TAG@); \
+		DISTRO_ARCH=x86_64; \
+		DISTRO_SUFFIX=64; \
+		$(do_subst_finish)
+
