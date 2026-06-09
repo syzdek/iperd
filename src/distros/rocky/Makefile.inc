@@ -70,10 +70,11 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_ROCKY_LOCAL_URL)';
 
 
-.PHONY: rocky-download
+.PHONY: rocky-download rocky-defconfig
 
 
 src/distros/rocky/gen.d/Makefile.inc: .config src/distros/rocky/Makefile.distro.in
+	@echo "  SED      $(@)"
 	@rm -f "$(@)"
 	@mkdir -p src/distros/rocky/gen.d
 	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \
