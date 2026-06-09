@@ -43,7 +43,7 @@ insmod vbe
 insmod fat
 insmod chain
 insmod usb
-insmod usb_keyboard
+#insmod usb_keyboard
 insmod usbms
 insmod serial
 insmod regexp
