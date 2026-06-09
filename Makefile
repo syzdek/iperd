@@ -59,7 +59,7 @@ IPERD_DEPS		= src/netdir/.iperd \
 DATE			= $(shell date +%Y-%m-%d)
 
 
-IPERD_GIT_REF		:= $(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 
 
 DISTCLEANFILES		= boot \
