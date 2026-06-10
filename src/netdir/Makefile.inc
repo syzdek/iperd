@@ -47,7 +47,7 @@ GRUBNET_MODULES			= http tftp net gzio \
 				  linux
 
 
-boot/grub/.iperd: var/grub/.iperd src/themes/.iperd
+boot/grub/.iperd: var/grub/.iperd var/themes/.iperd
 	@rm -Rf grub
 	./tools/bin/grub-mknetdir \
 	   --modules="$(GRUBNET_MODULES)" \
@@ -56,8 +56,7 @@ boot/grub/.iperd: var/grub/.iperd src/themes/.iperd
 	   --core-compress=xz \
 	   --net-directory=$(IPERD_ROOT) \
 	   --subdir=/boot/grub
-	find boot/grub -type f -exec chmod go+r  {} \; || exit 1;
-	find boot/grub -type d -exec chmod go+rx {} \; || exit 1;
+	@CHMOD_DIR="$(@D)"; $(do_chmod);
 	@touch $(@)
 
 
