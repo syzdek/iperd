@@ -28,8 +28,7 @@
 #   SUCH DAMAGE.
 #
 
-DISTCLEANFILES			+= src/grub/grub-*.tar.xz \
-				   src/grub/source
+DISTCLEANFILES			+=
 CLEANFILES			+=
 
 
@@ -44,8 +43,8 @@ GRUB_SHA512			:= 5008e3b70072798d2b34301219fe174cc6bcfead40a9ab25fe32f30c62a392f
 GRUB_ROOT			:= $(IPERD_ROOT)/src/grub
 
 
-GRUB_BUILDDIR			:= src/grub/source/build
-GRUB_DEPENDENCIES 		:= src/grub/grub-$(GRUB_VERSION).tar.xz \
+GRUB_BUILDDIR			:= var/grub/source/build
+GRUB_DEPENDENCIES 		:= var/grub/grub-$(GRUB_VERSION).tar.xz \
 				   src/dejavu/.iperd \
 				   src/unifont/.iperd
 GRUB_PLATFORMS			:= tools/iperd/grub_i386_pc \
@@ -69,111 +68,95 @@ GRUB_CONFIGURE			:= ../configure\
 #
 # unpack source
 #
-src/grub/grub-$(GRUB_VERSION).tar.xz:
-	@rm -f $(@) $(@).new
-	wget -q -O $(@).new "$(GRUB_MIRROR)"
-	@echo "$(GRUB_SHA1) $(@).new"   |sha1sum   --check > /dev/null
-	@echo "$(GRUB_SHA256) $(@).new" |sha256sum --check > /dev/null
-	@echo "$(GRUB_SHA512) $(@).new" |sha512sum --check > /dev/null
-	mv $(@).new $(@)
+var/grub/grub-$(GRUB_VERSION).tar.xz:
+	@mkdir -p "$(@D)"
+	@WGET_FILE="$(@)"; \
+		WGET_URL="$(GRUB_MIRROR)"; \
+		WGET_SHA1="$(GRUB_SHA1)"; \
+		WGET_SHA256="$(GRUB_SHA256)"; \
+		WGET_SHA512="$(GRUB_SHA512)"; \
+		$(do_wget);
+
+
+var/grub/source/.iperd: $(GRUB_DEPENDENCIES)
+	@TAR_FILE="var/grub/grub-$(GRUB_VERSION).tar.xz"; \
+		TAR_DIR="$(@D)"; \
+		$(do_tar);
 	@touch $(@)
-
-
-src/grub/source/.iperd: $(GRUB_DEPENDENCIES)
-	@rm -Rf src/grub/source
-	@mkdir  src/grub/source
-	tar -C  src/grub/source -xf src/grub/grub-$(GRUB_VERSION).tar.xz --strip-components=1
-	( cd src/grub/source && patch -p1 < ../grub-title.patch )
-	find src/grub/source -type f -exec chmod ugo+r  {} \; || exit 1;
-	find src/grub/source -type d -exec chmod ugo+rx {} \; || exit 1;
-	@touch $(@)
-
-
-#
-# make front-end tools
-#
-$(GRUB_BUILDDIR)/.iperd: src/grub/source/.iperd
-	@rm -Rf $(GRUB_BUILDDIR)
-	mkdir   $(GRUB_BUILDDIR)
-	( cd    $(GRUB_BUILDDIR) && $(GRUB_CONFIGURE) --target=i386 --with-platform=pc )
-	make -C $(GRUB_BUILDDIR) -j 4 V=$(V)
-	@touch $(@)
-
-
-tools/iperd/grub: $(GRUB_PLATFORMS) $(GRUB_BUILDDIR)/.iperd
-	@rm -f $(@)
-	@mkdir -p tools/iperd/
-	make -C $(GRUB_BUILDDIR) V=$(V) install
+	@PATCH_FILE="$(IPERD_ROOT)/src/grub/grub-title.patch"; \
+		PATCH_DIR="$(@D)"; \
+		$(do_patch);
+	@CHMOD_DIR="$(@D)"; $(do_chmod);
 	@touch $(@)
 
 
 #
 # build for i386-pc
 #
-$(GRUB_BUILDDIR)_i386_pc/.iperd: src/grub/source/.iperd
+$(GRUB_BUILDDIR)_i386_pc/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_i386_pc
-	mkdir   $(GRUB_BUILDDIR)_i386_pc
+	@mkdir   $(GRUB_BUILDDIR)_i386_pc
 	( cd    $(GRUB_BUILDDIR)_i386_pc && $(GRUB_CONFIGURE) --target=i386 --with-platform=pc )
-	make -C $(GRUB_BUILDDIR)_i386_pc -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_pc -j $(IPERD_NUMJOBS) V=$(V)
 	@touch $(@)
 
 
 tools/iperd/grub_i386_pc: $(GRUB_BUILDDIR)_i386_pc/.iperd
 	@rm -f $(@)
 	@mkdir -p tools/iperd/
-	make -C $(GRUB_BUILDDIR)_i386_pc V=$(V) install
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_pc V=$(V) install
 	@touch $(@)
 
 
 #
 # build for i386-efi
 #
-$(GRUB_BUILDDIR)_i386_efi/.iperd: src/grub/source/.iperd
+$(GRUB_BUILDDIR)_i386_efi/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_i386_efi
-	mkdir   $(GRUB_BUILDDIR)_i386_efi
+	@mkdir   $(GRUB_BUILDDIR)_i386_efi
 	( cd    $(GRUB_BUILDDIR)_i386_efi && $(GRUB_CONFIGURE) --target=i386 --with-platform=efi )
-	make -C $(GRUB_BUILDDIR)_i386_efi -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_efi -j $(IPERD_NUMJOBS) V=$(V)
 	@touch $(@)
 
 
 tools/iperd/grub_i386_efi: $(GRUB_BUILDDIR)_i386_efi/.iperd
 	@rm -f $(@)
 	@mkdir -p tools/iperd/
-	make -C $(GRUB_BUILDDIR)_i386_efi V=$(V) install
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_efi V=$(V) install
 	@touch $(@)
 
 
 #
 # build for x86_64-efi
 #
-$(GRUB_BUILDDIR)_x86_64_efi/.iperd: src/grub/source/.iperd
+$(GRUB_BUILDDIR)_x86_64_efi/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_x86_64_efi
-	mkdir   $(GRUB_BUILDDIR)_x86_64_efi
+	@mkdir   $(GRUB_BUILDDIR)_x86_64_efi
 	( cd    $(GRUB_BUILDDIR)_x86_64_efi && $(GRUB_CONFIGURE) --target=x86_64 --with-platform=efi )
-	make -C $(GRUB_BUILDDIR)_x86_64_efi -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_x86_64_efi -j $(IPERD_NUMJOBS) V=$(V)
 	@touch $(@)
 
 
 tools/iperd/grub_x86_64_efi: $(GRUB_BUILDDIR)_x86_64_efi/.iperd
 	@rm -f $(@)
 	@mkdir -p tools/iperd/
-	make -C $(GRUB_BUILDDIR)_x86_64_efi V=$(V) install
+	$(MAKE) -C $(GRUB_BUILDDIR)_x86_64_efi V=$(V) install
 	@touch $(@)
 
 
 #
 # default grub target
 #
-src/grub/.iperd: $(GRUB_PLATFORMS)
+var/grub/.iperd: $(GRUB_PLATFORMS)
 	@touch $(@)
 
 
 grub-prune:
-	test -f src/grub/source/build_i386_efi/Makefile \
-		&& $(MAKE) -C src/grub/source/build_i386_efi clean
-	test -f src/grub/source/build_i386_pc/Makefile \
-		&& $(MAKE) -C src/grub/source/build_i386_pc clean
-	test -f src/grub/source/build_x86_64_efi/Makefile \
-		&& $(MAKE) -C src/grub/source/build_x86_64_efi clean
+	test -f var/grub/source/build_i386_efi/Makefile \
+		&& $(MAKE) -C var/grub/source/build_i386_efi clean
+	test -f var/grub/source/build_i386_pc/Makefile \
+		&& $(MAKE) -C var/grub/source/build_i386_pc clean
+	test -f var/grub/source/build_x86_64_efi/Makefile \
+		&& $(MAKE) -C var/grub/source/build_x86_64_efi clean
 
 # end of makefile

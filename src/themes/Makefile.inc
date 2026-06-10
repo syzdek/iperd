@@ -33,7 +33,7 @@ CLEANFILES		+=
 
 
 THEME_DEPENDENCIES	:= src/dejavu/.iperd \
-			   src/grub/.iperd \
+			   var/grub/.iperd \
 			   src/unifont/.iperd
 THEME_FONTS		:= tools/share/grub/themes/iperd/dejavu_10.pf2 \
 			   tools/share/grub/themes/iperd/dejavu_12.pf2 \

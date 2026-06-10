@@ -47,7 +47,7 @@ GRUBNET_MODULES			= http tftp net gzio \
 				  linux
 
 
-boot/grub/.iperd: src/grub/.iperd src/themes/.iperd
+boot/grub/.iperd: var/grub/.iperd src/themes/.iperd
 	@rm -Rf grub
 	./tools/bin/grub-mknetdir \
 	   --modules="$(GRUBNET_MODULES)" \
