@@ -172,9 +172,22 @@ do_wget			= if test "x$(V)" == "x0";then \
 			  else \
 			     echo "wget -q -O $${WGET_FILE} $${WGET_URL}"; \
 			  fi; \
-			  rm -f "$${WGET_FILE}" || exit 1; \
-			  wget -q -O "$${WGET_FILE}" "$${WGET_URL}" || exit; \
-			  chmod 644 "$${WGET_FILE}" || exit 1; \
+			  rm -f "$${WGET_FILE}" "$${WGET_FILE}.new" || exit 1; \
+			  wget -q -O "$${WGET_FILE}.new" "$${WGET_URL}" || exit; \
+			  chmod 644 "$${WGET_FILE}.new" || exit 1; \
+			  if test ! -z "$${WGET_SHA1}"; then \
+			     echo "$${WGET_SHA1}" "$${WGET_FILE}.new" \
+			        |sha1sum   --check > /dev/null || exit 1; \
+			  fi; \
+			  if test ! -z "$${WGET_SHA256}"; then \
+			     echo "$${WGET_SHA256}" "$${WGET_FILE}.new" \
+			        |sha256sum   --check > /dev/null || exit 1; \
+			  fi; \
+			  if test ! -z "$${WGET_SHA512}"; then \
+			     echo "$${WGET_SHA512}" "$${WGET_FILE}.new" \
+			        |sha512sum   --check > /dev/null || exit 1; \
+			  fi; \
+			  mv "$${WGET_FILE}.new" "$${WGET_FILE}" || exit 1; \
 			  touch "$${WGET_FILE}"
 
 
