@@ -204,6 +204,15 @@ do_bsdtar		= BSD_PWD="$$(pwd)"; \
 			    chmod -R u+w .; \
 			  )
 
+
+do_patch		= if test "x$(V)" == "x0";then \
+			     echo "  PATCH    $${PATCH_FILE}"; \
+			  else \
+			     echo "( cd '$${PATCH_DIR}' && patch -p1 < '$${PATCH_FILE}' )"; \
+			  fi; \
+			  (cd "$${PATCH_DIR}" && patch -p1 < "$${PATCH_FILE}" > /dev/null )
+
+
 do_tar			= if test "x$(V)" == "x0";then \
 			     echo "  TAR      $${TAR_FILE}"; \
 			  else \
