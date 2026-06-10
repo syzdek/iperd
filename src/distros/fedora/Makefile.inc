@@ -4,8 +4,8 @@
 #
 #   Redistribution and use in source and binary forms, with or without
 #   modification, are permitted provided that the following conditions are
-#   met:                     
-#                         
+#   met:
+#
 #      * Redistributions of source code must retain the above copyright
 #        notice, this list of conditions and the following disclaimer.
 #      * Redistributions in binary form must reproduce the above copyright
@@ -37,78 +37,58 @@ DISTRO_FEDORA_CFG		:=
 DISTRO_FEDORA_BOOT		:=
 
 
+DEFAULT_FEDORA			?= y
+DEFAULT_FEDORA_URL		?= https://mirrors.edge.kernel.org/fedora/releases
+DEFAULT_FEDORA_GRUB		?= (http,mirrors.edge.kernel.org)/fedora/releases
+DEFAULT_FEDORA_APPEND		?=
+DEFAULT_FEDORA_OPT		?= $(DEFAULT_FEDORA)
+DEFAULT_FEDORA_VERSIONS		?= 42 \
+				   43 \
+				   44
+
+
 DISTRO_FEDORA			?= n
 DISTRO_FEDORA_MIRROR		?= n
-DISTRO_FEDORA_URL		?= https://mirrors.edge.kernel.org/fedora/releases
-DISTRO_FEDORA_GRUB		?= (http,mirrors.edge.kernel.org)/fedora/releases
-DISTRO_FEDORA_APPEND		?=
-DISTRO_FEDORA_EXTRA_URL		?=
-DISTRO_FEDORA_EXTRA_GRUB	?=
-DISTRO_FEDORA_EXTRA_APPEND	?=
-DISTRO_FEDORA_LOCAL_URL		?= https://mirrors.edge.kernel.org/fedora/releases
-DISTRO_FEDORA_LOCAL_GRUB	?= (http,mirrors.edge.kernel.org)/fedora/releases
-DISTRO_FEDORA_LOCAL_APPEND	?=
-DISTRO_FEDORA_42		?= n
-DISTRO_FEDORA_43		?= n
-DISTRO_FEDORA_44		?= n
+DISTRO_FEDORA_URL		?= $(DEFAULT_FEDORA_URL)
+DISTRO_FEDORA_GRUB		?= $(DEFAULT_FEDORA_GRUB)
+DISTRO_FEDORA_APPEND		?= $(DEFAULT_FEDORA_APPEND)
+DISTRO_FEDORA_LOCAL_URL		?= $(DISTRO_FEDORA_URL)
+DISTRO_FEDORA_LOCAL_GRUB	?= $(DISTRO_FEDORA_GRUB)
+DISTRO_FEDORA_LOCAL_APPEND	?= $(DISTRO_FEDORA_APPEND)
 
 
 DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 				   DISTRO_GRUB='$(DISTRO_FEDORA_GRUB)'; \
 				   DISTRO_URL='$(DISTRO_FEDORA_URL)'; \
-				   DISTRO_EXTRA_APPEND='$(DISTRO_FEDORA_EXTRA_APPEND)'; \
-				   DISTRO_EXTRA_URL='$(DISTRO_FEDORA_EXTRA_URL)'; \
 				   DISTRO_LOCAL_APPEND='$(DISTRO_FEDORA_LOCAL_APPEND)'; \
 				   DISTRO_LOCAL_GRUB='$(DISTRO_FEDORA_LOCAL_GRUB)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_FEDORA_LOCAL_URL)';
 
 
-ifeq ($(DISTRO_FEDORA), y)
-   GRUB_CFG_INCLUDES		+= src/distros/fedora/grub.d/grub.inc
-   DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-header.inc.in
+.PHONY: fedora-download fedora-defconfig
 
-   #
-   # Fedora 42
-   ifneq ($(DISTRO_FEDORA_42), n)
-      DISTRO_FEDORA_CFG		+= src/distros/fedora/grub.d/fedora-42.inc
-   endif
-   ifeq ($(DISTRO_FEDORA_42), d)
-      DISTRO_FEDORA_BOOT	+= boot/fedora/42/Everything/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_FEDORA_BOOT	+= boot/fedora/42/Everything/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_FEDORA_42), l)
-      DISTRO_FEDORA_42		:= y
-   endif
 
-   #
-   # Fedora 43
-   ifneq ($(DISTRO_FEDORA_43), n)
-      DISTRO_FEDORA_CFG		+= src/distros/fedora/grub.d/fedora-43.inc
-   endif
-   ifeq ($(DISTRO_FEDORA_43), d)
-      DISTRO_FEDORA_BOOT	+= boot/fedora/43/Everything/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_FEDORA_BOOT	+= boot/fedora/43/Everything/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_FEDORA_43), l)
-      DISTRO_FEDORA_43		:= y
-   endif
+src/distros/fedora/gen.d/Makefile.inc: .config src/distros/fedora/Makefile.distro.in
+	@echo "  SED      $(@)"
+	@rm -f "$(@)"
+	@mkdir -p src/distros/fedora/gen.d
+	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \
+	   sed \
+	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
+	      src/distros/fedora/Makefile.distro.in; \
+	done > "$(@)";
+	@touch "$(@)"
 
-   #
-   # Fedora 44
-   ifneq ($(DISTRO_FEDORA_44), n)
-      DISTRO_FEDORA_CFG		+= src/distros/fedora/grub.d/fedora-44.inc
-   endif
-   ifeq ($(DISTRO_FEDORA_44), d)
-      DISTRO_FEDORA_BOOT	+= boot/fedora/44/Everything/x86_64/os/images/pxeboot/initrd.img
-      DISTRO_FEDORA_BOOT	+= boot/fedora/44/Everything/x86_64/os/images/pxeboot/vmlinuz
-   else ifneq ($(DISTRO_FEDORA_44), l)
-      DISTRO_FEDORA_44		:= y
-   endif
 
-   DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-footer.inc.in
-endif
+GRUB_CFG_INCLUDES		+= src/distros/fedora/gen.d/grub.inc
+DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-header.inc.in
+-include src/distros/fedora/gen.d/Makefile.inc
+DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_FEDORA_BOOT)
 
 
-.PHONY: fedora-download
+src/distros/fedora/gen.d/grub.inc: $(DISTRO_FEDORA_CFG)
+	@$(do_subst_files_dt)
 
 
 #
@@ -128,56 +108,20 @@ fedora-download: $(DISTRO_FEDORA_BOOT)
 
 
 #
-# Grub include targets
-#
-src/distros/fedora/grub.d/fedora-42.inc: src/distros/fedora/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_FEDORA_KEYWORDS) \
-		DISTRO_VERSION=42; \
-		DISTRO_OPT=$(DISTRO_FEDORA_42); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/fedora/grub.d/fedora-43.inc: src/distros/fedora/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_FEDORA_KEYWORDS) \
-		DISTRO_VERSION=43; \
-		DISTRO_OPT=$(DISTRO_FEDORA_43); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/fedora/grub.d/fedora-44.inc: src/distros/fedora/grub-distro.inc.in
-	@$(do_subst_start)
-	@$(DISTRO_FEDORA_KEYWORDS) \
-		DISTRO_VERSION=44; \
-		DISTRO_OPT=$(DISTRO_FEDORA_44); \
-		DISTRO_ARCH=x86_64; \
-		$(do_subst_finish)
-
-
-src/distros/fedora/grub.d/grub.inc: $(DISTRO_FEDORA_CFG)
-	@$(do_subst_files_dt)
-
-
-#
 # IPERD config  targets
 #
 fedora-defconfig:
 	@echo "#"
 	@echo "# Fedora Linux"
 	@echo "DISTRO_FEDORA=y"
-	@echo "DISTRO_FEDORA_URL=https://mirrors.edge.kernel.org/fedora/releases"
-	@echo "DISTRO_FEDORA_GRUB=(http,mirrors.edge.kernel.org)/fedora/releases"
-	@echo "DISTRO_FEDORA_APPEND="
-	@echo "DISTRO_FEDORA_EXTRA_URL="
-	@echo "DISTRO_FEDORA_EXTRA_APPEND="
-	@echo "DISTRO_FEDORA_LOCAL_URL=https://mirrors.edge.kernel.org/fedora/releases"
-	@echo "DISTRO_FEDORA_LOCAL_GRUB=(http,mirrors.edge.kernel.org)/fedora/releases"
-	@echo "DISTRO_FEDORA_LOCAL_APPEND="
-	@for REL in 42 43 44; do \
-	   echo "DISTRO_FEDORA_$${REL}=y"; \
+	@echo "DISTRO_FEDORA_URL=$(DEFAULT_FEDORA_URL)"
+	@echo "DISTRO_FEDORA_GRUB=$(DEFAULT_FEDORA_GRUB)"
+	@echo "DISTRO_FEDORA_APPEND=$(DEFAULT_FEDORA_APPEND)"
+	@echo "DISTRO_FEDORA_LOCAL_URL=$(DEFAULT_FEDORA_URL)"
+	@echo "DISTRO_FEDORA_LOCAL_GRUB=$(DEFAULT_FEDORA_GRUB)"
+	@echo "DISTRO_FEDORA_LOCAL_APPEND=$(DEFAULT_FEDORA_APPEND)"
+	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \
+	   echo "DISTRO_FEDORA_$${REL}=$(DEFAULT_FEDORA_OPT)"; \
 	done;
 
 

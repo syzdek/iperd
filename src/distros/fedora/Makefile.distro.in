@@ -1,0 +1,24 @@
+
+#
+# Fedora Linux @DISTRO_VERSION@ (x86_64)
+#
+DISTRO_FEDORA_@DISTRO_VERSION@		?= n
+ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), n)
+   DISTRO_FEDORA_CFG		+= src/distros/fedora/gen.d/fedora-@DISTRO_VERSION@.inc
+endif
+ifeq ($(DISTRO_FEDORA_@DISTRO_VERSION@), d)
+   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Everything/x86_64/os/images/pxeboot/initrd.img
+   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Everything/x86_64/os/images/pxeboot/vmlinuz
+else ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), l)
+   DISTRO_FEDORA_@DISTRO_VERSION@		:= y
+endif
+
+
+src/distros/fedora/gen.d/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in
+	@$(do_subst_start)
+	@$(DISTRO_FEDORA_KEYWORDS) \
+		DISTRO_VERSION=@DISTRO_VERSION@; \
+		DISTRO_OPT=$(DISTRO_FEDORA_@DISTRO_VERSION@); \
+		DISTRO_ARCH=x86_64; \
+		$(do_subst_finish)
+
