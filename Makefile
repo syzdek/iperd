@@ -64,7 +64,8 @@ IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 
 DISTCLEANFILES		= boot \
 			  src/*/.iperd \
-			  src/distros/*/source
+			  src/distros/*/source \
+			  var
 CLEANFILES		= boot/grub \
 			  tools \
 			  src/*/*.new \
