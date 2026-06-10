@@ -205,6 +205,16 @@ do_bsdtar		= BSD_PWD="$$(pwd)"; \
 			  )
 
 
+do_chmod		= if test "x$(V)" == "x0";then \
+			     echo "  CHMOD    $${CHMOD_DIR}"; \
+			  else \
+			     echo "( cd '$${PATCH_DIR}' && patch -p1 < '$${PATCH_FILE}' )"; \
+			  fi; \
+			  find "$${CHMOD_DIR}" -exec chmod u+w  {} \; || exit 1; \
+			  find "$${CHMOD_DIR}" -type f -exec chmod ugo+r  {} \; || exit 1; \
+			  find "$${CHMOD_DIR}" -type d -exec chmod ugo+rx {} \; || exit 1
+
+
 do_patch		= if test "x$(V)" == "x0";then \
 			     echo "  PATCH    $${PATCH_FILE}"; \
 			  else \
