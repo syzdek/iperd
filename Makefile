@@ -52,7 +52,7 @@ IPERD_DEFCONFIGS	= alpine \
 			  rocky \
 			  slackware
 IPERD_DEPS		= boot/grub/.iperd \
-			  src/cfg/.iperd \
+			  boot/grub/grub.cfg \
 			  $(IPERD_DOWNLOADS)
 
 

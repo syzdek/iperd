@@ -34,10 +34,7 @@ CLEANFILES			+=
 
 boot/grub/grub.cfg: src/cfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
 	@$(do_subst_files_dt)
-
-
-src/cfg/.iperd: boot/grub/grub.cfg
-	@touch $(@)
+	@touch "$(@)"
 
 
 # end of makefile
