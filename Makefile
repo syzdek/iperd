@@ -167,6 +167,17 @@ do_subst_files_fn	= $(do_subst_files); chmod 0755 "$(@)"
 do_subst_files_dt	= $(do_subst_files); chmod 0644 "$(@)"
 
 
+do_gzip			= if test "x$(V)" == "x0";then \
+			     echo "  GZIP     $${GZIP_FILE}"; \
+			  else \
+			     echo "gzip -cd '$${GZIP_FILE}' > '$${GZIP_DST}'"; \
+			  fi; \
+			  rm -f "$${GZIP_DST}" "$${GZIP_DST}.new" || exit 1; \
+			  gzip -cd "$${GZIP_FILE}" > "$${GZIP_DST}.new" \
+			     || exit 1; \
+			  mv "$${GZIP_DST}.new" "$${GZIP_DST}" || exit 1
+
+
 do_wget			= if test "x$(V)" == "x0";then \
 			     echo "  WGET     $${WGET_FILE}"; \
 			  else \
