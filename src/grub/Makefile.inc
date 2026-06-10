@@ -46,7 +46,7 @@ GRUB_ROOT			:= $(IPERD_ROOT)/src/grub
 GRUB_BUILDDIR			:= var/grub/source/build
 GRUB_DEPENDENCIES 		:= var/grub/grub-$(GRUB_VERSION).tar.xz \
 				   src/dejavu/.iperd \
-				   src/unifont/.iperd
+				   var/unifont/.iperd
 GRUB_PLATFORMS			:= tools/iperd/grub_i386_pc \
 				   tools/iperd/grub_i386_efi \
 				   tools/iperd/grub_x86_64_efi

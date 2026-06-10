@@ -29,8 +29,7 @@
 #
 
 
-DISTCLEANFILES		+= src/unifont/unifont-*.bdf.gz \
-			   src/unifont/unifont.bdf
+DISTCLEANFILES		+=
 CLEANFILES              +=
 
 
@@ -42,24 +41,23 @@ UNIFONT_SHA512		:= ad67446632a58f0b3b8a428ea8601e4ad9dfd4d2b1f11e481a2f9dedcf539
 UNIFONT_ROOT		:= $(IPERD_ROOT)/src/unifont
 
 
-src/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
-	@rm -f $(@) $(@).new
-	wget -q -O $(@).new "$(UNIFONT_MIRROR)"
-	@echo "$(UNIFONT_SHA1) $(@).new"   |sha1sum   --check > /dev/null
-	@echo "$(UNIFONT_SHA256) $(@).new" |sha256sum --check > /dev/null
-	@echo "$(UNIFONT_SHA512) $(@).new" |sha512sum --check > /dev/null
-	mv $(@).new $(@)
+var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
+	@mkdir -p "$(@D)"
+	@WGET_FILE="$(@)"; \
+		WGET_URL="$(UNIFONT_MIRROR)"; \
+		WGET_SHA1="$(UNIFONT_SHA1)"; \
+		WGET_SHA256="$(UNIFONT_SHA256)"; \
+		WGET_SHA512="$(UNIFONT_SHA512)"; \
+		$(do_wget);
 	@touch $(@)
 
 
-src/unifont/unifont.bdf: src/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
-	@rm -Rf $(@) $(@).new
-	gzip -cd src/unifont/unifont-$(UNIFONT_VERSION).bdf.gz > $(@).new
-	mv $(@).new $(@)
+var/unifont/unifont.bdf: var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
+	@GZIP_FILE="$(^)"; GZIP_DST="$(@)"; $(do_gzip);
 	@touch $(@)
 
 
-src/unifont/.iperd: src/unifont/unifont.bdf
+var/unifont/.iperd: var/unifont/unifont.bdf
 	@touch $(@)
 
 
