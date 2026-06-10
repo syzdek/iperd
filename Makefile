@@ -223,8 +223,8 @@ all:
 
 .version: $(IPERD_VERSION_DEPS)
 	@rm -f "$(@)"
-	echo "IPERD_VERSION=$(shell git describe --long --abbrev=7 |sed -e 's/^v//g' -e 's/-/./g' )" > "$(@)"
-	touch "$(@)"
+	@echo "IPERD_VERSION=$(shell git describe --long --abbrev=7 |sed -e 's/^v//g' -e 's/-/./g' )" > "$(@)"
+	@touch "$(@)"
 
 
 -include .config
