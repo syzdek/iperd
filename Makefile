@@ -337,7 +337,7 @@ update: $(IPERD_DEPS)
 
 
 clean:
-	rm -Rf $(CLEANFILES) *.iso
+	rm -Rf $(CLEANFILES) *.iso *.tar.xz
 
 
 distclean: clean
