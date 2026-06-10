@@ -84,6 +84,8 @@ src/grub/source/.iperd: $(GRUB_DEPENDENCIES)
 	@mkdir  src/grub/source
 	tar -C  src/grub/source -xf src/grub/grub-$(GRUB_VERSION).tar.xz --strip-components=1
 	( cd src/grub/source && patch -p1 < ../grub-title.patch )
+	find src/grub/source -type f -exec chmod ugo+r  {} \; || exit 1;
+	find src/grub/source -type d -exec chmod ugo+rx {} \; || exit 1;
 	@touch $(@)
 
 
