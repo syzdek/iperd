@@ -61,8 +61,4 @@ boot/grub/.iperd: var/grub/.iperd src/themes/.iperd
 	@touch $(@)
 
 
-src/netdir/.iperd: boot/grub/.iperd
-	@touch $(@)
-
-
 # end of makefile

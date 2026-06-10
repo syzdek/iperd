@@ -51,7 +51,7 @@ IPERD_DEFCONFIGS	= alpine \
 			  fedora \
 			  rocky \
 			  slackware
-IPERD_DEPS		= src/netdir/.iperd \
+IPERD_DEPS		= boot/grub/.iperd \
 			  src/cfg/.iperd \
 			  $(IPERD_DOWNLOADS)
 
