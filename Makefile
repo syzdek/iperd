@@ -204,6 +204,16 @@ do_bsdtar		= BSD_PWD="$$(pwd)"; \
 			    chmod -R u+w .; \
 			  )
 
+do_tar			= if test "x$(V)" == "x0";then \
+			     echo "  TAR      $${TAR_FILE}"; \
+			  else \
+			     echo "tar -C '$${TAR_DIR}' -xf '$${TAR_FILE}' --strip-components=1"; \
+			  fi; \
+			  rm -Rf "$${TAR_DIR}" || exit 1; \
+			  mkdir -p "$${TAR_DIR}" || exit 1; \
+			  tar -C "$${TAR_DIR}" -xf "$${TAR_FILE}" --strip-components=1 \
+			     || exit 1
+
 
 .PHONY: all clean configure defconfig distclean dist-all dist-iso download selfupdate update prune
 
