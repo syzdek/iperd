@@ -71,10 +71,10 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 .PHONY: alpine-download alpine-defconfig
 
 
-src/distros/alpine/gen.d/Makefile.inc: .config src/distros/alpine/Makefile.distro.in
+.makefile.d/alpine.inc: .config src/distros/alpine/Makefile.distro.in
 	@echo "  SED      $(@)"
 	@rm -f "$(@)"
-	@mkdir -p src/distros/alpine/gen.d
+	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_ALPINE_VERSIONS); do \
 	   TAG="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
 	   sed \
@@ -85,14 +85,14 @@ src/distros/alpine/gen.d/Makefile.inc: .config src/distros/alpine/Makefile.distr
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= src/distros/alpine/gen.d/grub.inc
+GRUB_CFG_INCLUDES		+= var/distros/alpine/grub.inc
 DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-header.inc.in
--include src/distros/alpine/gen.d/Makefile.inc
+-include .makefile.d/alpine.inc
 DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ALPINE_BOOT)
 
 
-src/distros/alpine/gen.d/grub.inc: $(DISTRO_ALPINE_CFG)
+var/distros/alpine/grub.inc: $(DISTRO_ALPINE_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -102,10 +102,10 @@ src/distros/alpine/gen.d/grub.inc: $(DISTRO_ALPINE_CFG)
 boot/alpine/v%/main/x86/.iperd:
 	@rm -Rf "boot/alpine/v$(*)/main/x86"
 	@rm -Rf "boot/alpine/v$(*)/releases/x86"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86*"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86*"
 	@mkdir -p "boot/alpine/v$(*)/main"
 	@mkdir -p "boot/alpine/v$(*)/releases/x86/netboot"
-	@mkdir -p "src/distros/alpine/source/alpine-$(*).0-x86"
+	@mkdir -p "var/distros/alpine/source/alpine-$(*).0-x86"
 	@WGET_FILENAME="initramfs-lts"; \
 		WGET_FILE="boot/alpine/v$(*)/releases/x86/netboot/$${WGET_FILENAME}"; \
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86/netboot/$${WGET_FILENAME}"; \
@@ -119,27 +119,27 @@ boot/alpine/v%/main/x86/.iperd:
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86/netboot/$${WGET_FILENAME}"; \
 		$(do_wget);
 	@WGET_FILENAME="alpine-standard-$(*).0-x86.iso"; \
-		WGET_FILE="src/distros/alpine/source/$${WGET_FILENAME}"; \
+		WGET_FILE="var/distros/alpine/source/$${WGET_FILENAME}"; \
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86/$${WGET_FILENAME}"; \
 		$(do_wget);
-	@BSDTAR_FILE="src/distros/alpine/source/alpine-standard-$(*).0-x86.iso"; \
-		BSDTAR_DIR="src/distros/alpine/source/alpine-standard-$(*).0-x86"; \
+	@BSDTAR_FILE="var/distros/alpine/source/alpine-standard-$(*).0-x86.iso"; \
+		BSDTAR_DIR="var/distros/alpine/source/alpine-standard-$(*).0-x86"; \
 		$(do_bsdtar);
 	@mv \
-	   "src/distros/alpine/source/alpine-standard-$(*).0-x86/apks/x86" \
+	   "var/distros/alpine/source/alpine-standard-$(*).0-x86/apks/x86" \
 	   "boot/alpine/v$(*)/main/x86"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86.iso"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86.iso"
 	@touch $(@)
 
 
 boot/alpine/v%/main/x86_64/.iperd:
 	@rm -Rf "boot/alpine/v$(*)/main/x86_64"
 	@rm -Rf "boot/alpine/v$(*)/releases/x86_64"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86_64*"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86_64*"
 	@mkdir -p "boot/alpine/v$(*)/main"
 	@mkdir -p "boot/alpine/v$(*)/releases/x86_64/netboot"
-	@mkdir -p "src/distros/alpine/source/alpine-$(*).0-x86_64"
+	@mkdir -p "var/distros/alpine/source/alpine-$(*).0-x86_64"
 	@WGET_FILENAME="initramfs-lts"; \
 		WGET_FILE="boot/alpine/v$(*)/releases/x86_64/netboot/$${WGET_FILENAME}"; \
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86_64/netboot/$${WGET_FILENAME}"; \
@@ -153,17 +153,17 @@ boot/alpine/v%/main/x86_64/.iperd:
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86_64/netboot/$${WGET_FILENAME}"; \
 		$(do_wget);
 	@WGET_FILENAME="alpine-standard-$(*).0-x86_64.iso"; \
-		WGET_FILE="src/distros/alpine/source/$${WGET_FILENAME}"; \
+		WGET_FILE="var/distros/alpine/source/$${WGET_FILENAME}"; \
 		WGET_URL="$(DISTRO_ALPINE_URL)/v$(*)/releases/x86_64/$${WGET_FILENAME}"; \
 		$(do_wget);
-	@BSDTAR_FILE="src/distros/alpine/source/alpine-standard-$(*).0-x86_64.iso"; \
-		BSDTAR_DIR="src/distros/alpine/source/alpine-standard-$(*).0-x86_64"; \
+	@BSDTAR_FILE="var/distros/alpine/source/alpine-standard-$(*).0-x86_64.iso"; \
+		BSDTAR_DIR="var/distros/alpine/source/alpine-standard-$(*).0-x86_64"; \
 		$(do_bsdtar);
 	@mv \
-	   "src/distros/alpine/source/alpine-standard-$(*).0-x86_64/apks/x86_64" \
+	   "var/distros/alpine/source/alpine-standard-$(*).0-x86_64/apks/x86_64" \
 	   "boot/alpine/v$(*)/main/x86_64"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86_64"
-	@rm -Rf "src/distros/alpine/source/alpine-$(*).0-x86_64.iso"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86_64"
+	@rm -Rf "var/distros/alpine/source/alpine-$(*).0-x86_64.iso"
 	@touch $(@)
 
 
