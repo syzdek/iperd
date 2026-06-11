@@ -101,17 +101,6 @@ do_subst = sed \
 	$(SUBST_EXPRESSIONS)
 
 
-do_subst_start		= if test "x$(V)" == "x0";then \
-			     echo "  SED      $(@)"; \
-			  else \
-			     echo "do_subst $(+) > ${@}"; \
-			  fi; \
-			  rm -f "$(@)" "$(@).new" || exit 1; \
-			  mkdir -p "`dirname "$(@)"`" || exit 1;
-do_subst_finish		= $(do_subst) $(+) > "$(@).new" || exit 1; \
-			  mv "$(@).new" "$(@)" || exit 1; \
-			  touch "$(@)"
-
 do_subst_common		= if test "x$(V)" == "x0";then \
 			     echo "  SED      $(@)"; \
 			  else \
