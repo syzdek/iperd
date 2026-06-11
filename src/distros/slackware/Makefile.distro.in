@@ -15,13 +15,12 @@ endif
 
 
 var/distros/slackware/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_SLACKWARE_@DISTRO_TAG@); \
 		DISTRO_ARCH=x86; \
 		DISTRO_SUFFIX=; \
-		$(do_subst_finish)
+		$(do_subst_files_dt)
 
 
 #
@@ -40,11 +39,10 @@ endif
 
 
 var/distros/slackware/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
-	@$(do_subst_start)
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_SLACKWARE64_@DISTRO_TAG@); \
 		DISTRO_ARCH=x86_64; \
 		DISTRO_SUFFIX=64; \
-		$(do_subst_finish)
+		$(do_subst_files_dt)
 
