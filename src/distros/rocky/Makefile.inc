@@ -73,7 +73,9 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 
 
 .makefile.d/rocky.inc: .config src/distros/rocky/Makefile.distro.in
-	@echo "  SED      $(@)"
+	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
+	   echo "  GEN      $(@)"; \
+	fi
 	@rm -f "$(@)"
 	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \

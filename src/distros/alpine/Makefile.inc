@@ -72,7 +72,9 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 
 
 .makefile.d/alpine.inc: .config src/distros/alpine/Makefile.distro.in
-	@echo "  SED      $(@)"
+	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
+	   echo "  GEN      $(@)"; \
+	fi;
 	@rm -f "$(@)"
 	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_ALPINE_VERSIONS); do \

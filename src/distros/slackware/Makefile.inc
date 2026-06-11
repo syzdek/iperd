@@ -69,7 +69,9 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 
 
 .makefile.d/slackware.inc: .config src/distros/slackware/Makefile.distro.in
-	@echo "  SED      $(@)"
+	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
+	   echo "  GEN      $(@)"; \
+	fi
 	@rm -f "$(@)"
 	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_SLACKWARE_VERSIONS); do \

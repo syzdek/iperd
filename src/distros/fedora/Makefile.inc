@@ -68,7 +68,9 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 
 
 .makefile.d/fedora.inc: .config src/distros/fedora/Makefile.distro.in
-	@echo "  SED      $(@)"
+	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
+	   echo "  GEN      $(@)"; \
+	fi
 	@rm -f "$(@)"
 	@mkdir -p .makefile.d
 	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \

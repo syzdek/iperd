@@ -258,10 +258,34 @@ all:
 	@echo " "
 
 
+defconfig:
+	@echo "#"
+	@echo "# IP Engineering Rescue Disk Configuration"
+	@echo "#"
+	@echo "# GRUB options"
+	@echo "GRUB_SERIAL_COM=1"
+	@echo "GRUB_SERIAL_DEV=0"
+	@echo "GRUB_SERIAL_BAUD=115200"
+	@echo "GRUB_USE_GFXTERM=n"
+	@echo "GRUB_TERM=vt100-color"
+	@echo "#"
+	@echo "# IPERD"
+	@echo "IPERD_PREFIX="
+	@echo "IPERD_NET_PREFIX=/httpboot"
+	@for CFG in $(IPERD_DEFCONFIGS); do \
+	   $(MAKE) -s \
+	           -f src/distros/$${CFG}/Makefile.inc \
+	           IPERD_DEFCONFIG="$(IPERD_DEFCONFIG)" \
+	           $${CFG}-defconfig; \
+	done
+	@echo "#"
+	@echo "# end of config"
+
+
 .config:
 	@if test ! -e "$(@)"; then \
-	   echo "creating default $(@) ..."; \
-	   $(MAKE) -s defconfig > "$(@)"; \
+	   echo "  CONF     $(@)"; \
+	   $(MAKE) -s defconfig IPERD_DEFCONFIG=1 > "$(@)"; \
 	fi;
 	@touch "$(@)"
 
@@ -293,27 +317,6 @@ ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
 endif
 include src/cfg/Makefile.inc
-
-
-defconfig:
-	@echo "#"
-	@echo "# IP Engineering Rescue Disk Configuration"
-	@echo "#"
-	@echo "# GRUB options"
-	@echo "GRUB_SERIAL_COM=1"
-	@echo "GRUB_SERIAL_DEV=0"
-	@echo "GRUB_SERIAL_BAUD=115200"
-	@echo "GRUB_USE_GFXTERM=n"
-	@echo "GRUB_TERM=vt100-color"
-	@echo "#"
-	@echo "# IPERD"
-	@echo "IPERD_PREFIX="
-	@echo "IPERD_NET_PREFIX=/httpboot"
-	@for CFG in $(IPERD_DEFCONFIGS); do \
-	   $(MAKE) -s -f  src/distros/$${CFG}/Makefile.inc $${CFG}-defconfig; \
-	done
-	@echo "#"
-	@echo "# end of config"
 
 
 iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
