@@ -56,7 +56,7 @@ IPERD_DEPS		= boot/grub/.iperd \
 			  $(IPERD_DOWNLOADS)
 
 
-IPERD_DATE		= $(shell date +%Y-%m-%d)
+DATE			= $(shell date +%Y-%m-%d)
 
 
 IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -104,6 +104,8 @@ do_subst = sed \
 	-e "s;[@]DISTRO_URL[@];$${DISTRO_URL};g" \
 	-e "s;[@]DISTRO_OPT[@];$${DISTRO_OPT};g" \
 	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
+	\
+	-e 's,[@]DATE[@],$(DATE),g' \
 	\
 	$(SUBST_EXPRESSIONS)
 
@@ -230,7 +232,7 @@ do_tar			= if test "x$(V)" == "x0";then \
 
 all:
 	@echo " "
-	@echo "   IP Engineering Rescue Disk $(IPERD_VERSION)"
+	@echo "   IP Engineering Rescue Disk ($(IPERD_VERSION)) [$(IPERD_DATE)]"
 	@echo " "
 	@echo "   make selfupdate   # update source and build rules"
 	@echo " "
@@ -258,6 +260,7 @@ all:
 .version: $(IPERD_VERSION_DEPS)
 	@rm -f "$(@)"
 	@echo "IPERD_VERSION=$(shell git describe --long --abbrev=7 |sed -e 's/^v//g' -e 's/-/./g' )" > "$(@)"
+	@echo "IPERD_DATE=$(shell git log -1 --format=%cs )" >> "$(@)"
 	@touch "$(@)"
 
 
