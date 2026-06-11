@@ -97,7 +97,7 @@ $(GRUB_BUILDDIR)_i386_pc/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_i386_pc
 	@mkdir   $(GRUB_BUILDDIR)_i386_pc
 	( cd    $(GRUB_BUILDDIR)_i386_pc && $(GRUB_CONFIGURE) --target=i386 --with-platform=pc )
-	$(MAKE) -C $(GRUB_BUILDDIR)_i386_pc -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_pc -j $(NUMJOBS) V=$(V)
 	@touch $(@)
 
 
@@ -115,7 +115,7 @@ $(GRUB_BUILDDIR)_i386_efi/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_i386_efi
 	@mkdir   $(GRUB_BUILDDIR)_i386_efi
 	( cd    $(GRUB_BUILDDIR)_i386_efi && $(GRUB_CONFIGURE) --target=i386 --with-platform=efi )
-	$(MAKE) -C $(GRUB_BUILDDIR)_i386_efi -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_i386_efi -j $(NUMJOBS) V=$(V)
 	@touch $(@)
 
 
@@ -133,7 +133,7 @@ $(GRUB_BUILDDIR)_x86_64_efi/.iperd: var/grub/source/.iperd
 	@rm -Rf $(GRUB_BUILDDIR)_x86_64_efi
 	@mkdir   $(GRUB_BUILDDIR)_x86_64_efi
 	( cd    $(GRUB_BUILDDIR)_x86_64_efi && $(GRUB_CONFIGURE) --target=x86_64 --with-platform=efi )
-	$(MAKE) -C $(GRUB_BUILDDIR)_x86_64_efi -j $(IPERD_NUMJOBS) V=$(V)
+	$(MAKE) -C $(GRUB_BUILDDIR)_x86_64_efi -j $(NUMJOBS) V=$(V)
 	@touch $(@)
 
 

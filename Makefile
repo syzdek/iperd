@@ -30,7 +30,7 @@
 
 
 V			?= 0
-IPERD_NUMJOBS		?= 1
+NUMJOBS			?= 1
 DATE			:= $(shell date +%Y-%m-%d)
 
 
