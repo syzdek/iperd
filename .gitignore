@@ -3,6 +3,7 @@
 /.makefile.d/
 /.version*
 /EFI/
+/VERSION.md
 /boot/
 /iperd-*.iso
 /iperd-*.tar.xz

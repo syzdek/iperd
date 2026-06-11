@@ -61,6 +61,7 @@ IPERD_DEFCONFIGS	:= alpine \
 			   slackware
 IPERD_DEPS		:= boot/grub/.iperd \
 			   boot/grub/grub.cfg \
+			   VERSION.md \
 			   $(IPERD_DOWNLOADS)
 IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 IPERD_VERSION_DEPS	:=
@@ -319,6 +320,15 @@ endif
 include src/cfg/Makefile.inc
 
 
+VERSION.md: $(IPERD_VERSION_DEPS)
+	@echo "  GEN      $(@)"
+	@rm -f "$(@)"
+	@head -4 COPYING.md >> "$(@)"
+	@echo "Version:      $(IPERD_VERSION)  " >> "$(@)"
+	@echo "Last Updated: $(IPERD_DATE)  " >> "$(@)"
+	@echo "" >> "$(@)"
+
+
 iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	@rm -f "$(@)"
 	./tools/bin/grub-mkrescue \
@@ -335,7 +345,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	   -m 'tools/' \
 	   -m 'var/' \
 	   -volid IPERD \
-	   -publisher "IP Engineering Rescue Disk $(IPERD_VERSION) (iperd.org)" \
+	   -publisher "IP Engineering Rescue Disk (iperd.org)" \
 	   ./
 	@mv "$(@).new" "$(@)"
 	@touch "$(@)"
