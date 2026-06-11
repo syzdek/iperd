@@ -1,7 +1,7 @@
 *.swp
-/.config
+/.config*
 /.makefile.d/
-/.version
+/.version*
 /EFI/
 /boot/
 /iperd-*.iso
