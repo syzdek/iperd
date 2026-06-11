@@ -63,14 +63,12 @@ IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 
 
 DISTCLEANFILES		= boot \
-			  src/*/.iperd \
-			  src/distros/*/source \
 			  var
-CLEANFILES		= boot/grub \
+CLEANFILES		= *.iso *.tar.xz \
+			  boot/grub \
 			  tools \
-			  src/*/*.new \
-			  src/distros/*/gen.d/ \
-			  src/distros/*/grub.d/
+			  var/*/*.new \
+			  var/distros/*/*.inc
 
 
 ifdef IPERD_GIT_REF
@@ -385,7 +383,7 @@ update: $(IPERD_DEPS)
 
 
 clean:
-	rm -Rf $(CLEANFILES) *.iso *.tar.xz
+	rm -Rf $(CLEANFILES)
 
 
 distclean: clean
