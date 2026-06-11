@@ -4,7 +4,7 @@
 #
 DISTRO_SLACKWARE_@DISTRO_TAG@		?= n
 ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), n)
-   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/gen.d/slackware-@DISTRO_VERSION@.inc
+   DISTRO_SLACKWARE_CFG		+= var/distros/slackware/slackware-@DISTRO_VERSION@.inc
 endif
 ifeq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), d)
    DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware-@DISTRO_VERSION@/isolinux/initrd.img
@@ -14,7 +14,7 @@ else ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), l)
 endif
 
 
-src/distros/slackware/gen.d/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
+var/distros/slackware/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
@@ -29,7 +29,7 @@ src/distros/slackware/gen.d/slackware-@DISTRO_VERSION@.inc: src/distros/slackwar
 #
 DISTRO_SLACKWARE64_@DISTRO_TAG@		?= n
 ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), n)
-   DISTRO_SLACKWARE_CFG		+= src/distros/slackware/gen.d/slackware64-@DISTRO_VERSION@.inc
+   DISTRO_SLACKWARE_CFG		+= var/distros/slackware/slackware64-@DISTRO_VERSION@.inc
 endif
 ifeq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), d)
    DISTRO_SLACKWARE_BOOT	+= boot/slackware/slackware64-@DISTRO_VERSION@/isolinux/initrd.img
@@ -39,7 +39,7 @@ else ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), l)
 endif
 
 
-src/distros/slackware/gen.d/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
+var/distros/slackware/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \

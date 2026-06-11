@@ -68,10 +68,10 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 .PHONY: slackware-download slackware-defconfig
 
 
-src/distros/slackware/gen.d/Makefile.inc: .config src/distros/slackware/Makefile.distro.in
+.makefile.d/slackware.inc: .config src/distros/slackware/Makefile.distro.in
 	@echo "  SED      $(@)"
 	@rm -f "$(@)"
-	@mkdir -p src/distros/slackware/gen.d
+	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_SLACKWARE_VERSIONS); do \
 	   TAG="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
 	   sed \
@@ -82,14 +82,14 @@ src/distros/slackware/gen.d/Makefile.inc: .config src/distros/slackware/Makefile
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= src/distros/slackware/gen.d/grub.inc
+GRUB_CFG_INCLUDES		+= var/distros/slackware/grub.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
--include src/distros/slackware/gen.d/Makefile.inc
+-include .makefile.d/slackware.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_SLACKWARE_BOOT)
 
 
-src/distros/slackware/gen.d/grub.inc: $(DISTRO_SLACKWARE_CFG)
+var/distros/slackware/grub.inc: $(DISTRO_SLACKWARE_CFG)
 	@$(do_subst_files_dt)
 
 
