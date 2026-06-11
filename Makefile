@@ -146,7 +146,10 @@ do_wget			= if test "x$(V)" == "x0";then \
 			     echo "wget -q -O $${WGET_FILE} $${WGET_URL}"; \
 			  fi; \
 			  rm -f "$${WGET_FILE}" "$${WGET_FILE}.new" || exit 1; \
-			  wget -q -O "$${WGET_FILE}.new" "$${WGET_URL}" || exit; \
+			  wget -q \
+			     -O "$${WGET_FILE}.new" \
+			     "$${WGET_URL}" \
+			     || exit; \
 			  chmod 644 "$${WGET_FILE}.new" || exit 1; \
 			  if test ! -z "$${WGET_SHA1}"; then \
 			     echo "$${WGET_SHA1}" "$${WGET_FILE}.new" \
@@ -168,7 +171,8 @@ do_bsdtar		= BSD_PWD="$$(pwd)"; \
 			  if test "x$(V)" == "x0";then \
 			     echo "  BSDTAR   $${BSDTAR_FILE}"; \
 			  else \
-			     echo "( cd '$${BSDTAR_DIR}' && bsdtar -xf '$${BSD_PWD}/$${BSDTAR_FILE}'; )"; \
+			     echo "( cd '$${BSDTAR_DIR}' &&"; \
+			     echo "  bsdtar -xf '$${BSDTAR_FILE}'; )"; \
 			  fi; \
 			  rm -Rf "$${BSDTAR_DIR}" || exit 1; \
 			  mkdir -p "$${BSDTAR_DIR}" || exit 1; \
@@ -181,29 +185,54 @@ do_bsdtar		= BSD_PWD="$$(pwd)"; \
 do_chmod		= if test "x$(V)" == "x0";then \
 			     echo "  CHMOD    $${CHMOD_DIR}"; \
 			  else \
-			     echo "( cd '$${PATCH_DIR}' && patch -p1 < '$${PATCH_FILE}' )"; \
+			     echo "find '$${CHMOD_DIR}' \\"; \
+			     echo "     -exec chmod u+w  {} \\;"; \
 			  fi; \
-			  find "$${CHMOD_DIR}" -exec chmod u+w  {} \; || exit 1; \
-			  find "$${CHMOD_DIR}" -type f -exec chmod ugo+r  {} \; || exit 1; \
-			  find "$${CHMOD_DIR}" -type d -exec chmod ugo+rx {} \; || exit 1
+			  find "$${CHMOD_DIR}" \
+			       -exec chmod u+w  {} \; \
+			       || exit 1; \
+			  if test "x$(V)" != "x0";then \
+			     echo "find '$${CHMOD_DIR}' \\"; \
+			     echo "     -type f \\"; \
+			     echo "     -exec chmod ugo+r  {} \\;"; \
+			  fi; \
+			  find "$${CHMOD_DIR}" \
+			       -type f \
+			       -exec chmod ugo+r  {} \; \
+			       || exit 1; \
+			  if test "x$(V)" != "x0";then \
+			     echo "find '$${CHMOD_DIR}' \\"; \
+			     echo "     -type d \\"; \
+			     echo "     -exec chmod ugo+rx  {} \\;"; \
+			  fi; \
+			  find "$${CHMOD_DIR}" \
+			       -type d \
+			       -exec chmod ugo+rx {} \; \
+			       || exit 1
 
 
 do_patch		= if test "x$(V)" == "x0";then \
 			     echo "  PATCH    $${PATCH_FILE}"; \
 			  else \
-			     echo "( cd '$${PATCH_DIR}' && patch -p1 < '$${PATCH_FILE}' )"; \
+			     echo "( cd '$${PATCH_DIR}' &&"; \
+			     echo "  patch -p1 < '$${PATCH_FILE}' )"; \
 			  fi; \
-			  (cd "$${PATCH_DIR}" && patch -p1 < "$${PATCH_FILE}" > /dev/null )
+			  ( cd "$${PATCH_DIR}" && \
+			    patch -p1 < "$${PATCH_FILE}" > /dev/null )
 
 
 do_tar			= if test "x$(V)" == "x0";then \
 			     echo "  TAR      $${TAR_FILE}"; \
 			  else \
-			     echo "tar -C '$${TAR_DIR}' -xf '$${TAR_FILE}' --strip-components=1"; \
+			     echo "tar -C '$${TAR_DIR}' \\"; \
+			     echo "    -xf '$${TAR_FILE}' \\"; \
+			     echo "    --strip-components=1"; \
 			  fi; \
 			  rm -Rf "$${TAR_DIR}" || exit 1; \
 			  mkdir -p "$${TAR_DIR}" || exit 1; \
-			  tar -C "$${TAR_DIR}" -xf "$${TAR_FILE}" --strip-components=1 \
+			  tar -C "$${TAR_DIR}" \
+			      -xf "$${TAR_FILE}" \
+			      --strip-components=1 \
 			     || exit 1
 
 
