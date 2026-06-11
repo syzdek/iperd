@@ -79,6 +79,7 @@ endif
 
 
 do_subst = sed \
+	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
 	\
@@ -103,26 +104,7 @@ do_subst = sed \
 	-e "s;[@]DISTRO_OPT[@];$${DISTRO_OPT};g" \
 	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
 	\
-	-e "s,[@]DISTRO[@],$${DISTRO},g" \
-	-e "s,[@]CODENAME[@],$${DISTRO_CODENAME},g" \
-	-e "s,[@]VERSION[@],$${DISTRO_VERSION},g" \
-	-e "s,[@]LABEL[@],$${DISTRO_LABEL},g" \
-	-e "s,[@]ARCH[@],$${DISTRO_ARCH},g" \
-	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
 	-e 's,[@]DATE[@],$(DATE),g' \
-	-e 's,[@]NETBOOT[@],$(NETBOOT),g' \
-	-e 's,[@]NETBOOT_HOST[@],$(NETBOOT_HOST),g' \
-	-e 's,[@]NETBOOT_PATH[@],$(NETBOOT_PATH),g' \
-	-e 's,[@]NETBOOT_HTTP[@],$(NETBOOT_HTTP),g' \
-	-e 's,[@]NETBOOT_HTTP_SCHEME[@],$(NETBOOT_HTTP_SCHEME),g' \
-	-e 's,[@]NETBOOT_HTTP_HOST[@],$(NETBOOT_HTTP_HOST),g' \
-	-e 's,[@]NETBOOT_HTTP_PATH[@],$(NETBOOT_HTTP_PATH),g' \
-	-e 's,[@]NETBOOT_NFS[@],$(NETBOOT_NFS),g' \
-	-e 's,[@]NETBOOT_NFS_HOST[@],$(NETBOOT_NFS_HOST),g' \
-	-e 's,[@]NETBOOT_NFS_PATH[@],$(NETBOOT_NFS_PATH),g' \
-	-e 's,[@]NETBOOT_TFTP[@],$(NETBOOT_TFTP),g' \
-	-e 's,[@]NETBOOT_TFTP_HOST[@],$(NETBOOT_TFTP_HOST),g' \
-	-e 's,[@]NETBOOT_TFTP_PATH[@],$(NETBOOT_TFTP_PATH),g' \
 	$(SUBST_EXPRESSIONS)
 
 
