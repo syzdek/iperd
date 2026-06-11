@@ -56,7 +56,7 @@ IPERD_DEPS		= boot/grub/.iperd \
 			  $(IPERD_DOWNLOADS)
 
 
-DATE			= $(shell date +%Y-%m-%d)
+IPERD_DATE		= $(shell date +%Y-%m-%d)
 
 
 IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -79,6 +79,7 @@ endif
 
 
 do_subst = sed \
+	-e 's,[@]IPERD_DATE[@],$(IPERD_DATE),g' \
 	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
@@ -104,7 +105,6 @@ do_subst = sed \
 	-e "s;[@]DISTRO_OPT[@];$${DISTRO_OPT};g" \
 	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
 	\
-	-e 's,[@]DATE[@],$(DATE),g' \
 	$(SUBST_EXPRESSIONS)
 
 
