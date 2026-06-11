@@ -31,35 +31,7 @@
 
 V			?= 0
 IPERD_NUMJOBS		?= 1
-
-
-IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-
-
-GRUB_SERIAL_COM		?= 1
-GRUB_SERIAL_DEV		?= 0
-GRUB_SERIAL_BAUD	?= 115200
-GRUB_USE_GFXTERM	?= n
-GRUB_TERM		?= vt100-color
-
-
-GRUB_CFG_INCLUDES	=
-IPERD_DOWNLOADS		=
-IPERD_MIRRORS		=
-IPERD_PRUNE		=
-IPERD_DEFCONFIGS	= alpine \
-			  fedora \
-			  rocky \
-			  slackware
-IPERD_DEPS		= boot/grub/.iperd \
-			  boot/grub/grub.cfg \
-			  $(IPERD_DOWNLOADS)
-
-
-DATE			= $(shell date +%Y-%m-%d)
-
-
-IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
+DATE			:= $(shell date +%Y-%m-%d)
 
 
 DISTCLEANFILES		= boot \
@@ -71,10 +43,29 @@ CLEANFILES		= *.iso *.tar.xz \
 			  var/distros/*/*.inc
 
 
+GRUB_SERIAL_COM		?= 1
+GRUB_SERIAL_DEV		?= 0
+GRUB_SERIAL_BAUD	?= 115200
+GRUB_USE_GFXTERM	?= n
+GRUB_TERM		?= vt100-color
+GRUB_CFG_INCLUDES	=
+
+
+IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+IPERD_DOWNLOADS		:=
+IPERD_MIRRORS		:=
+IPERD_PRUNE		:=
+IPERD_DEFCONFIGS	:= alpine \
+			   fedora \
+			   rocky \
+			   slackware
+IPERD_DEPS		:= boot/grub/.iperd \
+			   boot/grub/grub.cfg \
+			   $(IPERD_DOWNLOADS)
+IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
+IPERD_VERSION_DEPS	:=
 ifdef IPERD_GIT_REF
    IPERD_VERSION_DEPS	:= .git/refs/heads/$(IPERD_GIT_REF)
-else
-   IPERD_VERSION_DEPS	:=
 endif
 
 
