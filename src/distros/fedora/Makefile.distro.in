@@ -4,7 +4,7 @@
 #
 DISTRO_FEDORA_@DISTRO_VERSION@		?= n
 ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), n)
-   DISTRO_FEDORA_CFG		+= src/distros/fedora/gen.d/fedora-@DISTRO_VERSION@.inc
+   DISTRO_FEDORA_CFG		+= var/distros/fedora/fedora-@DISTRO_VERSION@.inc
 endif
 ifeq ($(DISTRO_FEDORA_@DISTRO_VERSION@), d)
    DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Everything/x86_64/os/images/pxeboot/initrd.img
@@ -14,7 +14,7 @@ else ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), l)
 endif
 
 
-src/distros/fedora/gen.d/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in
+var/distros/fedora/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_FEDORA_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \

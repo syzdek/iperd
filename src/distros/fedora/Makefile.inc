@@ -67,10 +67,10 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 .PHONY: fedora-download fedora-defconfig
 
 
-src/distros/fedora/gen.d/Makefile.inc: .config src/distros/fedora/Makefile.distro.in
+.makefile.d/fedora.inc: .config src/distros/fedora/Makefile.distro.in
 	@echo "  SED      $(@)"
 	@rm -f "$(@)"
-	@mkdir -p src/distros/fedora/gen.d
+	@mkdir -p .makefile.d
 	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
@@ -79,14 +79,14 @@ src/distros/fedora/gen.d/Makefile.inc: .config src/distros/fedora/Makefile.distr
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= src/distros/fedora/gen.d/grub.inc
+GRUB_CFG_INCLUDES		+= var/distros/fedora/grub.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-header.inc.in
--include src/distros/fedora/gen.d/Makefile.inc
+-include .makefile.d/fedora.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_FEDORA_BOOT)
 
 
-src/distros/fedora/gen.d/grub.inc: $(DISTRO_FEDORA_CFG)
+var/distros/fedora/grub.inc: $(DISTRO_FEDORA_CFG)
 	@$(do_subst_files_dt)
 
 
