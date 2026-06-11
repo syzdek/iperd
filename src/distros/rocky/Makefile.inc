@@ -72,10 +72,10 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 .PHONY: rocky-download rocky-defconfig
 
 
-src/distros/rocky/gen.d/Makefile.inc: .config src/distros/rocky/Makefile.distro.in
+.makefile.d/rocky.inc: .config src/distros/rocky/Makefile.distro.in
 	@echo "  SED      $(@)"
 	@rm -f "$(@)"
-	@mkdir -p src/distros/rocky/gen.d
+	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
@@ -84,14 +84,14 @@ src/distros/rocky/gen.d/Makefile.inc: .config src/distros/rocky/Makefile.distro.
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= src/distros/rocky/gen.d/grub.inc
+GRUB_CFG_INCLUDES		+= var/distros/rocky/grub.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
--include src/distros/rocky/gen.d/Makefile.inc
+-include .makefile.d/rocky.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ROCKY_BOOT)
 
 
-src/distros/rocky/gen.d/grub.inc: $(DISTRO_ROCKY_CFG)
+var/distros/rocky/grub.inc: $(DISTRO_ROCKY_CFG)
 	@$(do_subst_files_dt)
 
 

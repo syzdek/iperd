@@ -4,7 +4,7 @@
 #
 DISTRO_ROCKY_@DISTRO_VERSION@			?= n
 ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), n)
-   DISTRO_ROCKY_CFG		+= src/distros/rocky/gen.d/rocky-@DISTRO_VERSION@.inc
+   DISTRO_ROCKY_CFG		+= var/distros/rocky/rocky-@DISTRO_VERSION@.inc
 endif
 ifeq ($(DISTRO_ROCKY_@DISTRO_VERSION@), d)
    DISTRO_ROCKY_BOOT		+= boot/rocky/@DISTRO_VERSION@/BaseOS/x86_64/os/images/pxeboot/initrd.img
@@ -14,7 +14,7 @@ else ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), l)
 endif
 
 
-src/distros/rocky/gen.d/rocky-@DISTRO_VERSION@.inc: src/distros/rocky/grub-distro.inc.in
+var/distros/rocky/rocky-@DISTRO_VERSION@.inc: src/distros/rocky/grub-distro.inc.in
 	@$(do_subst_start)
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
