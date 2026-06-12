@@ -329,7 +329,7 @@ VERSION.md: $(IPERD_VERSION_DEPS)
 	@echo "" >> "$(@)"
 
 
-iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
+iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)"
 	./tools/bin/grub-mkrescue \
 	   --compress=xz  \
@@ -351,7 +351,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS)
 	@touch "$(@)"
 
 
-iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS)
+iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)" 'iperd-*.tar.new*'
 	tar -c \
 	   -f iperd-$(IPERD_VERSION).tar.new \
@@ -386,7 +386,7 @@ dist-all: iperd-$(IPERD_VERSION).iso iperd-$(IPERD_VERSION).tar.xz
 download: $(IPERD_DOWNLOADS)
 
 
-update: $(IPERD_DEPS)
+update: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 
 
 clean:
