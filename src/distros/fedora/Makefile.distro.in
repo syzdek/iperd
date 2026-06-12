@@ -14,10 +14,10 @@ else ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), l)
 endif
 
 
-var/distros/fedora/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in
+var/distros/fedora/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in .config
 	@$(DISTRO_FEDORA_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_FEDORA_@DISTRO_VERSION@); \
 		DISTRO_ARCH=x86_64; \
-		$(do_subst_files_dt)
+		$(do_subst_file_dt)
 
