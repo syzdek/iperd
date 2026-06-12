@@ -146,3 +146,19 @@ function iperd_location_desc {
 }
 
 
+submenu 'IPERD Documentation' {
+   menuentry "IPERD Version" {
+      cat (${root})Version.md
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Networking Notes" {
+      cat (${root})doc/Networking.md
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+}
+
+
