@@ -148,7 +148,7 @@ function iperd_location_desc {
 
 submenu 'IPERD Documentation' {
    menuentry "IPERD Version" {
-      cat (${root})Version.md
+      cat (${root})VERSION.md
       echo ""
       echo "press [enter] to return to menu"
       read
