@@ -118,9 +118,18 @@ export iperd_url
 export iperd_pxe
 
 
+echo ""
+echo ""
+echo "IP Engineering Rescue Disk @IPERD_VERSION@"
+echo ""
+echo ""
+
+
 if [ "x${net_default_interface}" == "x" ]; then
    if [ ${grub_platform} == "efi" ]; then
       echo "configuring network using DHCP ..."
+      echo ""
+      echo ""
       net_dhcp
    fi   
 fi
