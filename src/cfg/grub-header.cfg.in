@@ -143,7 +143,15 @@ else
 fi
 
 
-terminfo --utf8 serial @GRUB_TERM@
+set iperd_term_type="@GRUB_TERM@"
+set iperd_term_geometry="@GRUB_TERM_GEOMETRY@"
+if [ "x${iperd_term_type}" == "x" ]; then
+   set iperd_term_type="vt100"
+fi
+if [ "x${iperd_term_geometry}" == "x" ] ;then
+   set iperd_term_geometry="80x24"
+fi
+terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
 #terminfo --utf8 -g 80x24 serial vt100-color
 
 
