@@ -62,6 +62,27 @@ function iperd_boolean_prompt {
 }
 
 
+function iperd_str_prompt {
+   if [ "x${iperd_prompt_str}" != "x" ]; then
+      if [ "x${iperd_prompt_dflt}" != "x" ]; then
+         echo -n "${iperd_prompt_str} [${iperd_prompt_dflt}]: "
+      else
+         echo -n "${iperd_prompt_str}: "
+      fi
+      read iperd_prompt_input
+      echo ""
+      if [ "x${iperd_prompt_input}" == "x" ]; then
+         if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            set iperd_prompt_input="${iperd_prompt_dflt}"
+         fi
+      fi
+      if [ "x${iperd_prompt_input}" == "x " ]; then
+         set iperd_prompt_input=""
+      fi
+   fi
+}
+
+
 insmod all_video
 
 insmod net
