@@ -42,7 +42,8 @@ DEFAULT_ALPINE			?= y
 DEFAULT_ALPINE_URL		?= https://mirrors.edge.kernel.org/alpine
 DEFAULT_ALPINE_GRUB		?= (http,mirrors.edge.kernel.org)/alpine
 DEFAULT_ALPINE_APPEND		?=
-DEFAULT_ALPINE_OPT		:= $(DEFAULT_ALPINE)
+DEFAULT_ALPINE_OPT_X86		:= n
+DEFAULT_ALPINE_OPT_X86_64	:= $(DEFAULT_ALPINE)
 DEFAULT_ALPINE_VERSIONS		:= 3.18 \
 				   3.19 \
 				   3.20 \
@@ -187,8 +188,8 @@ alpine-defconfig:
 	@echo "DISTRO_ALPINE_LOCAL_APPEND=$(DEFAULT_ALPINE_APPEND)"
 	@for REL in $(DEFAULT_ALPINE_VERSIONS); do \
 	   REL="$$(echo "$${REL}" |sed -e 's/\.//g')"; \
-	   echo "DISTRO_ALPINE_$${REL}_x86=$(DEFAULT_ALPINE_OPT)"; \
-	   echo "DISTRO_ALPINE_$${REL}_x8664=$(DEFAULT_ALPINE_OPT)"; \
+	   echo "DISTRO_ALPINE_$${REL}_x86=$(DEFAULT_ALPINE_OPT_X86)"; \
+	   echo "DISTRO_ALPINE_$${REL}_x8664=$(DEFAULT_ALPINE_OPT_X86_64)"; \
 	done;
 
 
