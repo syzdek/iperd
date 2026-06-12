@@ -126,7 +126,7 @@ if [ "x${net_default_interface}" == "x" ]; then
 fi
 
 
-set pager=1
+set pager=0
 export pager
 
 

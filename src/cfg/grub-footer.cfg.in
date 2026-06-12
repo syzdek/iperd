@@ -1,11 +1,15 @@
 submenu 'System Information' {
    menuentry "ACPI Hardware" {
+      set pager=1
+      export pager
       lsacpi
       echo ""
       echo "press [enter] to return to menu"
       read
    }
-   menuentry "APM Information" {
+   menuentry "AP1 Information" {
+      set pager=0
+      export pager
       lsapm
       echo ""
       echo "press [enter] to return to menu"
@@ -30,30 +34,40 @@ submenu 'System Information' {
       set pager=1
    }
    menuentry "PCI Information" {
+      set pager=1
+      export pager
       lspci
       echo ""
       echo "press [enter] to return to menu"
       read
    }
    menuentry "Terminal  Information" {
+      set pager=0
+      export pager
       terminfo
       echo ""
       echo "press [enter] to return to menu"
       read
    }
    menuentry "USB Information" {
+      set pager=1
+      export pager
       usb
       echo ""
       echo "press [enter] to return to menu"
       read
    }
    menuentry "VBE Information" {
+      set pager=1
+      export pager
       vbeinfo
       echo ""
       echo "press [enter] to return to menu"
       read
    }
    menuentry "Video Information" {
+      set pager=1
+      export pager
       videoinfo
       echo ""
       echo "press [enter] to return to menu"
