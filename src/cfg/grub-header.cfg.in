@@ -36,6 +36,17 @@ terminal_input  serial console
 terminal_output serial console
 
 
+function iperd_boolean {
+   if [ "x${iperd_str}" == "x" ]; then
+      set iperd_str="n/a"
+   elif [ ${iperd_str} == "y" ]; then
+      set iperd_str="yes"
+   elif [ ${iperd_str} == "n" ]; then
+      set iperd_str="no"
+   fi
+}
+
+
 function iperd_boolean_prompt {
    if [ "x${iperd_prompt_str}" != "x" ]; then
       set iperd_prompt_continue="no"
