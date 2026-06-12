@@ -194,6 +194,7 @@ export iperd_console
 
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 set iperd_network="n"
+set iperd_network_card="any"
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_grub="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
    set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
@@ -202,6 +203,11 @@ else
    set iperd_grub="(${root})@IPERD_PREFIX@"
    set iperd_url="@IPERD_PREFIX@"
    set iperd_pxe="n"
+   if [ "x${net_default_interface}" == "x" ]; then
+      if [ ${grub_platform} == "efi" ]; then
+         set iperd_use_network="y"
+      fi
+   fi
 fi
 export iperd_grub
 export iperd_url
@@ -215,13 +221,24 @@ echo ""
 echo ""
 
 
-if [ "x${net_default_interface}" == "x" ]; then
-   if [ ${grub_platform} == "efi" ]; then
-      echo "configuring network using DHCP ..."
-      echo ""
-      echo ""
-      net_dhcp
-   fi   
+if [ ${iperd_network} == "y" ]; then
+   if [ "x${net_default_interface}" == "x" ]; then
+      if [ ${grub_platform} == "efi" ]; then
+         echo "configuring network using DHCP ..."
+         echo ""
+         echo ""
+         if [ ${iperd_network_card} == "any" ]; then
+            net_dhcp
+         elif [ "x${iperd_network_card}" == "x" ]; then
+            net_dhcp
+         else
+            net_dhcp "${iperd_network_card}"
+         fi
+         echo ""
+         echo ""
+         net_ls_addr
+      fi   
+   fi
 fi
 
 
