@@ -2,10 +2,10 @@
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_location_desc
    menuentry "Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}]" {
-      if [ "${distro_ver_opt}x" == "dx" ]; then
+      if [ "@DISTRO_OPT@x" == "dx" ]; then
          set distro_ver_grub="${iperd_grub}/boot/alpine/v@DISTRO_VERSION@"
          set distro_ver_url="${iperd_url}/boot/alpine/v@DISTRO_VERSION@"
-      elif [ "${distro_ver_opt}x" == "lx" ]; then
+      elif [ "@DISTRO_OPT@x" == "lx" ]; then
          set distro_ver_grub="@DISTRO_LOCAL_GRUB@/v@DISTRO_VERSION@"
          set distro_ver_url="@DISTRO_LOCAL_URL@/v@DISTRO_VERSION@"
       else
