@@ -1,48 +1,46 @@
 
-IP Engineering Rescue Disk
-==========================
+IP Engineering Rescue Disk: Todo
+================================
 
 OS/Utilities
 ------------
 
-   - [X] CentOS
-   - [ ] clonezilla (tychotithonus)
-   - [X] Darik's Boot and Nuke - DBAN
-   - [X] Debian
-   - [ ] Fedora
-   - [ ] FreeBSD
-   - [ ] FreeDOS
-   - [ ] grml (tychotithonus)
-   - [ ] LWP/lightweight portable security (tychotithonus)
-   - [X] Memtest86+
-   - [ ] OpenBSD
-   - [ ] OpenSUSE
-   - [X] Red Hat Enterprise Linux
-   - [X] Slackware
-   - [ ] SUSE Linux Enterprise Server
-   - [X] SystemRescueCD
-   - [X] TinyCore (tychotithonus)
-   - [X] Ubuntu Linux
+   - add support for CentOS
+   - add support for clonezilla (tychotithonus)
+   - add support for Darik's Boot and Nuke - DBAN
+   - add support for Debian
+   - add support for FreeBSD
+   - add support for FreeDOS
+   - add support for grml (tychotithonus)
+   - add support for LWP/lightweight portable security (tychotithonus)
+   - add support for OpenBSD
+   - add support for OpenSUSE
+   - add support for Red Hat Enterprise Linux
+   - add support for SUSE Linux Enterprise Server
+   - add support for TinyCore (tychotithonus)
+   - add support for Ubuntu Linux
 
 
 Features
 --------
 
-   - [ ] Licensing compliance (for distributing re-built images)
-   - [X] DHCP config for BIOS PXE Boot
-   - [X] BIOS PXE Boot
-   - [X] BIOS Bootable ISO
-   - [X] BIOS Bootable Disk Image
-   - [ ] UEFI PXE Boot
-   - [ ] UEFI Bootable ISO
-   - [ ] UEFI Bootable Disk Image
+   - add mechanism for configuring IPERD without editing .config
+   - test bootable disk image with BIOS
+   - test bootable disk image with UEFI
 
 
 Documentation
 -------------
 
-   - [ ] README.md
-   - [ ] Script Framework
-   - [ ] syslinux/isolinux/pxelinux basics
-   - [ ] Linux kernel cmdline basics
+   - updating README
+   - document configuration
+   - write documentation for maintainers
+   - write notes for using serial consoles
+   - write notes for GRUB basics
+     - GRUB CLI
+     - editing targets
+     - networking
+     - finding disks/images
+     - overriding variables
+   - write notes for Linux kernel cmdline basics
 
