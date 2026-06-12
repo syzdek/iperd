@@ -36,6 +36,32 @@ terminal_input  serial console
 terminal_output serial console
 
 
+function iperd_boolean_prompt {
+   if [ "x${iperd_prompt_str}" != "x" ]; then
+      set iperd_prompt_continue="no"
+      while [ "x${iperd_prompt_continue}" == "xno" ]; do
+         if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
+         else
+            echo -n "${iperd_prompt_str} (yes/no): "
+         fi
+         read iperd_prompt_input
+         echo ""
+         if [ "x${iperd_prompt_input}" == "x" ]; then
+            if [ "x${iperd_prompt_dflt}" != "x" ]; then
+               set iperd_prompt_input="${iperd_prompt_dflt}"
+            fi
+         fi
+         if [ "x${iperd_prompt_input}" == "xyes" ]; then
+            set iperd_prompt_continue="yes"
+         elif [ "x${iperd_prompt_input}" == "xno" ]; then
+            set iperd_prompt_continue="yes"
+         fi
+      done
+   fi
+}
+
+
 insmod all_video
 
 insmod net
