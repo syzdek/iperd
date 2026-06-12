@@ -143,6 +143,9 @@ else
 fi
 
 
+#
+# set initial terminal options
+#
 set iperd_term_type="@GRUB_TERM@"
 set iperd_term_geometry="@GRUB_TERM_GEOMETRY@"
 if [ "x${iperd_term_type}" == "x" ]; then
@@ -155,6 +158,9 @@ terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
 #terminfo --utf8 -g 80x24 serial vt100-color
 
 
+#
+# set text menu theme
+#
 set color_normal='white/black'
 set color_highlight='white/black'
 set menu_color_normal='white/blue'
@@ -192,6 +198,9 @@ set iperd_console="@IPERD_CONSOLE@"
 export iperd_console
 
 
+#
+# check PXE status and set initial network preferences
+#
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 set iperd_network="n"
 set iperd_network_card="any"
@@ -323,6 +332,9 @@ else
 fi
 
 
+#
+# configure network using DHCP
+#
 if [ ${iperd_network} == "y" ]; then
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
