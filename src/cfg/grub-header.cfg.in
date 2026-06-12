@@ -172,26 +172,6 @@ export menu_color_highlight
 
 
 set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
-if [ ${iperd_use_gfxterm} == "y" ]; then
-   insmod png
-   insmod jpeg
-   insmod gfxterm
-   insmod font
-   loadfont /grub/themes/iperd/dejavu_10.pf2
-   loadfont /grub/themes/iperd/dejavu_12.pf2
-   loadfont /grub/themes/iperd/dejavu_14.pf2
-   loadfont /grub/themes/iperd/dejavu_14_bold.pf2
-   loadfont /grub/themes/iperd/dejavu_14_bolditalic.pf2
-   loadfont /grub/themes/iperd/dejavu_16.pf2
-   loadfont /grub/themes/iperd/dejavu_18.pf2
-   set theme=/grub/themes/iperd/theme.txt
-   set gfxmode=1024x768x32,auto
-   set gfxterm_font="/grub/themes/iperd/dejavu_12.pf2"
-   export theme
-   export gfxmode
-   export gfxterm_font
-   terminal_output serial gfxterm
-fi
 
 
 set iperd_console="@IPERD_CONSOLE@"
@@ -329,6 +309,31 @@ else
    echo "IP Engineering Rescue Disk @IPERD_VERSION@"
    echo ""
    echo ""
+fi
+
+
+#
+# configure graphical terminal
+#
+if [ ${iperd_use_gfxterm} == "y" ]; then
+   insmod png
+   insmod jpeg
+   insmod gfxterm
+   insmod font
+   loadfont /grub/themes/iperd/dejavu_10.pf2
+   loadfont /grub/themes/iperd/dejavu_12.pf2
+   loadfont /grub/themes/iperd/dejavu_14.pf2
+   loadfont /grub/themes/iperd/dejavu_14_bold.pf2
+   loadfont /grub/themes/iperd/dejavu_14_bolditalic.pf2
+   loadfont /grub/themes/iperd/dejavu_16.pf2
+   loadfont /grub/themes/iperd/dejavu_18.pf2
+   set theme=/grub/themes/iperd/theme.txt
+   set gfxmode=1024x768x32,auto
+   set gfxterm_font="/grub/themes/iperd/dejavu_12.pf2"
+   export theme
+   export gfxmode
+   export gfxterm_font
+   terminal_output serial gfxterm
 fi
 
 
