@@ -7,14 +7,16 @@ submenu 'System Information' {
       echo "press [enter] to return to menu"
       read
    }
-   menuentry "AP1 Information" {
-      set pager=0
-      export pager
-      lsapm
-      echo ""
-      echo "press [enter] to return to menu"
-      read
-   }
+   if [ ${grub_platform} != "efi" ]; then
+      menuentry "APM Information" {
+         set pager=0
+         export pager
+         lsapm
+         echo ""
+         echo "press [enter] to return to menu"
+         read
+      }
+   fi
    menuentry "Network Information" {
       set pager=0
       echo "Network Interfaces:"
@@ -57,14 +59,16 @@ submenu 'System Information' {
       echo "press [enter] to return to menu"
       read
    }
-   menuentry "VBE Information" {
-      set pager=1
-      export pager
-      vbeinfo
-      echo ""
-      echo "press [enter] to return to menu"
-      read
-   }
+   if [ ${grub_platform} != "efi" ]; then
+      menuentry "VBE Information" {
+         set pager=1
+         export pager
+         vbeinfo
+         echo ""
+         echo "press [enter] to return to menu"
+         read
+      }
+   fi
    menuentry "Video Information" {
       set pager=1
       export pager
@@ -81,7 +85,16 @@ submenu 'System Information' {
       echo "press [enter] to return to menu"
       read
    }
+   menuentry "Loaded Grub Modules" {
+      set pager=1
+      export pager
+      lsmod
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
 }
+
 
 menuentry "Reboot System" {
    echo "rebooting system ..."

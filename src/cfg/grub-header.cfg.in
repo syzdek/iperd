@@ -40,7 +40,6 @@ insmod all_video
 
 insmod net
 insmod http
-insmod vbe
 insmod fat
 insmod chain
 insmod usb
@@ -54,6 +53,8 @@ if [ ${grub_platform} == "efi" ]; then
    insmod efifwsetup
    insmod efi_gop
    insmod efi_uga
+else
+   insmod vbe
 fi
 
 
