@@ -48,6 +48,7 @@ GRUB_SERIAL_DEV		?= 0
 GRUB_SERIAL_BAUD	?= 115200
 GRUB_USE_GFXTERM	?= n
 GRUB_TERM		?= vt100-color
+GRUB_TERM_GEOMETRY	?= 80x24
 GRUB_CFG_INCLUDES	=
 
 
@@ -83,6 +84,7 @@ do_subst = sed \
 	-e "s,[@]GRUB_SERIAL_BAUD[@],$(GRUB_SERIAL_BAUD),g" \
 	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
 	-e "s,[@]GRUB_TERM[@],$(GRUB_TERM),g" \
+	-e "s,[@]GRUB_TERM_GEOMETRY[@],$(GRUB_TERM_GEOMETRY),g" \
 	\
 	-e "s;[@]DISTRO_ARCH[@];$${DISTRO_ARCH};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
@@ -285,6 +287,7 @@ defconfig:
 	@echo "GRUB_SERIAL_BAUD=115200"
 	@echo "GRUB_USE_GFXTERM=n"
 	@echo "GRUB_TERM=vt100-color"
+	@echo "GRUB_TERM_GEOMETRY=80x24"
 	@echo "#"
 	@echo "# IPERD"
 	@echo "IPERD_CONSOLE=tty0"
