@@ -246,8 +246,6 @@ set pager=0
 export pager
 
 
-
-
 submenu 'IPERD Documentation' {
    menuentry "IPERD Version" {
       set pager=0
