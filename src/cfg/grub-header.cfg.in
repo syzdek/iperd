@@ -49,9 +49,14 @@ function iperd_boolean {
 
 function iperd_boolean_prompt {
    if [ "x${iperd_prompt_str}" != "x" ]; then
-      set iperd_prompt_continue="no"
-      while [ "x${iperd_prompt_continue}" == "xno" ]; do
+      set iperd_prompt_continue="n"
+      while [ "x${iperd_prompt_continue}" == "xn" ]; do
          if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            if [ "${iperd_prompt_dflt}" == "y" ]; then
+               set iperd_prompt_dflt="yes"
+            elif [ ${iperd_prompt_dflt} == "n" ]; then
+               set iperd_prompt_dflt="no"
+            fi
             echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
          else
             echo -n "${iperd_prompt_str} (yes/no): "
@@ -63,10 +68,16 @@ function iperd_boolean_prompt {
                set iperd_prompt_input="${iperd_prompt_dflt}"
             fi
          fi
-         if [ "x${iperd_prompt_input}" == "xyes" ]; then
-            set iperd_prompt_continue="yes"
+         if [ "x${iperd_prompt_input}" == "xy" ]; then
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xyes" ]; then
+            set iperd_prompt_input="y"
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xn" ]; then
+            set iperd_prompt_continue="y"
          elif [ "x${iperd_prompt_input}" == "xno" ]; then
-            set iperd_prompt_continue="yes"
+            set iperd_prompt_input="n"
+            set iperd_prompt_continue="y"
          fi
       done
    fi
