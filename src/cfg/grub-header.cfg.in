@@ -95,12 +95,7 @@ if [ ${iperd_use_gfxterm} == "y" ]; then
 fi
 
 
-set iperd_console_dev="ttyS@GRUB_SERIAL_DEV@"
-set iperd_console_rate="@GRUB_SERIAL_BAUD@"
-set iperd_console="${iperd_console_dev}"
-if [ ${iperd_console} != "tty0" ]; then
-   set iperd_console="${iperd_console_dev},${iperd_console_rate}"
-fi
+set iperd_console="@IPERD_CONSOLE@"
 export iperd_console
 
 
