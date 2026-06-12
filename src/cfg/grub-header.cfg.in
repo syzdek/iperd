@@ -313,8 +313,9 @@ fi
 
 
 #
-# configure graphical terminal
+# configure terminal
 #
+terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
 if [ ${iperd_use_gfxterm} == "y" ]; then
    insmod png
    insmod jpeg
