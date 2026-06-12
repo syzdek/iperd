@@ -194,7 +194,7 @@ else
    set iperd_pxe="n"
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
-         set iperd_use_network="y"
+         set iperd_network="y"
       fi
    fi
 fi
