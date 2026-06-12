@@ -43,6 +43,7 @@ CLEANFILES		= *.iso *.tar.xz \
 			  var/distros/*/*.inc
 
 
+GRUB_RUNTIME_SETUP	?= n
 GRUB_SERIAL_DEV		?= 0
 GRUB_SERIAL_BAUD	?= 115200
 GRUB_USE_GFXTERM	?= n
@@ -77,6 +78,7 @@ do_subst = sed \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
 	-e "s;[@]IPERD_CONSOLE[@];$(IPERD_CONSOLE);g" \
 	\
+	-e "s,[@]GRUB_RUNTIME_SETUP[@],$(GRUB_RUNTIME_SETUP),g" \
 	-e "s,[@]GRUB_SERIAL_DEV[@],$(GRUB_SERIAL_DEV),g" \
 	-e "s,[@]GRUB_SERIAL_BAUD[@],$(GRUB_SERIAL_BAUD),g" \
 	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
@@ -278,6 +280,7 @@ defconfig:
 	@echo "# IP Engineering Rescue Disk Configuration"
 	@echo "#"
 	@echo "# GRUB options"
+	@echo "GRUB_RUNTIME_SETUP=n"
 	@echo "GRUB_SERIAL_DEV=0"
 	@echo "GRUB_SERIAL_BAUD=115200"
 	@echo "GRUB_USE_GFXTERM=n"
