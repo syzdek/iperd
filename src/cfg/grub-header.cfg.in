@@ -214,11 +214,113 @@ export iperd_url
 export iperd_pxe
 
 
-echo ""
-echo ""
-echo "IP Engineering Rescue Disk @IPERD_VERSION@"
-echo ""
-echo ""
+#
+# Prompt user to review setup options
+#
+if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
+   set iperd_continue="n"
+   while [ ${iperd_continue} == "n" ]; do
+      echo ""
+      echo ""
+      echo "IP Engineering Rescue Disk @IPERD_VERSION@"
+      echo ""
+      echo "Review Configuration:"
+      echo "   IPERD Console:            ${iperd_console}"
+      echo "   IPERD Prefix:             ${iperd_grub}"
+      echo "   IPERD URL:                ${iperd_url}"
+      if [ "x${iperd_pxe}" == "xn" ]; then
+         if [ ${grub_platform} == "efi" ]; then
+            set iperd_str="${iperd_network}"
+            iperd_boolean
+            echo "   Initialize Network:       ${iperd_str}"
+            if [ ${iperd_network} == "y" ]; then
+               echo "   Network Interface:        ${iperd_network_card}"
+            fi
+         fi
+      fi
+      set iperd_str="${iperd_use_gfxterm}"
+      iperd_boolean
+      echo "   Graphics Terminal:        ${iperd_str}"
+      echo "   Serial Terminal Type:     ${iperd_term_type}"
+      echo "   Serial Terminal Geometry: ${iperd_term_geometry}"
+      echo ""
+
+      set iperd_prompt_dflt=""
+      set iperd_prompt_str="Is the above correct"
+      iperd_boolean_prompt
+      if [ "x${iperd_prompt_input}" == "xy" ]; then
+         set iperd_continue="y"
+      fi
+
+      if [ ${iperd_continue} == "n" ]; then
+
+         # IPERD Console
+         set iperd_prompt_dflt="${iperd_console}"
+         set iperd_prompt_str="IPERD Console"
+         iperd_str_prompt
+         set iperd_console="${iperd_prompt_input}"
+
+         # IPERD Prefix
+         set iperd_prompt_dflt="${iperd_grub}"
+         set iperd_prompt_str="IPERD Prefix"
+         iperd_str_prompt
+         set iperd_grub="${iperd_prompt_input}"
+
+         # IPERD URL
+         set iperd_prompt_dflt="${iperd_url}"
+         set iperd_prompt_str="IPERD URL"
+         iperd_str_prompt
+         set iperd_url="${iperd_prompt_input}"
+
+         if [ "x${iperd_pxe}" == "xn" ]; then
+            if [ ${grub_platform} == "efi" ]; then
+
+            # Initialize Network
+            set iperd_prompt_dflt="${iperd_network}"
+            set iperd_prompt_str="Initialize Network"
+            iperd_boolean_prompt
+            set iperd_network="${iperd_prompt_input}"
+
+             # Network Interface
+            if [ ${iperd_network} == "y" ]; then
+               set iperd_prompt_dflt="${iperd_network_card}"
+               set iperd_prompt_str="Network Interface (e.g. efinet0, any, etc)"
+               iperd_str_prompt
+               set iperd_network_card="${iperd_prompt_input}"
+            fi
+
+            fi
+         fi
+
+         # Graphics Terminal
+         set iperd_prompt_dflt="${iperd_use_gfxterm}"
+         set iperd_prompt_str="Graphics Terminal"
+         iperd_boolean_prompt
+         set iperd_use_gfxterm="${iperd_prompt_input}"
+
+         # Terminal Type
+         set iperd_prompt_dflt="${iperd_term_type}"
+         set iperd_prompt_str="Terminal Type"
+         iperd_str_prompt
+         set iperd_term_type="${iperd_prompt_input}"
+
+         # Terminal Geometry
+         set iperd_prompt_dflt="${iperd_term_geometry}"
+         set iperd_prompt_str="Terminal Geometry"
+         iperd_str_prompt
+         set iperd_term_geometry="${iperd_prompt_input}"
+
+      fi
+   done
+   echo ""
+   echo ""
+else
+   echo ""
+   echo ""
+   echo "IP Engineering Rescue Disk @IPERD_VERSION@"
+   echo ""
+   echo ""
+fi
 
 
 if [ ${iperd_network} == "y" ]; then
