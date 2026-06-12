@@ -116,6 +116,20 @@ do_subst_fn		= $(do_subst_common); chmod 0755 "$(@)"
 do_subst_dt		= $(do_subst_common); chmod 0644 "$(@)"
 
 
+do_subst_file		= if test "x$(V)" == "x0";then \
+			     echo "  SED      $(@)"; \
+			  else \
+			     echo "do_subst $(<) > ${@}"; \
+			  fi; \
+			  rm -f "$(@)" "$(@).new" || exit 1; \
+			  mkdir -p "`dirname "$(@)"`" || exit 1; \
+			  $(do_subst) $(<) > "$(@).new" || exit 1; \
+			  mv "$(@).new" "$(@)" || exit 1; \
+			  touch "$(@)"
+do_subst_file_fn	= $(do_subst_file); chmod 0755 "$(@)"
+do_subst_file_dt	= $(do_subst_file); chmod 0644 "$(@)"
+
+
 do_subst_files		= if test "x$(V)" == "x0";then \
 			     echo "  SED      $(@)"; \
 			  else \
