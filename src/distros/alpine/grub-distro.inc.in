@@ -18,6 +18,7 @@
 
       export distro_ver_grub;
       export distro_ver_url;
+      export distro_ver_append;
       export distro_ver_loc;
 
       echo   'Booting Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
@@ -29,7 +30,7 @@
              alpine_repo=${distro_ver_url}/main \
              ip=dhcp:::::eth0: \
              console=${iperd_linux_console} \
-             ${distro_append}
+             ${distro_ver_append}
       echo   'loading initramfs-lts ...'
       initrd ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/initramfs-lts
       echo   'booting system ...'
