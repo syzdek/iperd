@@ -52,7 +52,9 @@ GRUB_TERM_GEOMETRY	?= 80x24
 GRUB_CFG_INCLUDES	=
 
 
-IPERD_CONSOLE		?= tty0
+LINUX_CONSOLE		?= tty0
+
+
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 IPERD_DOWNLOADS		:=
 IPERD_MIRRORS		:=
@@ -77,7 +79,8 @@ do_subst = sed \
 	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
-	-e "s;[@]IPERD_CONSOLE[@];$(IPERD_CONSOLE);g" \
+	\
+	-e "s;[@]LINUX_CONSOLE[@];$(LINUX_CONSOLE);g" \
 	\
 	-e "s,[@]GRUB_RUNTIME_SETUP[@],$(GRUB_RUNTIME_SETUP),g" \
 	-e "s,[@]GRUB_SERIAL_DEV[@],$(GRUB_SERIAL_DEV),g" \
@@ -289,8 +292,10 @@ defconfig:
 	@echo "GRUB_TERM=vt100-color"
 	@echo "GRUB_TERM_GEOMETRY=80x24"
 	@echo "#"
+	@echo "# Linux kernel options"
+	@echo "LINUX_CONSOLE=tty0"
+	@echo "#"
 	@echo "# IPERD"
-	@echo "IPERD_CONSOLE=tty0"
 	@echo "IPERD_PREFIX="
 	@echo "IPERD_NET_PREFIX=/httpboot"
 	@for CFG in $(IPERD_DEFCONFIGS); do \

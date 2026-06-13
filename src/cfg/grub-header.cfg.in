@@ -173,8 +173,8 @@ export menu_color_highlight
 set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
 
 
-set iperd_console="@IPERD_CONSOLE@"
-export iperd_console
+set iperd_linux_console="@LINUX_CONSOLE@"
+export iperd_linux_console
 
 
 #
@@ -213,7 +213,7 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
       echo "IP Engineering Rescue Disk @IPERD_VERSION@"
       echo ""
       echo "Review Configuration:"
-      echo "   IPERD Console:            ${iperd_console}"
+      echo "   Linux Console:            ${iperd_linux_console}"
       echo "   IPERD Prefix:             ${iperd_grub}"
       echo "   IPERD URL:                ${iperd_url}"
       if [ "x${iperd_pxe}" == "xn" ]; then
@@ -242,11 +242,11 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
 
       if [ ${iperd_continue} == "n" ]; then
 
-         # IPERD Console
-         set iperd_prompt_dflt="${iperd_console}"
-         set iperd_prompt_str="IPERD Console"
+         # Linux Console
+         set iperd_prompt_dflt="${iperd_linux_console}"
+         set iperd_prompt_str="Linux Console"
          iperd_str_prompt
-         set iperd_console="${iperd_prompt_input}"
+         set iperd_linux_console="${iperd_prompt_input}"
 
          # IPERD Prefix
          set iperd_prompt_dflt="${iperd_grub}"
