@@ -2,14 +2,24 @@
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@) [${distro_ver_loc}]" {
-      if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set distro_ver_grub="${iperd_grub}/boot/slackware/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
-      elif [ "@DISTRO_OPT@x" == "lx" ]; then
-         set distro_ver_grub="@DISTRO_LOCAL_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
-      else
-         set distro_ver_grub="@DISTRO_GRUB@/slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@"
-      fi
-      export distro_ver_grub
+
+      set distro_name="slackware";
+      set distro_ver_opt="@DISTRO_OPT@";
+      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
+      set distro_local_url="@DISTRO_LOCAL_URL@";
+      set distro_grub="@DISTRO_GRUB@";
+      set distro_url="@DISTRO_URL@";
+
+      iperd_distro_ver_paths;
+
+      set distro_ver_suffix="slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@";
+      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
+      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
+
+      export distro_ver_grub;
+      export distro_ver_url;
+      export distro_ver_loc;
+
       echo   'Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
       echo   "${distro_ver_loc}: ${distro_ver_grub}"
       echo   'Loading bzImage ...'
