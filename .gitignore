@@ -4,6 +4,7 @@
 /.makefile.d/
 /.version*
 /EFI/
+/RCS/
 /System/
 /VERSION.md
 /boot/
