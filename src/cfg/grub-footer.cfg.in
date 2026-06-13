@@ -1,5 +1,13 @@
 submenu 'Documentation ...' {
-   menuentry "IPERD Version" {
+   menuentry "IPERD Copyright" {
+      set pager=1
+      export pager
+      cat (${root})/COPYING.md
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
+   menuentry "Software Versions" {
       set pager=0
       export pager
       cat (${root})/VERSION.md
