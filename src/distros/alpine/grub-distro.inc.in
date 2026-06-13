@@ -2,23 +2,29 @@
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
    menuentry "Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}]" {
-      if [ "@DISTRO_OPT@x" == "dx" ]; then
-         set distro_ver_grub="${iperd_grub}/boot/alpine/v@DISTRO_VERSION@"
-         set distro_ver_url="${iperd_url}/boot/alpine/v@DISTRO_VERSION@"
-      elif [ "@DISTRO_OPT@x" == "lx" ]; then
-         set distro_ver_grub="@DISTRO_LOCAL_GRUB@/v@DISTRO_VERSION@"
-         set distro_ver_url="@DISTRO_LOCAL_URL@/v@DISTRO_VERSION@"
-      else
-         set distro_ver_grub="@DISTRO_GRUB@/v@DISTRO_VERSION@"
-         set distro_ver_url="@DISTRO_URL@/v@DISTRO_VERSION@"
-      fi
-      export distro_ver_grub
-      export distro_ver_url
+
+      set distro_name="alpine";
+      set distro_ver_opt="@DISTRO_OPT@";
+      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
+      set distro_local_url="@DISTRO_LOCAL_URL@";
+      set distro_grub="@DISTRO_GRUB@";
+      set distro_url="@DISTRO_URL@";
+
+      iperd_distro_ver_paths;
+
+      set distro_ver_suffix="v@DISTRO_VERSION@";
+      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
+      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
+
+      export distro_ver_grub;
+      export distro_ver_url;
+      export distro_ver_loc;
+
       echo   'Booting Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
       echo   "${distro_ver_loc}: ${distro_ver_grub}"
       echo   'loading vmlinuz-lts ...'
       linux  ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/vmlinuz-lts \
-             modloop=${distro_ver_url}/releases/@DISTRO_ARCH@/netboot//modloop-lts \
+             modloop=${distro_ver_url}/releases/@DISTRO_ARCH@/netboot/modloop-lts \
              modules=loop,squashfs,sd-mod,usb-storage \
              alpine_repo=${distro_ver_url}/main \
              ip=dhcp:::::eth0: \
