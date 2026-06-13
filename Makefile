@@ -369,6 +369,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWN
 	   -m '*.swp' \
 	   -m '.git' \
 	   -m '.iperd' \
+	   -m '.makefile.d \
 	   -m 'iperd-*/' \
 	   -m 'iperd-*.iso' \
 	   -m 'iperd-*.tar' \
@@ -393,6 +394,7 @@ iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS) $(IPERD_D
 	   --exclude='*.swp' \
 	   --exclude='.git' \
 	   --exclude='.iperd' \
+	   --exclude='.makefile.d' \
 	   --exclude='iperd-*' \
 	   --exclude='iperd-*.iso' \
 	   --exclude='iperd-*.tar' \
