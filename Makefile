@@ -358,8 +358,12 @@ VERSION.md: $(IPERD_VERSION_DEPS)
 	@echo "  GEN      $(@)"
 	@rm -f "$(@)"
 	@head -4 COPYING.md >> "$(@)"
-	@echo "Version:      $(IPERD_VERSION)  " >> "$(@)"
-	@echo "Last Updated: $(IPERD_DATE)  " >> "$(@)"
+	@echo "IPERD:         $(IPERD_VERSION) ($(IPERD_DATE))  " >> "$(@)"
+	@echo "Generated On:  $(DATE)"  >> "$(@)"
+	@echo "" >> "$(@)"
+	@echo "GNU GRUB:      $(GRUB_VERSION)  " >> "$(@)"
+	@echo "GNU Unifont:   $(UNIFONT_VERSION)  " >> "$(@)"
+	@echo "DejaVu Fonts:  $(DEJAVU_VERSION)  " >> "$(@)"
 	@echo "" >> "$(@)"
 
 
