@@ -43,7 +43,7 @@ Compatibility
     +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
     | Alpine Linux      |  ?  |  ?  |  ?  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
     | Arch Linux        |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
-    | Debian Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Debian Linux      |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  Y  |  Y  |
     | Fedora Linux      |  -  |  ?  |  ?  |  -  |  Y  |  Y  |  -  |  Y  |  Y  |
     | Gentoo Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
     | openSUSE          |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |

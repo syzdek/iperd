@@ -1,5 +1,0 @@
-MENU BEGIN debian
-MENU TITLE Debian Linux Installers
-#label debiam
-#    MENU LABEL Debian Linux
-#    MENU DISABLE

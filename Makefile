@@ -60,6 +60,7 @@ IPERD_DOWNLOADS		:=
 IPERD_MIRRORS		:=
 IPERD_PRUNE		:=
 IPERD_DEFCONFIGS	:= alpine \
+			   debian \
 			   fedora \
 			   rocky \
 			   slackware
@@ -332,6 +333,9 @@ include src/themes/Makefile.inc
 include src/netdir/Makefile.inc
 ifeq ($(DISTRO_ALPINE), y)
    include src/distros/alpine/Makefile.inc
+endif
+ifeq ($(DISTRO_DEBIAN), y)
+   include src/distros/debian/Makefile.inc
 endif
 ifeq ($(DISTRO_FEDORA), y)
    include src/distros/fedora/Makefile.inc

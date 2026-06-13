@@ -8,7 +8,6 @@ OS/Utilities
    - add support for CentOS
    - add support for clonezilla (tychotithonus)
    - add support for Darik's Boot and Nuke - DBAN
-   - add support for Debian
    - add support for FreeBSD
    - add support for FreeDOS
    - add support for grml (tychotithonus)
