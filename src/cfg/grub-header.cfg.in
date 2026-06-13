@@ -57,7 +57,13 @@ function iperd_boolean_prompt {
             elif [ ${iperd_prompt_dflt} == "n" ]; then
                set iperd_prompt_dflt="no"
             fi
-            echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
+            if [ "x${iperd_prompt_abort}" == "xy" ]; then
+               echo -n "${iperd_prompt_str} (yes/no/abort) [${iperd_prompt_dflt}]: "
+            else
+               echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
+            fi
+         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+            echo -n "${iperd_prompt_str} (yes/no/abort): "
          else
             echo -n "${iperd_prompt_str} (yes/no): "
          fi
@@ -78,9 +84,17 @@ function iperd_boolean_prompt {
          elif [ "x${iperd_prompt_input}" == "xno" ]; then
             set iperd_prompt_input="n"
             set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+            if [ "x${iperd_prompt_input}" == "xa" ]; then
+               set iperd_prompt_continue="y"
+            elif [ "x${iperd_prompt_input}" == "xabort" ]; then
+               set iperd_prompt_input="a"
+               set iperd_prompt_continue="y"
+            fi
          fi
       done
    fi
+   set iperd_prompt_abort="n"
 }
 
 
@@ -267,11 +281,15 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
       echo "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
       echo ""
 
+      set iperd_prompt_abort='y'
       set iperd_prompt_dflt=""
       set iperd_prompt_str="Is the above correct"
       iperd_boolean_prompt
       if [ "x${iperd_prompt_input}" == "xy" ]; then
          set iperd_continue="y"
+      elif [ "x${iperd_prompt_input}" == "xa" ]; then
+         echo "exiting IPERD/GRUB ..."
+         exit
       fi
 
       if [ ${iperd_continue} == "n" ]; then
