@@ -58,6 +58,18 @@ var/dejavu/source/.iperd: var/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
 	@touch $(@)
 
 
+var/dejavu/source/ttf/DejaVuSansMono.ttf: var/dejavu/source/.iperd
+	@test -f "$(@)" && touch $(@)
+
+
+var/dejavu/source/ttf/DejaVuSansMono-Bold.ttf: var/dejavu/source/.iperd
+	@test -f "$(@)" && touch $(@)
+
+
+var/dejavu/source/ttf/DejaVuSansMono-BoldOblique.ttf: var/dejavu/source/.iperd
+	@test -f "$(@)" && touch $(@)
+
+
 var/dejavu/.iperd: var/dejavu/source/.iperd
 	@touch $(@)
 
