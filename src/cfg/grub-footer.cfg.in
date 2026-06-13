@@ -96,26 +96,28 @@ submenu 'System Information ...' {
 }
 
 
-menuentry "Boot next device" {
-   echo "exiting grub ..."
-   exit
-}
-menuentry "Reboot System" {
-   echo "rebooting system ..."
-   reboot
-}
-if [ ${grub_platform} == "efi" ]; then
-   fwsetup --is-supported
-   if [ $? -eq 0 ]; then
-      menuentry "System Setup" {
-         echo "rebooting system into setup ..."
-         fwsetup
-      }
+submenu 'System Options ...' {
+   menuentry "Boot Next System Device" {
+      echo "exiting grub ..."
+      exit
+   }
+   menuentry "Reboot System" {
+      echo "rebooting system ..."
+      reboot
+   }
+   if [ ${grub_platform} == "efi" ]; then
+      fwsetup --is-supported
+      if [ $? -eq 0 ]; then
+         menuentry "System Setup" {
+            echo "rebooting system into setup ..."
+            fwsetup
+         }
+      fi
    fi
-fi
-menuentry "Power Off System" {
-   echo "halting system ..."
-   halt
+   menuentry "Power Off System" {
+      echo "halting system ..."
+      halt
+   }
 }
 
 
