@@ -90,6 +90,7 @@ do_subst = sed \
 	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
 	-e "s,[@]GRUB_TERM[@],$(GRUB_TERM),g" \
 	-e "s,[@]GRUB_TERM_GEOMETRY[@],$(GRUB_TERM_GEOMETRY),g" \
+	-e "s,[@]GRUB_VERSION[@],$(GRUB_VERSION),g" \
 	\
 	-e "s;[@]DISTRO_ARCH[@];$${DISTRO_ARCH};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
