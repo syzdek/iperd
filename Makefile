@@ -360,15 +360,18 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWN
 	   --compress=xz  \
 	   --core-compress=xz \
 	   -o "$(@).new" \
-	   -m '*.iso' \
 	   -m '*.new' \
 	   -m '*.swp' \
 	   -m '.git' \
-	   -m '.gitignore' \
+	   -m '.iperd' \
+	   -m 'iperd-*/' \
+	   -m 'iperd-*.iso' \
 	   -m 'iperd-*.tar' \
+	   -m 'iperd-*.tar.new.xz' \
 	   -m 'iperd-*.tar.xz' \
 	   -m 'tools/' \
-	   -m 'var/' \
+	   -m 'var/distros/' \
+	   -m 'var/*/source/' \
 	   -volid IPERD \
 	   -publisher "IP Engineering Rescue Disk (iperd.org)" \
 	   ./
@@ -381,15 +384,18 @@ iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS) $(IPERD_D
 	tar -c \
 	   -f iperd-$(IPERD_VERSION).tar.new \
 	   --transform='flags=r;s|^.|iperd-$(IPERD_VERSION)|g' \
-	   --exclude='*.iso' \
 	   --exclude='*.new' \
 	   --exclude='*.swp' \
 	   --exclude='.git' \
-	   --exclude='.gitignore' \
+	   --exclude='.iperd' \
+	   --exclude='iperd-*' \
+	   --exclude='iperd-*.iso' \
 	   --exclude='iperd-*.tar' \
+	   --exclude='iperd-*.tar.new.xz' \
 	   --exclude='iperd-*.tar.xz' \
 	   --exclude='tools' \
-	   --exclude='var' \
+	   --exclude='var/distros' \
+	   --exclude='var/*/source' \
 	   .
 	xz --threads=0 -z iperd-$(IPERD_VERSION).tar.new
 	@mv "iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"
