@@ -52,12 +52,13 @@ var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
 	@touch $(@)
 
 
-var/unifont/unifont.bdf: var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
+var/unifont/source/unifont.bdf: var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
+	@mkdir -p "$(@D)"
 	@GZIP_FILE="$(^)"; GZIP_DST="$(@)"; $(do_gzip);
 	@touch $(@)
 
 
-var/unifont/.iperd: var/unifont/unifont.bdf
+var/unifont/.iperd: var/unifont/source/unifont.bdf
 	@touch $(@)
 
 

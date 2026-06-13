@@ -62,7 +62,7 @@ GRUB_CONFIGURE			:= ../configure\
 				      --enable-boot-time \
 				      --enable-cache-stats \
 				      --with-dejavufont=$(DEJAVU_ROOT)/source/ttf/DejaVuSansMono.ttf \
-				      --with-unifont=$(UNIFONT_ROOT)/unifont.bdf
+				      --with-unifont=$(UNIFONT_ROOT)/source/unifont.bdf
 
 
 #
