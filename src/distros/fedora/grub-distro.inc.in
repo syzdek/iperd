@@ -1,6 +1,6 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
-   iperd_location_desc
+   iperd_distro_ver_desc
    submenu "Fedora Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}]" {
       if [ "@DISTRO_OPT@x" == "dx" ]; then
          set distro_ver_grub="${iperd_grub}/boot/fedora/@DISTRO_VERSION@/Everything/@DISTRO_ARCH@"
