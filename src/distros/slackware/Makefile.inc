@@ -66,7 +66,7 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_SLACKWARE_LOCAL_URL)';
 
 
-.PHONY: slackware-download slackware-defconfig
+.PHONY: slackware-clean slackware-distclean slackware-download slackware-defconfig
 
 
 .makefile.d/slackware.inc: .config src/distros/slackware/Makefile.distro.in
@@ -110,6 +110,14 @@ boot/slackware/%/bzImage:
 
 
 slackware-download: $(DISTRO_SLACKWARE_BOOT)
+
+
+slackware-clean:
+	rm -Rf var/distros/slackware
+	rm -Rf boot/slackware
+        
+
+slackware-distclean: slackware-clean
 
 
 #
