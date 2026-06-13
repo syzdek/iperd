@@ -18,6 +18,7 @@
 
       export distro_ver_grub;
       export distro_ver_url;
+      export distro_ver_append;
       export distro_ver_loc;
 
       menuentry "Install or upgrade an existing system" {
@@ -26,7 +27,7 @@
          echo   'Loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 console=${iperd_linux_console} \
-                ${distro_append}
+                ${distro_ver_append}
          echo   'Loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
@@ -38,7 +39,7 @@
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset \
                 console=${iperd_linux_console} \
-                ${distro_append}
+                ${distro_ver_append}
          echo   'Loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
@@ -55,7 +56,7 @@
                 inst.text \
                 ip=eth0:dhcp \
                 console=${iperd_linux_console} \
-                ${distro_append} @DISTRO_EXTRA_APPEND@
+                ${distro_ver_append} @DISTRO_EXTRA_APPEND@
          echo   'Loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
@@ -69,7 +70,7 @@
                 inst.repo=${distro_ver_url}/os/ \
                 inst.stage2=${distro_ver_url}/os \
                 console=${iperd_linux_console} \
-                ${distro_append}
+                ${distro_ver_append}
          echo   'Loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
@@ -81,7 +82,7 @@
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 rescue \
                 console=${iperd_linux_console} \
-                ${distro_append}
+                ${distro_ver_append}
          echo   'Loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
