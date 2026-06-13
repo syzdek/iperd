@@ -237,24 +237,25 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
       echo "IP Engineering Rescue Disk @IPERD_VERSION@"
       echo ""
       echo "Review Configuration:"
-      echo "   Linux Console:            ${iperd_linux_console}"
-      echo "   IPERD Prefix:             ${iperd_grub}"
-      echo "   IPERD URL:                ${iperd_url}"
+      echo "   GNU GRUB Version:          @GRUB_VERSION@"
+      echo "   Linux Console:             ${iperd_linux_console}"
+      echo "   IPERD GRUB Prefix:         ${iperd_grub}"
+      echo "   IPERD Boot URL:            ${iperd_url}"
       if [ "x${iperd_pxe}" == "xn" ]; then
          if [ ${grub_platform} == "efi" ]; then
             set iperd_str="${iperd_network}"
             iperd_boolean
-            echo "   Initialize Network:       ${iperd_str}"
+            echo "   GRUB Initialize Network:   ${iperd_str}"
             if [ ${iperd_network} == "y" ]; then
-               echo "   Network Interface:        ${iperd_network_card}"
+               echo "   GRUB Network Interface:    ${iperd_network_card}"
             fi
          fi
       fi
       set iperd_str="${iperd_use_gfxterm}"
       iperd_boolean
-      echo "   Graphics Terminal:        ${iperd_str}"
-      echo "   Serial Terminal Type:     ${iperd_term_type}"
-      echo "   Serial Terminal Geometry: ${iperd_term_geometry}"
+      echo "   GRUB Graphics Terminal:    ${iperd_str}"
+      echo "   GRUB Serial Term Type:     ${iperd_term_type}"
+      echo "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
       echo ""
 
       set iperd_prompt_dflt=""
@@ -272,31 +273,31 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
          iperd_str_prompt
          set iperd_linux_console="${iperd_prompt_input}"
 
-         # IPERD Prefix
+         # IPERD GRUB Prefix
          set iperd_prompt_dflt="${iperd_grub}"
-         set iperd_prompt_str="IPERD Prefix"
+         set iperd_prompt_str="IPERD GRUB Prefix"
          iperd_str_prompt
          set iperd_grub="${iperd_prompt_input}"
 
-         # IPERD URL
+         # IPERD Boot URL
          set iperd_prompt_dflt="${iperd_url}"
-         set iperd_prompt_str="IPERD URL"
+         set iperd_prompt_str="IPERD Boot URL"
          iperd_str_prompt
          set iperd_url="${iperd_prompt_input}"
 
          if [ "x${iperd_pxe}" == "xn" ]; then
             if [ ${grub_platform} == "efi" ]; then
 
-            # Initialize Network
+            # GRUB Initialize Network
             set iperd_prompt_dflt="${iperd_network}"
-            set iperd_prompt_str="Initialize Network"
+            set iperd_prompt_str="GRUB Initialize Network"
             iperd_boolean_prompt
             set iperd_network="${iperd_prompt_input}"
 
-             # Network Interface
+             # GRUB Network Interface
             if [ ${iperd_network} == "y" ]; then
                set iperd_prompt_dflt="${iperd_network_card}"
-               set iperd_prompt_str="Network Interface (e.g. efinet0, any, etc)"
+               set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
                iperd_str_prompt
                set iperd_network_card="${iperd_prompt_input}"
             fi
@@ -304,21 +305,21 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
             fi
          fi
 
-         # Graphics Terminal
+         # GRUB Graphics Terminal
          set iperd_prompt_dflt="${iperd_use_gfxterm}"
-         set iperd_prompt_str="Graphics Terminal"
+         set iperd_prompt_str="GRUB Graphics Terminal"
          iperd_boolean_prompt
          set iperd_use_gfxterm="${iperd_prompt_input}"
 
-         # Terminal Type
+         # GRUB Serial Term Type
          set iperd_prompt_dflt="${iperd_term_type}"
-         set iperd_prompt_str="Terminal Type"
+         set iperd_prompt_str="GRUB Serial Term Type"
          iperd_str_prompt
          set iperd_term_type="${iperd_prompt_input}"
 
-         # Terminal Geometry
+         # GRUB Serial Term Geometry
          set iperd_prompt_dflt="${iperd_term_geometry}"
-         set iperd_prompt_str="Terminal Geometry"
+         set iperd_prompt_str="GRUB Serial Term Geometry"
          iperd_str_prompt
          set iperd_term_geometry="${iperd_prompt_input}"
 
