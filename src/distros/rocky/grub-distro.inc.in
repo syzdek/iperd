@@ -1,7 +1,7 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
-   submenu "Rocky Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}]" {
+   submenu "Rocky Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}] ..." {
 
       set distro_name="rocky";
       set distro_ver_opt="@DISTRO_OPT@";
