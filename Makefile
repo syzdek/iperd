@@ -369,7 +369,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWN
 	   -m '*.swp' \
 	   -m '.git' \
 	   -m '.iperd' \
-	   -m '.makefile.d \
+	   -m '.makefile.d' \
 	   -m 'iperd-*/' \
 	   -m 'iperd-*.iso' \
 	   -m 'iperd-*.tar' \
