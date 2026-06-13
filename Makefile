@@ -439,17 +439,19 @@ prune: $(IPERD_PRUNE)
 selfupdate:
 	if test ! -e .git; then \
 	   rm -Rf iperd-git.new || exit 1; \
-	   git clone --no-checkout $(IPERD_GIT_URL) iperd-git.new || exit 1; \
+	   git clone \
+	      --no-checkout \
+	      $(IPERD_GIT_URL) \
+	      iperd-git.new \
+	      || exit 1; \
 	   mv iperd-git.new/.git .git || exit 1; \
 	   rm -Rf iperd-git.new || exit 1; \
 	fi;
+	git reset || exit 1;
+	git diff --diff-filter=D --name-only --exit-code > /dev/null \
+		||  git checkout .; \
 	git fetch origin || exit 1;
 	git merge origin/$$(git rev-parse --abbrev-ref HEAD) || exit 1;
-	git reset || exit 1;
-	git diff --exit-code > /dev/null; \
-	if test $? -ne 0; then \
-	   git checkout . || exit 1; \
-	fi;
 
 
 # end of makefile
