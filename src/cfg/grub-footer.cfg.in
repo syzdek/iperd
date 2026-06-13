@@ -1,4 +1,4 @@
-submenu 'System Information' {
+submenu 'System Information ...' {
    menuentry "ACPI Hardware" {
       set pager=1
       export pager
