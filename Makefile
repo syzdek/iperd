@@ -438,6 +438,7 @@ prune: $(IPERD_PRUNE)
 
 selfupdate:
 	if test ! -e .git; then \
+	   rm -Rf iperd-git.new || exit 1; \
 	   git clone --no-checkout $(IPERD_GIT_URL) iperd-git.new || exit 1; \
 	   mv iperd-git.new/.git .git || exit 1; \
 	   rm -Rf iperd-git.new || exit 1; \
