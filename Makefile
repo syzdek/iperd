@@ -448,7 +448,7 @@ selfupdate:
 	git reset || exit 1;
 	git diff --exit-code > /dev/null; \
 	if test $? -ne 0; then \
-	   git checkout . || exit 1;
+	   git checkout . || exit 1; \
 	fi;
 
 
