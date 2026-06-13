@@ -7,6 +7,17 @@ submenu 'Documentation ...' {
       echo "press [enter] to return to menu"
       read
    }
+   menuentry "IPERD Notice" {
+      set pager=0
+      export pager
+      echo ""
+      echo ""
+      iperd_notice
+      echo ""
+      echo ""
+      echo "press [enter] to return to menu"
+      read
+   }
    menuentry "Software Versions" {
       set pager=0
       export pager

@@ -158,6 +158,15 @@ function iperd_distro_ver_paths {
 }
 
 
+function iperd_notice {
+   echo "                     IP Engineering Rescue Disk"
+   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
+   echo "      bootloader to boot utilities, installers, and operating"
+   echo "      systems. The IPERD boot menu will not modify the system,"
+   echo "      however images booted by IPERD may modify the system."
+}
+
+
 insmod all_video
 
 insmod net
@@ -246,11 +255,7 @@ export iperd_pxe
 if [ "x@GRUB_RUNTIME_NOTICE@" == "xy" ]; then
    echo ""
    echo ""
-   echo "                     IP Engineering Rescue Disk"
-   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
-   echo "      bootloader to boot utilities, installers, and operating"
-   echo "      systems. The IPERD boot menu will not modify the system,"
-   echo "      however images booted by IPERD may modify the system."
+   iperd_notice
 fi
 if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
    set iperd_continue="n"
