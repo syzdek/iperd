@@ -69,7 +69,7 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_ROCKY_LOCAL_URL)';
 
 
-.PHONY: rocky-download rocky-defconfig
+.PHONY: rocky-clean rocky-distclean rocky-download rocky-defconfig
 
 
 .makefile.d/rocky.inc: .config src/distros/rocky/Makefile.distro.in
@@ -111,6 +111,14 @@ boot/rocky/%/vmlinuz:
 
 
 rocky-download: $(DISTRO_ROCKY_BOOT)
+
+
+rocky-clean:
+	rm -Rf var/distros/rocky
+	rm -Rf boot/rocky
+        
+
+rocky-distclean: rocky-clean
 
 
 #
