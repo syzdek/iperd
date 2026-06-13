@@ -295,7 +295,7 @@ defconfig:
 	@echo "GRUB_SERIAL_DEV=0"
 	@echo "GRUB_SERIAL_BAUD=115200"
 	@echo "GRUB_USE_GFXTERM=n"
-	@echo "GRUB_TERM=vt100-color"
+	@echo "GRUB_TERM=vt100"
 	@echo "GRUB_TERM_GEOMETRY=80x24"
 	@echo "#"
 	@echo "# Linux kernel options"
