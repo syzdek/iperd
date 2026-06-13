@@ -69,7 +69,7 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_ALPINE_LOCAL_URL)';
 
 
-.PHONY: alpine-download alpine-defconfig
+.PHONY: alpine-clean alpine-distclean alpine-download alpine-defconfig
 
 
 .makefile.d/alpine.inc: .config src/distros/alpine/Makefile.distro.in
@@ -171,6 +171,14 @@ boot/alpine/v%/main/x86_64/.iperd:
 
 
 alpine-download: $(DISTRO_ALPINE_BOOT)
+
+
+alpine-clean:
+	rm -Rf var/distros/alpine
+	rm -Rf boot/alpine
+
+
+alpine-distclean: alpine-clean
 
 
 #
