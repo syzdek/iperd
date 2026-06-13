@@ -229,6 +229,15 @@ export iperd_pxe
 #
 # Prompt user to review setup options
 #
+if [ "x@GRUB_RUNTIME_NOTICE@" == "xy" ]; then
+   echo ""
+   echo ""
+   echo "                     IP Engineering Rescue Disk"
+   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
+   echo "      bootloader to boot utilities, installers, and operating"
+   echo "      systems. The IPERD boot menu will not modify the system,"
+   echo "      however images booted by IPERD may modify the system."
+fi
 if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
    set iperd_continue="n"
    while [ ${iperd_continue} == "n" ]; do
