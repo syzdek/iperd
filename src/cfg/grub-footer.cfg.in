@@ -96,6 +96,10 @@ submenu 'System Information ...' {
 }
 
 
+menuentry "Boot next device" {
+   echo "exiting grub ..."
+   exit
+}
 menuentry "Reboot System" {
    echo "rebooting system ..."
    reboot
