@@ -1,4 +1,4 @@
-submenu 'Rocky Linux Installers ...' {
+submenu 'Distro: Rocky Linux ...' {
    set distro_append='@DISTRO_APPEND@'
    set distro_local_append='@DISTRO_LOCAL_APPEND@'
    export distro_append
