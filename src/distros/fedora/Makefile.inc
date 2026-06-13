@@ -64,7 +64,7 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 				   DISTRO_LOCAL_URL='$(DISTRO_FEDORA_LOCAL_URL)';
 
 
-.PHONY: fedora-download fedora-defconfig
+.PHONY: fedora-clean fedora-distclean fedora-download fedora-defconfig
 
 
 .makefile.d/fedora.inc: .config src/distros/fedora/Makefile.distro.in
@@ -106,6 +106,14 @@ boot/fedora/%/vmlinuz:
 
 
 fedora-download: $(DISTRO_FEDORA_BOOT)
+
+
+fedora-clean:
+	rm -Rf var/distros/fedora
+	rm -Rf boot/fedora
+        
+
+fedora-distclean: fedora-clean
 
 
 #
