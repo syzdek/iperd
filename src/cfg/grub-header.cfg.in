@@ -243,7 +243,7 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
    while [ ${iperd_continue} == "n" ]; do
       echo ""
       echo ""
-      echo "IP Engineering Rescue Disk @IPERD_VERSION@"
+      echo "      IP Engineering Rescue Disk @IPERD_VERSION@"
       echo ""
       echo "Review Configuration:"
       echo "   GNU GRUB Version:          @GRUB_VERSION@"
@@ -339,7 +339,7 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
 else
    echo ""
    echo ""
-   echo "IP Engineering Rescue Disk @IPERD_VERSION@"
+   echo "      IP Engineering Rescue Disk @IPERD_VERSION@"
    echo ""
    echo ""
 fi
