@@ -58,6 +58,8 @@ LINUX_CONSOLE		?= tty0
 
 
 IPERD_GIT_URL		?= https://github.com/syzdek/iperd.git
+IPERD_VERBOSE		?= y
+IPERD_DEBUG		?= n
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 IPERD_DOWNLOADS		:=
 IPERD_MIRRORS		:=
@@ -85,6 +87,8 @@ endif
 do_subst = sed \
 	-e 's,[@]IPERD_DATE[@],$(IPERD_DATE),g' \
 	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
+	-e 's,[@]IPERD_VERBOSE[@],$(IPERD_VERBOSE),g' \
+	-e 's,[@]IPERD_DEBUG[@],$(IPERD_DEBUG),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
 	\
@@ -311,6 +315,8 @@ defconfig:
 	@echo "# IPERD"
 	@echo "IPERD_PREFIX="
 	@echo "IPERD_NET_PREFIX=/httpboot"
+	@echo "IPERD_VERBOSE=y"
+	@echo "IPERD_DEBUG=n"
 	@for CFG in $(IPERD_DEFCONFIGS); do \
 	   $(MAKE) -s \
 	           -f src/distros/$${CFG}/Makefile.inc \
