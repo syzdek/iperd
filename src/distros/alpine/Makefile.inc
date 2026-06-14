@@ -72,7 +72,7 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 .PHONY: alpine-clean alpine-distclean alpine-download alpine-defconfig
 
 
-build/distros/alpine/Makefile.versions.inc: .config src/distros/alpine/Makefile.distro.in
+build/distros/alpine/Makefile.versions.inc: .config src/distros/alpine/Makefile.version.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -83,7 +83,7 @@ build/distros/alpine/Makefile.versions.inc: .config src/distros/alpine/Makefile.
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
 	      -e "s/[@]DISTRO_TAG[@]/$${TAG}/g" \
-	      src/distros/alpine/Makefile.distro.in; \
+	      src/distros/alpine/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
 
