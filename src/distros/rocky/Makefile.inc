@@ -72,7 +72,7 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 .PHONY: rocky-clean rocky-distclean rocky-download rocky-defconfig
 
 
-.makefile.d/rocky.inc: .config src/distros/rocky/Makefile.distro.in
+build/distros/rocky/Makefile.versions.inc: .config src/distros/rocky/Makefile.distro.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
@@ -88,7 +88,7 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/rocky/grub.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
--include .makefile.d/rocky.inc
+-include build/distros/rocky/Makefile.versions.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ROCKY_BOOT)
 
