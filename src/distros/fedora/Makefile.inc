@@ -67,7 +67,7 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 .PHONY: fedora-clean fedora-distclean fedora-download fedora-defconfig
 
 
-build/distros/fedora/Makefile.versions.inc: .config src/distros/fedora/Makefile.distro.in
+build/distros/fedora/Makefile.versions.inc: .config src/distros/fedora/Makefile.version.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
@@ -76,7 +76,7 @@ build/distros/fedora/Makefile.versions.inc: .config src/distros/fedora/Makefile.
 	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
-	      src/distros/fedora/Makefile.distro.in; \
+	      src/distros/fedora/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
 
