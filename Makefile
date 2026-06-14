@@ -36,11 +36,11 @@ DATE			:= $(shell date +%Y-%m-%d)
 
 DISTCLEANFILES		= boot \
 			  build
-CLEANFILES		= *.iso *.tar.xz \
-			  boot/grub \
+CLEANFILES		= boot/grub \
 			  tools \
 			  build/*/*.new \
-			  build/distros/*/*.inc
+			  build/distros/*/*.inc \
+			  dist/iperd
 
 
 GRUB_RUNTIME_SETUP	?= n
@@ -376,8 +376,9 @@ VERSION.md: $(IPERD_VERSION_DEPS)
 	@echo "" >> "$(@)"
 
 
-iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
+dist/iperd/iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)"
+	@mkdir -p "$(@D)"
 	./tools/bin/grub-mkrescue \
 	   --compress=xz  \
 	   --core-compress=xz \
@@ -386,11 +387,7 @@ iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	   -m '*.swp' \
 	   -m '.git' \
 	   -m '.iperd' \
-	   -m 'iperd-*/' \
-	   -m 'iperd-*.iso' \
-	   -m 'iperd-*.tar' \
-	   -m 'iperd-*.tar.new.xz' \
-	   -m 'iperd-*.tar.xz' \
+	   -m 'dist/iperd/' \
 	   -m 'tools/' \
 	   -m 'build/' \
 	   -volid IPERD \
@@ -398,34 +395,33 @@ iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	   ./
 	@mv "$(@).new" "$(@)"
 	@touch "$(@)"
+	@echo -e "\n\nCreated $(@)\n\n"
 
 
-iperd-$(IPERD_VERSION).tar.xz: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
+dist/iperd/iperd-$(IPERD_VERSION).tar.xz: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)" 'iperd-*.tar.new*'
+	@mkdir -p "$(@D)"
 	tar -c \
-	   -f iperd-$(IPERD_VERSION).tar.new \
+	   -f dist/iperd/iperd-$(IPERD_VERSION).tar.new \
 	   --transform='flags=r;s|^.|iperd-$(IPERD_VERSION)|g' \
 	   --exclude='*.new' \
 	   --exclude='*.swp' \
 	   --exclude='.git' \
 	   --exclude='.iperd' \
-	   --exclude='iperd-*' \
-	   --exclude='iperd-*.iso' \
-	   --exclude='iperd-*.tar' \
-	   --exclude='iperd-*.tar.new.xz' \
-	   --exclude='iperd-*.tar.xz' \
+	   --exclude='dist/iperd' \
 	   --exclude='tools' \
 	   --exclude='build' \
 	   .
-	xz --threads=0 -z iperd-$(IPERD_VERSION).tar.new
-	@mv "iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"
+	xz --threads=0 -z dist/iperd/iperd-$(IPERD_VERSION).tar.new
+	@mv "dist/iperd/iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"
 	@touch "$(@)"
+	@echo -e "\n\nCreated $(@)\n\n"
 
 
-dist-xz: iperd-$(IPERD_VERSION).tar.xz
+dist-xz: dist/iperd/iperd-$(IPERD_VERSION).tar.xz
 
 
-dist-iso: iperd-$(IPERD_VERSION).iso
+dist-iso: dist/iperd/iperd-$(IPERD_VERSION).iso
 
 
 dist: dist-xz
