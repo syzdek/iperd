@@ -72,7 +72,7 @@ DISTRO_UBUNTU_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_UBUNTU_APPEND)'; \
 .PHONY: ubuntu-clean ubuntu-distclean ubuntu-download ubuntu-defconfig
 
 
-.makefile.d/ubuntu.inc: .config src/distros/ubuntu/Makefile.distro-legacy1.in src/distros/ubuntu/Makefile.distro-legacy2.in
+build/distros/ubuntu/Makefile.versions.inc: .config src/distros/ubuntu/Makefile.distro-legacy1.in src/distros/ubuntu/Makefile.distro-legacy2.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -97,7 +97,7 @@ DISTRO_UBUNTU_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_UBUNTU_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/ubuntu/grub.inc
 DISTRO_UBUNTU_CFG		+= src/distros/ubuntu/grub-header.inc.in
--include .makefile.d/ubuntu.inc
+-include build/distros/ubuntu/Makefile.versions.inc
 DISTRO_UBUNTU_CFG		+= src/distros/ubuntu/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_UBUNTU_BOOT)
 
