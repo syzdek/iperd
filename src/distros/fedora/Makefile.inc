@@ -67,12 +67,12 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 .PHONY: fedora-clean fedora-distclean fedora-download fedora-defconfig
 
 
-.makefile.d/fedora.inc: .config src/distros/fedora/Makefile.distro.in
+build/distros/fedora/Makefile.versions.inc: .config src/distros/fedora/Makefile.distro.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
 	@rm -f "$(@)"
-	@mkdir -p .makefile.d
+	@mkdir -p "$(@D)"
 	@for REL in $(DEFAULT_FEDORA_VERSIONS); do \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
@@ -83,7 +83,7 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/fedora/grub.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-header.inc.in
--include .makefile.d/fedora.inc
+-include build/distros/fedora/Makefile.versions.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_FEDORA_BOOT)
 
