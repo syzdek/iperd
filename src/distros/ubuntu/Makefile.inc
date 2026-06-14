@@ -72,7 +72,7 @@ DISTRO_UBUNTU_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_UBUNTU_APPEND)'; \
 .PHONY: ubuntu-clean ubuntu-distclean ubuntu-download ubuntu-defconfig
 
 
-build/distros/ubuntu/Makefile.versions.inc: .config src/distros/ubuntu/Makefile.distro-legacy1.in src/distros/ubuntu/Makefile.distro-legacy2.in
+build/distros/ubuntu/Makefile.versions.inc: .config src/distros/ubuntu/Makefile.version-legacy1.inc.in src/distros/ubuntu/Makefile.version-legacy2.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -83,14 +83,14 @@ build/distros/ubuntu/Makefile.versions.inc: .config src/distros/ubuntu/Makefile.
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
 	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
-	      src/distros/ubuntu/Makefile.distro-legacy1.in; \
+	      src/distros/ubuntu/Makefile.version-legacy1.inc.in; \
 	done >> "$(@)";
 	@for REL in $(DEFAULT_UBUNTU_LEGACY_VER2); do \
 	   CODENAME="$$(echo "$${REL}" |tr a-z A-Z)"; \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
 	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
-	      src/distros/ubuntu/Makefile.distro-legacy2.in; \
+	      src/distros/ubuntu/Makefile.version-legacy2.inc.in; \
 	done >> "$(@)";
 	@touch "$(@)"
 
