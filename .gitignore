@@ -1,7 +1,6 @@
 *.swp
 /.config*
 /.disk/
-/.makefile.d/
 /.version*
 /EFI/
 /RCS/
