@@ -267,7 +267,7 @@ do_tar			= if test "x$(V)" == "x0";then \
 			     || exit 1
 
 
-.PHONY: all clean configure defconfig distclean dist-all dist-iso download info selfupdate update prune
+.PHONY: all clean configure defconfig distclean dist-all dist-iso download info maintainerclean selfupdate update prune
 
 
 all:
@@ -446,6 +446,10 @@ clean:
 
 distclean: clean
 	rm -Rf $(DISTCLEANFILES)
+
+
+maintainerclean: distclean
+	rm -f .config .version
 
 
 prune: $(IPERD_PRUNE)
