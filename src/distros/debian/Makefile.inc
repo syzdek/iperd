@@ -69,7 +69,7 @@ DISTRO_DEBIAN_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_DEBIAN_APPEND)'; \
 .PHONY: debian-clean debian-distclean debian-download debian-defconfig
 
 
-.makefile.d/debian.inc: .config src/distros/debian/Makefile.distro.in
+build/distros/debian/Makefile.versions.inc: .config src/distros/debian/Makefile.distro.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -87,7 +87,7 @@ DISTRO_DEBIAN_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_DEBIAN_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/debian/grub.inc
 DISTRO_DEBIAN_CFG		+= src/distros/debian/grub-header.inc.in
--include .makefile.d/debian.inc
+-include build/distros/debian/Makefile.versions.inc
 DISTRO_DEBIAN_CFG		+= src/distros/debian/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_DEBIAN_BOOT)
 
