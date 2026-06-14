@@ -72,7 +72,7 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 .PHONY: rocky-clean rocky-distclean rocky-download rocky-defconfig
 
 
-build/distros/rocky/Makefile.versions.inc: .config src/distros/rocky/Makefile.distro.in
+build/distros/rocky/Makefile.versions.inc: .config src/distros/rocky/Makefile.version.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
@@ -81,7 +81,7 @@ build/distros/rocky/Makefile.versions.inc: .config src/distros/rocky/Makefile.di
 	@for REL in $(DEFAULT_ROCKY_VERSIONS); do \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
-	      src/distros/rocky/Makefile.distro.in; \
+	      src/distros/rocky/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
 
