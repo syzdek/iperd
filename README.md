@@ -49,7 +49,7 @@ Compatibility
     | openSUSE          |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
     | Rocky Linux       |  -  |  ?  |  ?  |  -  |  Y  |  Y  |  -  |  Y  |  Y  |
     | Slackware Linux   |  ?  |  ?  |  ?  |  Y  |  Y  |  Y  |  Y  |  Y  |  Y  |
-    | Ubuntu Linux      |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    | Ubuntu Linux      |  ?  |  ?  |  ?  |  ?  |  ?  |  ?  |  Y  |  Y  |  Y  |
     +-------------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 
 

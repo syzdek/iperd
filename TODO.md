@@ -17,7 +17,7 @@ OS/Utilities
    - add support for Red Hat Enterprise Linux
    - add support for SUSE Linux Enterprise Server
    - add support for TinyCore (tychotithonus)
-   - add support for Ubuntu Linux
+   - add support for Ubuntu Linux's new installer
 
 
 Features

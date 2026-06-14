@@ -1,5 +1,0 @@
-MENU BEGIN ubuntu
-MENU TITLE Ubuntu Linux Installers
-#label debiam
-#    MENU LABEL Ubuntu Linux
-#    MENU DISABLE

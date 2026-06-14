@@ -65,7 +65,8 @@ IPERD_DEFCONFIGS	:= alpine \
 			   debian \
 			   fedora \
 			   rocky \
-			   slackware
+			   slackware \
+			   ubuntu
 IPERD_DEPS		:= boot/grub/.iperd \
 			   boot/grub/grub.cfg \
 			   VERSION.md \
@@ -350,6 +351,9 @@ ifeq ($(DISTRO_ROCKY), y)
 endif
 ifeq ($(DISTRO_SLACKWARE), y)
    include src/distros/slackware/Makefile.inc
+endif
+ifeq ($(DISTRO_UBUNTU), y)
+   include src/distros/ubuntu/Makefile.inc
 endif
 include src/cfg/Makefile.inc
 

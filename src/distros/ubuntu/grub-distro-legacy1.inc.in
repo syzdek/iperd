@@ -1,0 +1,72 @@
+
+   set distro_ver_opt="@DISTRO_OPT@";
+   iperd_distro_ver_desc
+   submenu "Ubuntu Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}] ..." {
+
+      set distro_name="ubuntu";
+      set distro_ver_opt="@DISTRO_OPT@";
+      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
+      set distro_local_url="@DISTRO_LOCAL_URL@";
+      set distro_grub="@DISTRO_GRUB@";
+      set distro_url="@DISTRO_URL@";
+
+      iperd_distro_ver_paths;
+
+      set distro_ver_suffix="dists/@DISTRO_VERSION@/main/installer-@DISTRO_ARCH@/current/images";
+      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
+      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
+
+      export distro_ver_grub;
+      export distro_ver_url;
+      export distro_ver_append;
+      export distro_ver_loc;
+
+      menuentry 'Install' {
+         echo   'Booting Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   "${distro_ver_loc}: ${distro_ver_grub}"
+         echo   'loading linux ...'
+         linux  ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/linux \
+                quiet \
+                console=${iperd_linux_console} \
+                ${distro_ver_append}
+         echo   'loading initrd.gz ...'
+         initrd ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/initrd.gz
+         echo   'booting system ...'
+      }
+      menuentry 'Expert Install' {
+         echo   'Booting Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   "${distro_ver_loc}: ${distro_ver_grub}"
+         echo   'loading linux ...'
+         linux  ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/linux \
+                priority=low \
+                console=${iperd_linux_console} \
+                ${distro_ver_append}
+         echo   'loading initrd.gz ...'
+         initrd ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/initrd.gz
+         echo   'booting system ...'
+      }
+      menuentry 'Rescue Mode' {
+         echo   'Booting Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   "${distro_ver_loc}: ${distro_ver_grub}"
+         echo   'loading linux ...'
+         linux  ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/linux \
+                rescue/enable=true quiet \
+                console=${iperd_linux_console} \
+                ${distro_ver_append}
+         echo   'loading initrd.gz ...'
+         initrd ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/initrd.gz
+         echo   'booting system ...'
+      }
+      menuentry 'Automated Install' {
+         echo   'Booting Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+         echo   "${distro_ver_loc}: ${distro_ver_grub}"
+         echo   'loading linux ...'
+         linux  ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/linux \
+                auto=true priority=critical quiet \
+                console=${iperd_linux_console} \
+                ${distro_ver_append}
+         echo   'loading initrd.gz ...'
+         initrd ${distro_ver_grub}/netboot/ubuntu-installer/@DISTRO_ARCH@/initrd.gz
+         echo   'booting system ...'
+      }
+   }

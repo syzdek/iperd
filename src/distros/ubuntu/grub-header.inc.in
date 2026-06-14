@@ -1,0 +1,6 @@
+submenu 'Distro: Ubuntu Linux ...' {
+   set distro_append='@DISTRO_APPEND@'
+   set distro_local_append='@DISTRO_LOCAL_APPEND@'
+   export distro_append
+   export distro_local_append
+
