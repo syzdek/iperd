@@ -67,8 +67,11 @@ IPERD_DEFCONFIGS	:= alpine \
 			   rocky \
 			   slackware \
 			   ubuntu
-IPERD_DEPS		:= boot/grub/.iperd \
+IPERD_DEPS		:= .config \
+			   .version \
+			   boot/grub/.iperd \
 			   boot/grub/grub.cfg \
+			   Makefile \
 			   VERSION.md \
 			   $(IPERD_DOWNLOADS)
 IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
@@ -371,7 +374,7 @@ VERSION.md: $(IPERD_VERSION_DEPS)
 	@echo "" >> "$(@)"
 
 
-iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWNLOADS)
+iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)"
 	./tools/bin/grub-mkrescue \
 	   --compress=xz  \
@@ -396,7 +399,7 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWN
 	@touch "$(@)"
 
 
-iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWNLOADS)
+iperd-$(IPERD_VERSION).tar.xz: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@rm -f "$(@)" 'iperd-*.tar.new*'
 	tar -c \
 	   -f iperd-$(IPERD_VERSION).tar.new \
