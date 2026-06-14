@@ -69,7 +69,7 @@ DISTRO_DEBIAN_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_DEBIAN_APPEND)'; \
 .PHONY: debian-clean debian-distclean debian-download debian-defconfig
 
 
-build/distros/debian/Makefile.versions.inc: .config src/distros/debian/Makefile.distro.in
+build/distros/debian/Makefile.versions.inc: .config src/distros/debian/Makefile.version.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -80,7 +80,7 @@ build/distros/debian/Makefile.versions.inc: .config src/distros/debian/Makefile.
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
 	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
-	      src/distros/debian/Makefile.distro.in; \
+	      src/distros/debian/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
 
