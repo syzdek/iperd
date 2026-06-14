@@ -69,7 +69,7 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 .PHONY: slackware-clean slackware-distclean slackware-download slackware-defconfig
 
 
-build/distros/slackware/Makefile.versions.inc: .config src/distros/slackware/Makefile.distro.in
+build/distros/slackware/Makefile.versions.inc: .config src/distros/slackware/Makefile.version.inc.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
@@ -80,7 +80,7 @@ build/distros/slackware/Makefile.versions.inc: .config src/distros/slackware/Mak
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
 	      -e "s/[@]DISTRO_TAG[@]/$${TAG}/g" \
-	      src/distros/slackware/Makefile.distro.in; \
+	      src/distros/slackware/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
 
