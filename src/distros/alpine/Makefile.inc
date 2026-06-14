@@ -72,7 +72,7 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 .PHONY: alpine-clean alpine-distclean alpine-download alpine-defconfig
 
 
-.makefile.d/alpine.inc: .config src/distros/alpine/Makefile.distro.in
+build/distros/alpine/Makefile.versions.inc: .config src/distros/alpine/Makefile.distro.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi;
@@ -90,7 +90,7 @@ DISTRO_ALPINE_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ALPINE_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/alpine/grub.inc
 DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-header.inc.in
--include .makefile.d/alpine.inc
+-include build/distros/alpine/Makefile.versions.inc
 DISTRO_ALPINE_CFG		+= src/distros/alpine/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ALPINE_BOOT)
 
