@@ -449,7 +449,7 @@ distclean: clean
 
 
 maintainerclean: distclean
-	rm -f .config .version
+	rm -f .config .version VERSION.md
 
 
 prune: $(IPERD_PRUNE)
