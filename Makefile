@@ -422,16 +422,16 @@ iperd-$(IPERD_VERSION).tar.xz: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	@touch "$(@)"
 
 
-dist: iperd-$(IPERD_VERSION).tar.xz
-
-
 dist-xz: iperd-$(IPERD_VERSION).tar.xz
 
 
 dist-iso: iperd-$(IPERD_VERSION).iso
 
 
-dist-all: iperd-$(IPERD_VERSION).iso iperd-$(IPERD_VERSION).tar.xz
+dist: dist-xz
+
+
+dist-all: dist-iso dist-xz
 
 
 download: $(IPERD_DOWNLOADS)
