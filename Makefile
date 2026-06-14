@@ -473,6 +473,7 @@ selfupdate:
 		||  git checkout .; \
 	git fetch origin || exit 1;
 	git merge origin/$$(git rev-parse --abbrev-ref HEAD) || exit 1;
+	@echo -e "\n\nUpdated to: $(IPERD_VERSION) [$(IPERD_DATE)]\n"
 
 
 # end of makefile
