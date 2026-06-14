@@ -267,12 +267,14 @@ do_tar			= if test "x$(V)" == "x0";then \
 			     || exit 1
 
 
-.PHONY: all clean configure defconfig distclean dist-all dist-iso download selfupdate update prune
+.PHONY: all clean configure defconfig distclean dist-all dist-iso download info selfupdate update prune
 
 
 all:
 	@echo " "
 	@echo "   IP Engineering Rescue Disk ($(IPERD_VERSION)) [$(IPERD_DATE)]"
+	@echo " "
+	@echo "   make info         # display IPERD metadata"
 	@echo " "
 	@echo "   make selfupdate   # update source and build rules"
 	@echo " "
@@ -435,6 +437,10 @@ dist-all: dist-iso dist-xz
 
 
 download: $(IPERD_DOWNLOADS)
+
+
+info: .version VERSION.md
+	@cat VERSION.md
 
 
 update: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
