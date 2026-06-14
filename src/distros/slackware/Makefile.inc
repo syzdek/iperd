@@ -69,7 +69,7 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 .PHONY: slackware-clean slackware-distclean slackware-download slackware-defconfig
 
 
-.makefile.d/slackware.inc: .config src/distros/slackware/Makefile.distro.in
+build/distros/slackware/Makefile.versions.inc: .config src/distros/slackware/Makefile.distro.in
 	@if test "x$(IPERD_DEFCONFIG)" != "x1"; then \
 	   echo "  GEN      $(@)"; \
 	fi
@@ -87,7 +87,7 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 
 GRUB_CFG_INCLUDES		+= build/distros/slackware/grub.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
--include .makefile.d/slackware.inc
+-include build/distros/slackware/Makefile.versions.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_SLACKWARE_BOOT)
 
