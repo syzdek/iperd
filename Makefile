@@ -392,8 +392,7 @@ iperd-$(IPERD_VERSION).iso: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	   -m 'iperd-*.tar.new.xz' \
 	   -m 'iperd-*.tar.xz' \
 	   -m 'tools/' \
-	   -m 'build/distros/' \
-	   -m 'build/*/source/' \
+	   -m 'build/' \
 	   -volid IPERD \
 	   -publisher "IP Engineering Rescue Disk (iperd.org)" \
 	   ./
@@ -416,8 +415,7 @@ iperd-$(IPERD_VERSION).tar.xz: $(IPERD_DEPS) $(IPERD_DOWNLOADS)
 	   --exclude='iperd-*.tar.new.xz' \
 	   --exclude='iperd-*.tar.xz' \
 	   --exclude='tools' \
-	   --exclude='build/distros' \
-	   --exclude='build/*/source' \
+	   --exclude='build' \
 	   .
 	xz --threads=0 -z iperd-$(IPERD_VERSION).tar.new
 	@mv "iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"

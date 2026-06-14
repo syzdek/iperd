@@ -9,6 +9,7 @@
 /boot/
 /boot.catalog
 /build/
+/dist/
 /efi/
 /efi.img
 /iperd-*/

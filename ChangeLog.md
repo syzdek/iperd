@@ -7,6 +7,7 @@ v0.2
 ----
    * core
      - changed location of built/generated files to "build/" directory
+     - changed location of downloaded files to "dist/" directory
      - changed location of generated Makefile includes to "build/" directory.
      - renamed standard Makefile template name to "Makefile.version.inc.in"
 

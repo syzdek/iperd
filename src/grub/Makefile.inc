@@ -44,7 +44,7 @@ GRUB_ROOT			:= $(IPERD_ROOT)/src/grub
 
 
 GRUB_BUILDDIR			:= build/grub/source/build
-GRUB_DEPENDENCIES 		:= build/grub/grub-$(GRUB_VERSION).tar.xz \
+GRUB_DEPENDENCIES 		:= dist/grub/grub-$(GRUB_VERSION).tar.xz \
 				   build/dejavu/.iperd \
 				   build/unifont/.iperd
 GRUB_PLATFORMS			:= tools/iperd/grub_i386_pc \
@@ -68,7 +68,7 @@ GRUB_CONFIGURE			:= ../configure\
 #
 # unpack source
 #
-build/grub/grub-$(GRUB_VERSION).tar.xz:
+dist/grub/grub-$(GRUB_VERSION).tar.xz:
 	@mkdir -p "$(@D)"
 	@WGET_FILE="$(@)"; \
 		WGET_URL="$(GRUB_MIRROR)"; \
@@ -79,7 +79,7 @@ build/grub/grub-$(GRUB_VERSION).tar.xz:
 
 
 build/grub/source/.iperd: $(GRUB_DEPENDENCIES)
-	@TAR_FILE="build/grub/grub-$(GRUB_VERSION).tar.xz"; \
+	@TAR_FILE="dist/grub/grub-$(GRUB_VERSION).tar.xz"; \
 		TAR_DIR="$(@D)"; \
 		$(do_tar);
 	@touch $(@)

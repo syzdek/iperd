@@ -41,7 +41,7 @@ DEJAVU_SHA512		:= bafa39321021097432777f0825d700190c23f917d754a4504722cd8946716c
 DEJAVU_ROOT		:= $(IPERD_ROOT)/build/dejavu
 
 
-build/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
+dist/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
 	@mkdir -p "$(@D)"
 	@WGET_FILE="$(@)"; \
 		WGET_URL="$(DEJAVU_MIRROR)"; \
@@ -51,7 +51,7 @@ build/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
 		$(do_wget);
 
 
-build/dejavu/source/.iperd: build/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
+build/dejavu/source/.iperd: dist/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
 	@TAR_FILE="$(^)"; \
 		TAR_DIR="build/dejavu/source"; \
 		$(do_tar);

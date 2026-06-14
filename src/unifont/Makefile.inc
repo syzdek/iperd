@@ -41,7 +41,7 @@ UNIFONT_SHA512		:= ad67446632a58f0b3b8a428ea8601e4ad9dfd4d2b1f11e481a2f9dedcf539
 UNIFONT_ROOT		:= $(IPERD_ROOT)/build/unifont
 
 
-build/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
+dist/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
 	@mkdir -p "$(@D)"
 	@WGET_FILE="$(@)"; \
 		WGET_URL="$(UNIFONT_MIRROR)"; \
@@ -52,7 +52,7 @@ build/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
 	@touch $(@)
 
 
-build/unifont/source/unifont.bdf: build/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
+build/unifont/source/unifont.bdf: dist/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
 	@mkdir -p "$(@D)"
 	@GZIP_FILE="$(^)"; GZIP_DST="$(@)"; $(do_gzip);
 	@touch $(@)
