@@ -35,6 +35,7 @@ DATE			:= $(shell date +%Y-%m-%d)
 
 
 DISTCLEANFILES		= boot \
+			  dist \
 			  build
 CLEANFILES		= boot/grub \
 			  tools \
