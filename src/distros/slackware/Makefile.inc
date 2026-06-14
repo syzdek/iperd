@@ -85,14 +85,14 @@ DISTRO_SLACKWARE_KEYWORDS	:= DISTRO_APPEND='$(DISTRO_SLACKWARE_APPEND)'; \
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= var/distros/slackware/grub.inc
+GRUB_CFG_INCLUDES		+= build/distros/slackware/grub.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-header.inc.in
 -include .makefile.d/slackware.inc
 DISTRO_SLACKWARE_CFG		+= src/distros/slackware/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_SLACKWARE_BOOT)
 
 
-var/distros/slackware/grub.inc: $(DISTRO_SLACKWARE_CFG)
+build/distros/slackware/grub.inc: $(DISTRO_SLACKWARE_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -113,7 +113,7 @@ slackware-download: $(DISTRO_SLACKWARE_BOOT)
 
 
 slackware-clean:
-	rm -Rf var/distros/slackware
+	rm -Rf build/distros/slackware
 	rm -Rf boot/slackware
         
 

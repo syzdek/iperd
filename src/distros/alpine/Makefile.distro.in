@@ -4,7 +4,7 @@
 #
 DISTRO_ALPINE_@DISTRO_TAG@_x86		?= n
 ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), n)
-   DISTRO_ALPINE_CFG		+= var/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc
+   DISTRO_ALPINE_CFG		+= build/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc
 endif
 ifeq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), d)
    DISTRO_ALPINE_BOOT		+= boot/alpine/v@DISTRO_VERSION@/main/x86/.iperd
@@ -13,7 +13,7 @@ else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), l)
 endif
 
 
-var/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc: src/distros/alpine/grub-distro.inc.in .config
+build/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc: src/distros/alpine/grub-distro.inc.in .config
 	@$(DISTRO_ALPINE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_ALPINE_@DISTRO_TAG@_x86); \
@@ -26,7 +26,7 @@ var/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc: src/distros/alpine/grub-dist
 #
 DISTRO_ALPINE_@DISTRO_TAG@_x8664		?= n
 ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), n)
-   DISTRO_ALPINE_CFG		+= var/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc
+   DISTRO_ALPINE_CFG		+= build/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc
 endif
 ifeq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), d)
    DISTRO_ALPINE_BOOT		+= boot/alpine/v@DISTRO_VERSION@/main/x86_64/.iperd
@@ -35,7 +35,7 @@ else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), l)
 endif
 
 
-var/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc: src/distros/alpine/grub-distro.inc.in .config
+build/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc: src/distros/alpine/grub-distro.inc.in .config
 	@$(DISTRO_ALPINE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_ALPINE_@DISTRO_TAG@_x8664); \

@@ -38,10 +38,10 @@ UNIFONT_MIRROR		:= https://unifoundry.com/pub/unifont/unifont-$(UNIFONT_VERSION)
 UNIFONT_SHA1		:= ae0dcc91404d1c5203c29ff11322a3a5b87b3083
 UNIFONT_SHA256		:= 9a2de4826388242771121c7fe00e412523c318318b8ee38e6be6cd454e7ec802
 UNIFONT_SHA512		:= ad67446632a58f0b3b8a428ea8601e4ad9dfd4d2b1f11e481a2f9dedcf539423ec1c7fb508849c1d535c8a811ce9ccd321c9474035f9ad36950b42e77206a3ea
-UNIFONT_ROOT		:= $(IPERD_ROOT)/var/unifont
+UNIFONT_ROOT		:= $(IPERD_ROOT)/build/unifont
 
 
-var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
+build/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
 	@mkdir -p "$(@D)"
 	@WGET_FILE="$(@)"; \
 		WGET_URL="$(UNIFONT_MIRROR)"; \
@@ -52,13 +52,13 @@ var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz:
 	@touch $(@)
 
 
-var/unifont/source/unifont.bdf: var/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
+build/unifont/source/unifont.bdf: build/unifont/unifont-$(UNIFONT_VERSION).bdf.gz
 	@mkdir -p "$(@D)"
 	@GZIP_FILE="$(^)"; GZIP_DST="$(@)"; $(do_gzip);
 	@touch $(@)
 
 
-var/unifont/.iperd: var/unifont/source/unifont.bdf
+build/unifont/.iperd: build/unifont/source/unifont.bdf
 	@touch $(@)
 
 

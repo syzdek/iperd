@@ -85,14 +85,14 @@ DISTRO_DEBIAN_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_DEBIAN_APPEND)'; \
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= var/distros/debian/grub.inc
+GRUB_CFG_INCLUDES		+= build/distros/debian/grub.inc
 DISTRO_DEBIAN_CFG		+= src/distros/debian/grub-header.inc.in
 -include .makefile.d/debian.inc
 DISTRO_DEBIAN_CFG		+= src/distros/debian/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_DEBIAN_BOOT)
 
 
-var/distros/debian/grub.inc: $(DISTRO_DEBIAN_CFG)
+build/distros/debian/grub.inc: $(DISTRO_DEBIAN_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -131,7 +131,7 @@ debian-download: $(DISTRO_DEBIAN_BOOT)
 
 
 debian-clean:
-	rm -Rf var/distros/debian
+	rm -Rf build/distros/debian
 	rm -Rf boot/debian
 
 

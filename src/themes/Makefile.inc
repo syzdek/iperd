@@ -32,9 +32,9 @@ DISTCLEANFILES		+=
 CLEANFILES		+=
 
 
-THEME_DEPENDENCIES	:= var/dejavu/.iperd \
-			   var/grub/.iperd \
-			   var/unifont/.iperd
+THEME_DEPENDENCIES	:= build/dejavu/.iperd \
+			   build/grub/.iperd \
+			   build/unifont/.iperd
 THEME_FONTS		:= tools/share/grub/themes/iperd/dejavu_10.pf2 \
 			   tools/share/grub/themes/iperd/dejavu_12.pf2 \
 			   tools/share/grub/themes/iperd/dejavu_14.pf2 \
@@ -83,50 +83,50 @@ tools/share/grub/themes/iperd/.iperd: $(THEME_DEPENDENCIES) $(THEME_FILES)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_10.pf2: var/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_10.pf2: build/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=10 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_12.pf2: var/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_12.pf2: build/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=12 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_14.pf2: var/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_14.pf2: build/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=14 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_14_bold.pf2: var/dejavu/source/ttf/DejaVuSansMono-Bold.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_14_bold.pf2: build/dejavu/source/ttf/DejaVuSansMono-Bold.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=14 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_14_bolditalic.pf2: var/dejavu/source/ttf/DejaVuSansMono-BoldOblique.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_14_bolditalic.pf2: build/dejavu/source/ttf/DejaVuSansMono-BoldOblique.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=14 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_16.pf2: var/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_16.pf2: build/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=16 $(<)
 	@touch $(@)
 
 
-tools/share/grub/themes/iperd/dejavu_18.pf2: var/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
+tools/share/grub/themes/iperd/dejavu_18.pf2: build/dejavu/source/ttf/DejaVuSansMono.ttf tools/share/grub/themes/iperd/.iperd
 	@rm -f $(@)
 	./tools/bin/grub-mkfont --verbose --output=$(@) --size=18 $(<)
 	@touch $(@)
 
 
 
-var/themes/.iperd: $(THEME_FONTS)
+build/themes/.iperd: $(THEME_FONTS)
 	@mkdir -p "$(@D)"
 	@touch $(@)
 

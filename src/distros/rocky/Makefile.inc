@@ -86,14 +86,14 @@ DISTRO_ROCKY_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_ROCKY_APPEND)'; \
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= var/distros/rocky/grub.inc
+GRUB_CFG_INCLUDES		+= build/distros/rocky/grub.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-header.inc.in
 -include .makefile.d/rocky.inc
 DISTRO_ROCKY_CFG		+= src/distros/rocky/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_ROCKY_BOOT)
 
 
-var/distros/rocky/grub.inc: $(DISTRO_ROCKY_CFG)
+build/distros/rocky/grub.inc: $(DISTRO_ROCKY_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -114,7 +114,7 @@ rocky-download: $(DISTRO_ROCKY_BOOT)
 
 
 rocky-clean:
-	rm -Rf var/distros/rocky
+	rm -Rf build/distros/rocky
 	rm -Rf boot/rocky
         
 

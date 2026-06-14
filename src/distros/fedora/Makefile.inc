@@ -81,14 +81,14 @@ DISTRO_FEDORA_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_FEDORA_APPEND)'; \
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= var/distros/fedora/grub.inc
+GRUB_CFG_INCLUDES		+= build/distros/fedora/grub.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-header.inc.in
 -include .makefile.d/fedora.inc
 DISTRO_FEDORA_CFG		+= src/distros/fedora/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_FEDORA_BOOT)
 
 
-var/distros/fedora/grub.inc: $(DISTRO_FEDORA_CFG)
+build/distros/fedora/grub.inc: $(DISTRO_FEDORA_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -109,7 +109,7 @@ fedora-download: $(DISTRO_FEDORA_BOOT)
 
 
 fedora-clean:
-	rm -Rf var/distros/fedora
+	rm -Rf build/distros/fedora
 	rm -Rf boot/fedora
         
 

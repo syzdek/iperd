@@ -9,6 +9,7 @@
 /VERSION.md
 /boot/
 /boot.catalog
+/build/
 /efi/
 /efi.img
 /iperd-*/
@@ -16,4 +17,3 @@
 /iperd-*.tar.xz
 /mach_kernel
 /tools/
-/var/

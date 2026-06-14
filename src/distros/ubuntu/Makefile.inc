@@ -95,14 +95,14 @@ DISTRO_UBUNTU_KEYWORDS		:= DISTRO_APPEND='$(DISTRO_UBUNTU_APPEND)'; \
 	@touch "$(@)"
 
 
-GRUB_CFG_INCLUDES		+= var/distros/ubuntu/grub.inc
+GRUB_CFG_INCLUDES		+= build/distros/ubuntu/grub.inc
 DISTRO_UBUNTU_CFG		+= src/distros/ubuntu/grub-header.inc.in
 -include .makefile.d/ubuntu.inc
 DISTRO_UBUNTU_CFG		+= src/distros/ubuntu/grub-footer.inc.in
 IPERD_DOWNLOADS			+= $(DISTRO_UBUNTU_BOOT)
 
 
-var/distros/ubuntu/grub.inc: $(DISTRO_UBUNTU_CFG)
+build/distros/ubuntu/grub.inc: $(DISTRO_UBUNTU_CFG)
 	@$(do_subst_files_dt)
 
 
@@ -155,7 +155,7 @@ ubuntu-download: $(DISTRO_UBUNTU_BOOT)
 
 
 ubuntu-clean:
-	rm -Rf var/distros/ubuntu
+	rm -Rf build/distros/ubuntu
 	rm -Rf boot/ubuntu
 
 

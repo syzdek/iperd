@@ -4,7 +4,7 @@
 #
 DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64		?= n
 ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), n)
-   DISTRO_UBUNTU_CFG		+= var/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc
+   DISTRO_UBUNTU_CFG		+= build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc
 endif
 ifeq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), d)
    DISTRO_UBUNTU_BOOT		+= boot/ubuntu/dists/@DISTRO_VERSION@/main/installer-amd64/current/legacy-images/.iperd
@@ -13,7 +13,7 @@ else ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), l)
 endif
 
 
-var/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: src/distros/ubuntu/grub-distro-legacy2.inc.in .config
+build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: src/distros/ubuntu/grub-distro-legacy2.inc.in .config
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64); \

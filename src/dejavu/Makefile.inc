@@ -38,10 +38,10 @@ DEJAVU_MIRROR		:= https://github.com/dejavu-fonts/dejavu-fonts/releases/download
 DEJAVU_SHA1		:= 7fa15e7b9676fc3915338c41e76ad454c344fff5
 DEJAVU_SHA256		:= fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7
 DEJAVU_SHA512		:= bafa39321021097432777f0825d700190c23f917d754a4504722cd8946716c22c083836294dab7f3ae7cf20af63c4d0944f3423bf4aa25dbca562d1f30e00654
-DEJAVU_ROOT		:= $(IPERD_ROOT)/var/dejavu
+DEJAVU_ROOT		:= $(IPERD_ROOT)/build/dejavu
 
 
-var/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
+build/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
 	@mkdir -p "$(@D)"
 	@WGET_FILE="$(@)"; \
 		WGET_URL="$(DEJAVU_MIRROR)"; \
@@ -51,26 +51,26 @@ var/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2:
 		$(do_wget);
 
 
-var/dejavu/source/.iperd: var/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
+build/dejavu/source/.iperd: build/dejavu/dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
 	@TAR_FILE="$(^)"; \
-		TAR_DIR="var/dejavu/source"; \
+		TAR_DIR="build/dejavu/source"; \
 		$(do_tar);
 	@touch $(@)
 
 
-var/dejavu/source/ttf/DejaVuSansMono.ttf: var/dejavu/source/.iperd
+build/dejavu/source/ttf/DejaVuSansMono.ttf: build/dejavu/source/.iperd
 	@test -f "$(@)" && touch $(@)
 
 
-var/dejavu/source/ttf/DejaVuSansMono-Bold.ttf: var/dejavu/source/.iperd
+build/dejavu/source/ttf/DejaVuSansMono-Bold.ttf: build/dejavu/source/.iperd
 	@test -f "$(@)" && touch $(@)
 
 
-var/dejavu/source/ttf/DejaVuSansMono-BoldOblique.ttf: var/dejavu/source/.iperd
+build/dejavu/source/ttf/DejaVuSansMono-BoldOblique.ttf: build/dejavu/source/.iperd
 	@test -f "$(@)" && touch $(@)
 
 
-var/dejavu/.iperd: var/dejavu/source/.iperd
+build/dejavu/.iperd: build/dejavu/source/.iperd
 	@touch $(@)
 
 

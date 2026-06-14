@@ -35,12 +35,12 @@ DATE			:= $(shell date +%Y-%m-%d)
 
 
 DISTCLEANFILES		= boot \
-			  var
+			  build
 CLEANFILES		= *.iso *.tar.xz \
 			  boot/grub \
 			  tools \
-			  var/*/*.new \
-			  var/distros/*/*.inc
+			  build/*/*.new \
+			  build/distros/*/*.inc
 
 
 GRUB_RUNTIME_SETUP	?= n
@@ -388,8 +388,8 @@ iperd-$(IPERD_VERSION).iso: Makefile .config .version $(IPERD_DEPS) $(IPERD_DOWN
 	   -m 'iperd-*.tar.new.xz' \
 	   -m 'iperd-*.tar.xz' \
 	   -m 'tools/' \
-	   -m 'var/distros/' \
-	   -m 'var/*/source/' \
+	   -m 'build/distros/' \
+	   -m 'build/*/source/' \
 	   -volid IPERD \
 	   -publisher "IP Engineering Rescue Disk (iperd.org)" \
 	   ./
@@ -413,8 +413,8 @@ iperd-$(IPERD_VERSION).tar.xz: Makefile .config .version $(IPERD_DEPS) $(IPERD_D
 	   --exclude='iperd-*.tar.new.xz' \
 	   --exclude='iperd-*.tar.xz' \
 	   --exclude='tools' \
-	   --exclude='var/distros' \
-	   --exclude='var/*/source' \
+	   --exclude='build/distros' \
+	   --exclude='build/*/source' \
 	   .
 	xz --threads=0 -z iperd-$(IPERD_VERSION).tar.new
 	@mv "iperd-$(IPERD_VERSION).tar.new.xz" "$(@)"
