@@ -51,6 +51,7 @@ GRUB_SERIAL_BAUD	?= 115200
 GRUB_USE_GFXTERM	?= n
 GRUB_TERM		?= vt100-color
 GRUB_TERM_GEOMETRY	?= 80x24
+GRUB_TERM_UTF8		?= y
 GRUB_CFG_INCLUDES	=
 
 
@@ -101,6 +102,7 @@ do_subst = sed \
 	-e "s,[@]GRUB_USE_GFXTERM[@],$(GRUB_USE_GFXTERM),g" \
 	-e "s,[@]GRUB_TERM[@],$(GRUB_TERM),g" \
 	-e "s,[@]GRUB_TERM_GEOMETRY[@],$(GRUB_TERM_GEOMETRY),g" \
+	-e "s,[@]GRUB_TERM_UTF8[@],$(GRUB_TERM_UTF8),g" \
 	-e "s,[@]GRUB_VERSION[@],$(GRUB_VERSION),g" \
 	\
 	-e "s;[@]DISTRO_ARCH[@];$${DISTRO_ARCH};g" \
@@ -308,6 +310,7 @@ defconfig:
 	@echo "GRUB_USE_GFXTERM=n"
 	@echo "GRUB_TERM=vt100"
 	@echo "GRUB_TERM_GEOMETRY=80x24"
+	@echo "GRUB_TERM_UTF8=y"
 	@echo "#"
 	@echo "# Linux kernel options"
 	@echo "LINUX_CONSOLE=tty0"

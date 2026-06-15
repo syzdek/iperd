@@ -226,13 +226,14 @@ fi
 #
 set iperd_term_type="@GRUB_TERM@"
 set iperd_term_geometry="@GRUB_TERM_GEOMETRY@"
+set iperd_term_utf8="@GRUB_TERM_UTF8@"
 if [ "x${iperd_term_type}" == "x" ]; then
    set iperd_term_type="vt100"
 fi
 if [ "x${iperd_term_geometry}" == "x" ] ;then
    set iperd_term_geometry="80x24"
 fi
-terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
+terminfo --ascii -g ${iperd_term_geometry} serial ${iperd_term_type}
 #terminfo --utf8 -g 80x24 serial vt100-color
 
 
@@ -330,6 +331,9 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
       echo "   GRUB Graphics Terminal:    ${iperd_str}"
       echo "   GRUB Serial Term Type:     ${iperd_term_type}"
       echo "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
+      set iperd_str="${iperd_term_utf8}"
+      iperd_boolean
+      echo "   GRUB Serial Term UTF-8:    ${iperd_str}"
       echo ""
 
       set iperd_prompt_abort='y'
@@ -415,6 +419,12 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
          iperd_str_prompt
          set iperd_term_geometry="${iperd_prompt_input}"
 
+         # GRUB Serial Term UTF-8
+         set iperd_prompt_dflt="${iperd_term_utf8}"
+         set iperd_prompt_str="GRUB Serial Term UTF-8"
+         iperd_boolean_prompt
+         set iperd_term_utf8="${iperd_prompt_input}"
+
       fi
    done
    echo ""
@@ -431,7 +441,11 @@ fi
 #
 # configure terminal
 #
-terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
+if [ ${iperd_term_utf8} == 'y' ]; then
+   terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
+else
+   terminfo --ascii -g ${iperd_term_geometry} serial ${iperd_term_type}
+fi
 if [ ${iperd_use_gfxterm} == "y" ]; then
    insmod png
    insmod jpeg
