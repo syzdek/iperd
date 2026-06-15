@@ -32,7 +32,12 @@ DISTCLEANFILES			+=
 CLEANFILES			+=
 
 
-boot/grub/grub.cfg: src/cfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
+grub-local.cfg:
+	@echo "# This file is for manual GRUB configurations" > $(@)
+	@touch $(@)
+
+
+boot/grub/grub.cfg: src/cfg/grub-header.cfg.in grub-local.cfg $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
 	@$(do_subst_files_dt)
 	@touch "$(@)"
 

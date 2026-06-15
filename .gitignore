@@ -12,6 +12,7 @@
 /dist/
 /efi/
 /efi.img
+/grub-local.cfg
 /iperd-*/
 /iperd-*.iso
 /iperd-*.tar.xz
