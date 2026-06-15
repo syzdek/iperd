@@ -320,19 +320,19 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
          if [ "x${iperd_pxe}" == "xn" ]; then
             if [ ${grub_platform} == "efi" ]; then
 
-            # GRUB Initialize Network
-            set iperd_prompt_dflt="${iperd_network}"
-            set iperd_prompt_str="GRUB Initialize Network"
-            iperd_boolean_prompt
-            set iperd_network="${iperd_prompt_input}"
+               # GRUB Initialize Network
+               set iperd_prompt_dflt="${iperd_network}"
+               set iperd_prompt_str="GRUB Initialize Network"
+               iperd_boolean_prompt
+               set iperd_network="${iperd_prompt_input}"
 
-             # GRUB Network Interface
-            if [ ${iperd_network} == "y" ]; then
-               set iperd_prompt_dflt="${iperd_network_card}"
-               set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
-               iperd_str_prompt
-               set iperd_network_card="${iperd_prompt_input}"
-            fi
+               # GRUB Network Interface
+               if [ ${iperd_network} == "y" ]; then
+                  set iperd_prompt_dflt="${iperd_network_card}"
+                  set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
+                  iperd_str_prompt
+                  set iperd_network_card="${iperd_prompt_input}"
+               fi
 
             fi
          fi
