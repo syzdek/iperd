@@ -21,38 +21,38 @@
       export distro_ver_append;
       export distro_ver_loc;
 
+      set iperd_verbose_str='Fedora Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      export iperd_verbose_str
+
       menuentry "Install Fedora @DISTRO_VERSION@" {
-         echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${distro_ver_loc}: ${distro_ver_grub}"
-         echo   'Loading vmlinuz ...'
+         iperd_print_distro_verbose
+         echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 ramdisk_size=100000 ip=dhcp net.ifnames=0 \
                 inst.repo=${distro_ver_url}/os/ \
                 inst.stage2=${distro_ver_url}/os \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
-         echo   'Loading initrd.img ...'
+         echo   'loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Install Fedora @DISTRO_VERSION@ in basic graphics mode" {
-         echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${distro_ver_loc}: ${distro_ver_grub}"
-         echo   'Loading vmlinuz ...'
+         iperd_print_distro_verbose
+         echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 ip=dhcp net.ifnames=0 \
                 inst.repo=${distro_ver_url}/os/ \
                 inst.stage2=${distro_ver_url}/os \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
-         echo   'Loading initrd.img ...'
+         echo   'loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
       menuentry "Rescue a Fedora system" {
-         echo   'Rocky Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-         echo   "${distro_ver_loc}: ${distro_ver_grub}"
-         echo   'Loading vmlinuz ...'
+         iperd_print_distro_verbose
+         echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 ramdisk_size=100000 ip=dhcp net.ifnames=0 \
                 inst.repo=${distro_ver_url}/os/ \
@@ -60,7 +60,7 @@
                 rescue \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
-         echo   'Loading initrd.img ...'
+         echo   'loading initrd.img ...'
          initrd ${distro_ver_grub}/os/images/pxeboot/initrd.img
          echo   'booting system ...'
       }
