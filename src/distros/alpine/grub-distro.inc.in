@@ -21,8 +21,10 @@
       export distro_ver_append;
       export distro_ver_loc;
 
-      echo   'Booting Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
-      echo   "${distro_ver_loc}: ${distro_ver_grub}"
+      set iperd_verbose_str='Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      export iperd_verbose_str
+
+      iperd_print_distro_verbose
       echo   'loading vmlinuz-lts ...'
       linux  ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/vmlinuz-lts \
              modloop=${distro_ver_url}/releases/@DISTRO_ARCH@/netboot/modloop-lts \
