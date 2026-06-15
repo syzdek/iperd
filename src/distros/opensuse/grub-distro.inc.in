@@ -1,0 +1,40 @@
+
+   set distro_ver_opt="@DISTRO_OPT@";
+   iperd_distro_ver_desc
+   menuentry "openSUSE @DISTRO_VERSION@ (@DISTRO_ARCH@) [${distro_ver_loc}] ..." {
+
+      set distro_name="opensuse";
+      set distro_ver_opt="@DISTRO_OPT@";
+      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
+      set distro_local_url="@DISTRO_LOCAL_URL@";
+      set distro_grub="@DISTRO_GRUB@";
+      set distro_url="@DISTRO_URL@";
+
+      iperd_distro_ver_paths;
+
+      set distro_ver_suffix='distribution/leap/@DISTRO_VERSION@/repo/oss';
+      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
+      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
+
+      export distro_ver_grub;
+      export distro_ver_url;
+      export distro_ver_append;
+      export distro_ver_loc;
+
+      set iperd_verbose_str='openSUSE @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      export iperd_verbose_str
+
+      iperd_print_distro_verbose
+      echo   'loading linux ...'
+      linux  ${distro_ver_grub}/boot/x86_64/loader/linux \
+             splash=silent showopts \
+             ip=dhcp \
+             install=${distro_ver_url}/ \
+             repo=${distro_ver_url}/ \
+             init=linuxrc \
+             console=${iperd_linux_console} \
+             ${distro_ver_append}
+      echo   'loading initrd ...'
+      initrd ${distro_ver_grub}/boot/x86_64/loader/initrd
+      echo   'booting system ...'
+   }
