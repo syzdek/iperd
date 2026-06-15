@@ -217,6 +217,12 @@ export menu_color_normal
 export menu_color_highlight
 
 
+set iperd_verbose="@IPERD_VERBOSE@"
+set iperd_debug="@IPERD_DEBUG@"
+export iperd_verbose
+export iperd_debug
+
+
 set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
 
 
@@ -269,6 +275,14 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
       echo "   Linux Console:             ${iperd_linux_console}"
       echo "   IPERD GRUB Prefix:         ${iperd_grub}"
       echo "   IPERD Boot URL:            ${iperd_url}"
+      set iperd_str="${iperd_verbose}"
+      iperd_boolean
+      echo "   IPERD Verbose Messages:    ${iperd_str}"
+      if [ "${iperd_verbose}" == "y" ]; then
+         set iperd_str="${iperd_debug}"
+         iperd_boolean
+         echo "   IPERD Debug Messages:      ${iperd_str}"
+      fi
       if [ "x${iperd_pxe}" == "xn" ]; then
          if [ ${grub_platform} == "efi" ]; then
             set iperd_str="${iperd_network}"
@@ -316,6 +330,20 @@ if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
          set iperd_prompt_str="IPERD Boot URL"
          iperd_str_prompt
          set iperd_url="${iperd_prompt_input}"
+
+         # IPERD Verbose Messages
+         set iperd_prompt_dflt="${iperd_verbose}"
+         set iperd_prompt_str="IPERD Verbose Messages"
+         iperd_boolean_prompt
+         set iperd_verbose="${iperd_prompt_input}"
+
+         # IPERD Debug Messages
+         if [ "${iperd_verbose}" == "y" ]; then
+            set iperd_prompt_dflt="${iperd_debug}"
+            set iperd_prompt_str="IPERD Debug Messages"
+            iperd_boolean_prompt
+            set iperd_debug="${iperd_prompt_input}"
+         fi
 
          if [ "x${iperd_pxe}" == "xn" ]; then
             if [ ${grub_platform} == "efi" ]; then
