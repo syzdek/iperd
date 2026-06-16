@@ -264,6 +264,69 @@ export iperd_linux_console
 
 
 #
+# attempt to load host specific defaults
+set iperd_loaded_host_cfg="n";
+if [ "x${net_default_mac}" != "x" ]; then
+
+   # generate regex
+   set iperd_mac_regex="^";
+   for iperd_mac_count in "1" "2" "3" "4" "5"; do
+      set iperd_mac_regex="${iperd_mac_regex}([[:xdigit:]])([[:xdigit:]]):";
+   done
+   set iperd_mac_regex="${iperd_mac_regex}([[:xdigit:]])([[:xdigit:]])\$";
+   unset iperd_mac_count
+   
+   regexp --set  1:iperd_mac1  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  2:iperd_mac2  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  3:iperd_mac3  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  4:iperd_mac4  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  5:iperd_mac5  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  6:iperd_mac6  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  7:iperd_mac7  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  8:iperd_mac8  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set  9:iperd_mac9  "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set 10:iperd_mac10 "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set 11:iperd_mac11 "${iperd_mac_regex}" ${net_default_mac}
+   regexp --set 12:iperd_mac12 "${iperd_mac_regex}" ${net_default_mac}
+   unset iperd_mac_regex
+
+   set iperd_mac0="";
+   set iperd_mac1="${iperd_mac0}${iperd_mac1}";
+   set iperd_mac2="${iperd_mac1}${iperd_mac2}";
+   set iperd_mac3="${iperd_mac2}-${iperd_mac3}";
+   set iperd_mac4="${iperd_mac3}${iperd_mac4}";
+   set iperd_mac5="${iperd_mac4}-${iperd_mac5}";
+   set iperd_mac6="${iperd_mac5}${iperd_mac6}";
+   set iperd_mac7="${iperd_mac6}-${iperd_mac7}";
+   set iperd_mac8="${iperd_mac7}${iperd_mac8}";
+   set iperd_mac9="${iperd_mac8}-${iperd_mac9}";
+   set iperd_mac10="${iperd_mac9}${iperd_mac10}";
+   set iperd_mac11="${iperd_mac10}-${iperd_mac11}";
+   set iperd_mac12="${iperd_mac11}${iperd_mac12}";
+
+   for iperd_mac in ${iperd_mac12} ${iperd_mac11} ${iperd_mac10} ${iperd_mac9} ${iperd_mac8} ${iperd_mac7} ${iperd_mac6} ${iperd_mac5} ${iperd_mac4} ${iperd_mac3} ${iperd_mac2} ${iperd_mac1}; do
+      if [ "x${iperd_loaded_host_cfg}" == "xn" ] ; then
+         source (${root})/local/grub-${iperd_mac}.cfg
+      fi
+   done
+
+   unset iperd_mac0
+   unset iperd_mac1
+   unset iperd_mac2
+   unset iperd_mac3
+   unset iperd_mac4
+   unset iperd_mac5
+   unset iperd_mac6
+   unset iperd_mac7
+   unset iperd_mac8
+   unset iperd_mac9
+   unset iperd_mac10
+   unset iperd_mac11
+   unset iperd_mac12
+fi
+
+
+#
 # check PXE status and set initial network preferences
 #
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
