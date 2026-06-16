@@ -16,5 +16,6 @@
 /iperd-*/
 /iperd-*.iso
 /iperd-*.tar.xz
+/local/
 /mach_kernel
 /tools/
