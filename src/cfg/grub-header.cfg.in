@@ -136,24 +136,24 @@ function iperd_distro_ver_desc {
 
 function iperd_distro_ver_paths {
    if [ "x${distro_ver_opt}" == "xd" ]; then
-      set distro_ver_grub="${iperd_grub}/boot/${distro_name}";
-      set distro_ver_url="${iperd_url}/boot/${distro_name}";
-      set distro_ver_append="${distro_local_append}";
       if [ "x${iperd_pxe}" == "xn" ]; then
          set distro_ver_loc="Local Media";
       else
          set distro_ver_loc="Netboot Server";
       fi;
-   elif [ "x${distro_ver_opt}" == "xl" ]; then
-      set distro_ver_grub="${distro_local_grub}";
-      set distro_ver_url="${distro_local_url}";
+      set distro_ver_url="${iperd_url}/boot/${distro_name}";
+      set distro_ver_grub="${iperd_grub}/boot/${distro_name}";
       set distro_ver_append="${distro_local_append}";
+   elif [ "x${distro_ver_opt}" == "xl" ]; then
       set distro_ver_loc="Local Mirror";
+      set distro_ver_url="${distro_local_url}";
+      set distro_ver_grub="${distro_local_grub}";
+      set distro_ver_append="${distro_local_append}";
    else
-      set distro_ver_grub="${distro_grub}";
-      set distro_ver_url="${distro_url}";
-      set distro_ver_append="${distro_append}";
       set distro_ver_loc="Internet";
+      set distro_ver_url="${distro_url}";
+      set distro_ver_grub="${distro_grub}";
+      set distro_ver_append="${distro_append}";
    fi;
 }
 
