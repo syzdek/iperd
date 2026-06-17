@@ -354,7 +354,7 @@ export iperd_pxe
 #
 # Prompt user to review setup options
 #
-if [ "x@GRUB_RUNTIME_NOTICE@" == "xy" ]; then
+if [ "x@IPERD_RUNTIME_NOTICE@" == "xy" ]; then
    echo ""
    echo ""
    iperd_notice
