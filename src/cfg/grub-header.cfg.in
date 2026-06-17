@@ -143,7 +143,7 @@ function iperd_distro_ver_paths {
       fi;
       set distro_ver_url="${iperd_url}/boot/${distro_name}";
       set distro_ver_grub="${iperd_grub}/boot/${distro_name}";
-      set distro_ver_append="${distro_local_append}";
+      set distro_ver_append="${distro_download_append}";
    elif [ "x${distro_ver_opt}" == "xl" ]; then
       set distro_ver_loc="Local Mirror";
       set distro_ver_url="${distro_local_url}";
