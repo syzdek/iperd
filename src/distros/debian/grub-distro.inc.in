@@ -1,10 +1,10 @@
 
-   set distro_ver_opt="@DISTRO_OPT@";
+   set distro_ver_opt="@DISTRO_VER_OPT@";
    iperd_distro_ver_desc
    submenu "Debian Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_loc}] ..." {
 
       set distro_name="debian";
-      set distro_ver_opt="@DISTRO_OPT@";
+      set distro_ver_opt="@DISTRO_VER_OPT@";
       set distro_local_grub="@DISTRO_LOCAL_GRUB@";
       set distro_local_url="@DISTRO_LOCAL_URL@";
       set distro_grub="@DISTRO_GRUB@";

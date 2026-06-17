@@ -17,7 +17,7 @@ endif
 build/distros/opensuse/opensuse-@DISTRO_VERSION@.inc: src/distros/opensuse/grub-distro.inc.in .config
 	@$(DISTRO_OPENSUSE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_OPT=$(DISTRO_OPENSUSE_@DISTRO_TAG@); \
+		DISTRO_VER_OPT=$(DISTRO_OPENSUSE_@DISTRO_TAG@); \
 		DISTRO_VER_ARCH=x86_64; \
 		$(do_subst_file_dt)
 

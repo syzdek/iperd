@@ -17,7 +17,7 @@ endif
 build/distros/rocky/rocky-@DISTRO_VERSION@.inc: src/distros/rocky/grub-distro.inc.in .config
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_OPT=$(DISTRO_ROCKY_@DISTRO_VERSION@); \
+		DISTRO_VER_OPT=$(DISTRO_ROCKY_@DISTRO_VERSION@); \
 		DISTRO_VER_ARCH=x86_64; \
 		$(do_subst_file_dt)
 

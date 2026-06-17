@@ -16,7 +16,7 @@ endif
 build/distros/debian/debian-@DISTRO_VERSION@-I386.inc: src/distros/debian/grub-distro.inc.in .config
 	@$(DISTRO_DEBIAN_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386); \
+		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386); \
 		DISTRO_VER_ARCH=i386; \
 		$(do_subst_file_dt)
 
@@ -38,7 +38,7 @@ endif
 build/distros/debian/debian-@DISTRO_VERSION@-amd64.inc: src/distros/debian/grub-distro.inc.in .config
 	@$(DISTRO_DEBIAN_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64); \
+		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64); \
 		DISTRO_VER_ARCH=amd64; \
 		$(do_subst_file_dt)
 
