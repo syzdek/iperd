@@ -106,11 +106,13 @@ do_subst = sed \
 	-e "s,[@]GRUB_VERSION[@],$(GRUB_VERSION),g" \
 	\
 	-e "s;[@]DISTRO_URL[@];$${DISTRO_URL};g" \
+	-e "s;[@]DISTRO_REPO[@];$${DISTRO_REPO};g" \
 	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
 	-e "s;[@]DISTRO_EXTRA_URL[@];$${DISTRO_EXTRA_URL};g" \
 	-e "s;[@]DISTRO_EXTRA_APPEND[@];$${DISTRO_EXTRA_APPEND};g" \
 	-e "s;[@]DISTRO_LOCAL_URL[@];$${DISTRO_LOCAL_URL};g" \
+	-e "s;[@]DISTRO_LOCAL_REPO[@];$${DISTRO_LOCAL_REPO};g" \
 	-e "s;[@]DISTRO_LOCAL_GRUB[@];$${DISTRO_LOCAL_GRUB};g" \
 	-e "s;[@]DISTRO_LOCAL_APPEND[@];$${DISTRO_LOCAL_APPEND};g" \
 	-e "s;[@]DISTRO_VERSION[@];$${DISTRO_VERSION};g" \
