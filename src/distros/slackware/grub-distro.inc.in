@@ -12,7 +12,7 @@
 
       iperd_distro_ver_paths;
 
-      set distro_ver_suffix="slackware@DISTRO_SUFFIX@-@DISTRO_VERSION@";
+      set distro_ver_suffix="slackware@DISTRO_VER_EXTRA@-@DISTRO_VERSION@";
       set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
       set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
 
