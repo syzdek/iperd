@@ -2,21 +2,21 @@
 #
 # Debian Linux @DISTRO_VERSION@ (i386)
 #
-DISTRO_DEBIAN_@DISTRO_CODENAME@_I386		?= n
-ifneq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386), n)
+DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386		?= n
+ifneq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386), n)
    DISTRO_DEBIAN_CFG		+= build/distros/debian/debian-@DISTRO_VERSION@-i386.inc
 endif
-ifeq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386), d)
+ifeq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386), d)
    DISTRO_DEBIAN_BOOT		+= boot/debian/dists/@DISTRO_VERSION@/main/installer-i386/.iperd
-else ifneq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386), l)
-   DISTRO_DEBIAN_@DISTRO_CODENAME@_I386	:= y
+else ifneq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386), l)
+   DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386	:= y
 endif
 
 
 build/distros/debian/debian-@DISTRO_VERSION@-I386.inc: src/distros/debian/grub-distro.inc.in .config
 	@$(DISTRO_DEBIAN_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_I386); \
+		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_I386); \
 		DISTRO_VER_ARCH=i386; \
 		$(do_subst_file_dt)
 
@@ -24,21 +24,21 @@ build/distros/debian/debian-@DISTRO_VERSION@-I386.inc: src/distros/debian/grub-d
 #
 # Debian Linux @DISTRO_VERSION@ (amd64)
 #
-DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64		?= n
-ifneq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64), n)
+DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64		?= n
+ifneq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64), n)
    DISTRO_DEBIAN_CFG		+= build/distros/debian/debian-@DISTRO_VERSION@-amd64.inc
 endif
-ifeq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64), d)
+ifeq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64), d)
    DISTRO_DEBIAN_BOOT		+= boot/debian/dists/@DISTRO_VERSION@/main/installer-amd64/.iperd
-else ifneq ($(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64), l)
-   DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64	:= y
+else ifneq ($(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64), l)
+   DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64	:= y
 endif
 
 
 build/distros/debian/debian-@DISTRO_VERSION@-amd64.inc: src/distros/debian/grub-distro.inc.in .config
 	@$(DISTRO_DEBIAN_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_CODENAME@_AMD64); \
+		DISTRO_VER_OPT=$(DISTRO_DEBIAN_@DISTRO_VER_CODENAME@_AMD64); \
 		DISTRO_VER_ARCH=amd64; \
 		$(do_subst_file_dt)
 

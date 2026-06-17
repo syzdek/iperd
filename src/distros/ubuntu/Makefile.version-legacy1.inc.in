@@ -2,21 +2,21 @@
 #
 # Ubuntu Linux @DISTRO_VERSION@ (i386)
 #
-DISTRO_UBUNTU_@DISTRO_CODENAME@_I386		?= n
-ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_I386), n)
+DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386		?= n
+ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386), n)
    DISTRO_UBUNTU_CFG		+= build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-i386.inc
 endif
-ifeq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_I386), d)
+ifeq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386), d)
    DISTRO_UBUNTU_BOOT		+= boot/ubuntu/dists/@DISTRO_VERSION@/main/installer-i386/current/images/.iperd
-else ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_I386), l)
-   DISTRO_UBUNTU_@DISTRO_CODENAME@_I386	:= y
+else ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386), l)
+   DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386	:= y
 endif
 
 
 build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-I386.inc: src/distros/ubuntu/grub-distro-legacy1.inc.in .config
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_VER_OPT=$(DISTRO_UBUNTU_@DISTRO_CODENAME@_I386); \
+		DISTRO_VER_OPT=$(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386); \
 		DISTRO_VER_ARCH=i386; \
 		$(do_subst_file_dt)
 
@@ -24,21 +24,21 @@ build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-I386.inc: src/distros/ubuntu/grub-d
 #
 # Ubuntu Linux @DISTRO_VERSION@ (amd64)
 #
-DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64		?= n
-ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), n)
+DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64		?= n
+ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64), n)
    DISTRO_UBUNTU_CFG		+= build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc
 endif
-ifeq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), d)
+ifeq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64), d)
    DISTRO_UBUNTU_BOOT		+= boot/ubuntu/dists/@DISTRO_VERSION@/main/installer-amd64/current/images/.iperd
-else ifneq ($(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64), l)
-   DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64	:= y
+else ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64), l)
+   DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64	:= y
 endif
 
 
 build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: src/distros/ubuntu/grub-distro-legacy1.inc.in .config
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
-		DISTRO_VER_OPT=$(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64); \
+		DISTRO_VER_OPT=$(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64); \
 		DISTRO_VER_ARCH=amd64; \
 		$(do_subst_file_dt)
 

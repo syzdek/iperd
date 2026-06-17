@@ -116,7 +116,7 @@ do_subst = sed \
 	-e "s;[@]DISTRO_VERSION[@];$${DISTRO_VERSION};g" \
 	-e "s;[@]DISTRO_VER_OPT[@];$${DISTRO_VER_OPT};g" \
 	-e "s;[@]DISTRO_VER_ARCH[@];$${DISTRO_VER_ARCH};g" \
-	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
+	-e "s;[@]DISTRO_VER_CODENAME[@];$${DISTRO_VER_CODENAME};g" \
 	-e "s,[@]DISTRO_VER_EXTRA[@],$${DISTRO_VER_EXTRA},g" \
 	\
 	-e 's,[@]DATE[@],$(DATE),g' \

@@ -82,14 +82,14 @@ build/distros/ubuntu/Makefile.versions.inc: .config src/distros/ubuntu/Makefile.
 	   CODENAME="$$(echo "$${REL}" |tr a-z A-Z)"; \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
-	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
+	      -e "s/[@]DISTRO_VER_CODENAME[@]/$${CODENAME}/g" \
 	      src/distros/ubuntu/Makefile.version-legacy1.inc.in; \
 	done >> "$(@)";
 	@for REL in $(DEFAULT_UBUNTU_LEGACY_VER2); do \
 	   CODENAME="$$(echo "$${REL}" |tr a-z A-Z)"; \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
-	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
+	      -e "s/[@]DISTRO_VER_CODENAME[@]/$${CODENAME}/g" \
 	      src/distros/ubuntu/Makefile.version-legacy2.inc.in; \
 	done >> "$(@)";
 	@touch "$(@)"

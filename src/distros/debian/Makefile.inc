@@ -79,7 +79,7 @@ build/distros/debian/Makefile.versions.inc: .config src/distros/debian/Makefile.
 	   CODENAME="$$(echo "$${REL}" |tr a-z A-Z)"; \
 	   sed \
 	      -e "s/[@]DISTRO_VERSION[@]/$${REL}/g" \
-	      -e "s/[@]DISTRO_CODENAME[@]/$${CODENAME}/g" \
+	      -e "s/[@]DISTRO_VER_CODENAME[@]/$${CODENAME}/g" \
 	      src/distros/debian/Makefile.version.inc.in; \
 	done > "$(@)";
 	@touch "$(@)"
