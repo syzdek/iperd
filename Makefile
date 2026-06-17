@@ -111,10 +111,10 @@ do_subst = sed \
 	-e "s;[@]DISTRO_LOCAL_APPEND[@];$${DISTRO_LOCAL_APPEND};g" \
 	-e "s;[@]DISTRO_LOCAL_GRUB[@];$${DISTRO_LOCAL_GRUB};g" \
 	-e "s;[@]DISTRO_LOCAL_URL[@];$${DISTRO_LOCAL_URL};g" \
-	-e "s;[@]DISTRO_VERSION[@];$${DISTRO_VERSION};g" \
 	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s,[@]DISTRO_SUFFIX[@],$${DISTRO_SUFFIX},g" \
 	-e "s;[@]DISTRO_URL[@];$${DISTRO_URL};g" \
+	-e "s;[@]DISTRO_VERSION[@];$${DISTRO_VERSION};g" \
 	-e "s;[@]DISTRO_VER_OPT[@];$${DISTRO_VER_OPT};g" \
 	-e "s;[@]DISTRO_VER_ARCH[@];$${DISTRO_VER_ARCH};g" \
 	-e "s;[@]DISTRO_CODENAME[@];$${DISTRO_CODENAME};g" \
