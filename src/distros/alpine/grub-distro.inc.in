@@ -1,7 +1,7 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
-   menuentry "Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}]" {
+   menuentry "Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_loc}]" {
 
       set distro_name="alpine";
       set distro_ver_opt="@DISTRO_OPT@";
@@ -21,19 +21,19 @@
       export distro_ver_append;
       export distro_ver_loc;
 
-      set iperd_verbose_str='Alpine Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      set iperd_verbose_str='Alpine Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
       iperd_print_distro_verbose
       echo   'loading vmlinuz-lts ...'
-      linux  ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/vmlinuz-lts \
-             modloop=${distro_ver_url}/releases/@DISTRO_ARCH@/netboot/modloop-lts \
+      linux  ${distro_ver_grub}/releases/@DISTRO_VER_ARCH@/netboot/vmlinuz-lts \
+             modloop=${distro_ver_url}/releases/@DISTRO_VER_ARCH@/netboot/modloop-lts \
              modules=loop,squashfs,sd-mod,usb-storage \
              alpine_repo=${distro_ver_url}/main \
              ip=dhcp:::::eth0: \
              console=${iperd_linux_console} \
              ${distro_ver_append}
       echo   'loading initramfs-lts ...'
-      initrd ${distro_ver_grub}/releases/@DISTRO_ARCH@/netboot/initramfs-lts
+      initrd ${distro_ver_grub}/releases/@DISTRO_VER_ARCH@/netboot/initramfs-lts
       echo   'booting system ...'
    }

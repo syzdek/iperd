@@ -18,6 +18,6 @@ build/distros/fedora/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro
 	@$(DISTRO_FEDORA_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_FEDORA_@DISTRO_VERSION@); \
-		DISTRO_ARCH=x86_64; \
+		DISTRO_VER_ARCH=x86_64; \
 		$(do_subst_file_dt)
 

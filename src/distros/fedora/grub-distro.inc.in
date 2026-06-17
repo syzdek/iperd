@@ -1,7 +1,7 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
-   submenu "Fedora Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}] ..." {
+   submenu "Fedora Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_loc}] ..." {
 
       set distro_name="fedora";
       set distro_ver_opt="@DISTRO_OPT@";
@@ -12,7 +12,7 @@
 
       iperd_distro_ver_paths;
 
-      set distro_ver_suffix="@DISTRO_VERSION@/Everything/@DISTRO_ARCH@";
+      set distro_ver_suffix="@DISTRO_VERSION@/Everything/@DISTRO_VER_ARCH@";
       set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
       set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
 
@@ -21,7 +21,7 @@
       export distro_ver_append;
       export distro_ver_loc;
 
-      set iperd_verbose_str='Fedora Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      set iperd_verbose_str='Fedora Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
       menuentry "Install Fedora @DISTRO_VERSION@" {

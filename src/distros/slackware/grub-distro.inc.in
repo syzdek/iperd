@@ -1,7 +1,7 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
-   menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@) [${distro_ver_loc}]" {
+   menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_loc}]" {
 
       set distro_name="slackware";
       set distro_ver_opt="@DISTRO_OPT@";
@@ -21,7 +21,7 @@
       export distro_ver_append;
       export distro_ver_loc;
 
-      set iperd_verbose_str='Slackware Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      set iperd_verbose_str='Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
       iperd_print_distro_verbose

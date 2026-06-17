@@ -18,6 +18,6 @@ build/distros/opensuse/opensuse-@DISTRO_VERSION@.inc: src/distros/opensuse/grub-
 	@$(DISTRO_OPENSUSE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_OPENSUSE_@DISTRO_TAG@); \
-		DISTRO_ARCH=x86_64; \
+		DISTRO_VER_ARCH=x86_64; \
 		$(do_subst_file_dt)
 

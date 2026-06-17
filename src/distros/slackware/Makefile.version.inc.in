@@ -18,7 +18,7 @@ build/distros/slackware/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/gr
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_SLACKWARE_@DISTRO_TAG@); \
-		DISTRO_ARCH=x86; \
+		DISTRO_VER_ARCH=x86; \
 		DISTRO_SUFFIX=; \
 		$(do_subst_file_dt)
 
@@ -42,7 +42,7 @@ build/distros/slackware/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_SLACKWARE64_@DISTRO_TAG@); \
-		DISTRO_ARCH=x86_64; \
+		DISTRO_VER_ARCH=x86_64; \
 		DISTRO_SUFFIX=64; \
 		$(do_subst_file_dt)
 

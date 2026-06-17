@@ -17,7 +17,7 @@ build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-I386.inc: src/distros/ubuntu/grub-d
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_UBUNTU_@DISTRO_CODENAME@_I386); \
-		DISTRO_ARCH=i386; \
+		DISTRO_VER_ARCH=i386; \
 		$(do_subst_file_dt)
 
 
@@ -39,6 +39,6 @@ build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: src/distros/ubuntu/grub-
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_OPT=$(DISTRO_UBUNTU_@DISTRO_CODENAME@_AMD64); \
-		DISTRO_ARCH=amd64; \
+		DISTRO_VER_ARCH=amd64; \
 		$(do_subst_file_dt)
 

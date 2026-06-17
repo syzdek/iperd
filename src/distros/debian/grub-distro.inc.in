@@ -1,7 +1,7 @@
 
    set distro_ver_opt="@DISTRO_OPT@";
    iperd_distro_ver_desc
-   submenu "Debian Linux @DISTRO_VERSION@ Installers (@DISTRO_ARCH@) [${distro_ver_loc}] ..." {
+   submenu "Debian Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_loc}] ..." {
 
       set distro_name="debian";
       set distro_ver_opt="@DISTRO_OPT@";
@@ -12,7 +12,7 @@
 
       iperd_distro_ver_paths;
 
-      set distro_ver_suffix="dists/@DISTRO_VERSION@/main/installer-@DISTRO_ARCH@/current/images";
+      set distro_ver_suffix="dists/@DISTRO_VERSION@/main/installer-@DISTRO_VER_ARCH@/current/images";
       set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
       set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
 
@@ -21,51 +21,51 @@
       export distro_ver_append;
       export distro_ver_loc;
 
-      set iperd_verbose_str='Debian Linux @DISTRO_VERSION@ (@DISTRO_ARCH@)'
+      set iperd_verbose_str='Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
       menuentry 'Install' {
          iperd_print_distro_verbose
          echo   'loading linux ...'
-         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/linux \
+         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 quiet \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
          echo   'loading initrd.gz ...'
-         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/initrd.gz
+         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/initrd.gz
          echo   'booting system ...'
       }
       menuentry 'Expert Install' {
          iperd_print_distro_verbose
          echo   'loading linux ...'
-         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/linux \
+         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 priority=low \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
          echo   'loading initrd.gz ...'
-         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/initrd.gz
+         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/initrd.gz
          echo   'booting system ...'
       }
       menuentry 'Rescue Mode' {
          iperd_print_distro_verbose
          echo   'loading linux ...'
-         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/linux \
+         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 rescue/enable=true quiet \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
          echo   'loading initrd.gz ...'
-         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/initrd.gz
+         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/initrd.gz
          echo   'booting system ...'
       }
       menuentry 'Automated Install' {
          iperd_print_distro_verbose
          echo   'loading linux ...'
-         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/linux \
+         linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 auto=true priority=critical quiet \
                 console=${iperd_linux_console} \
                 ${distro_ver_append}
          echo   'loading initrd.gz ...'
-         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_ARCH@/initrd.gz
+         initrd ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/initrd.gz
          echo   'booting system ...'
       }
    }
