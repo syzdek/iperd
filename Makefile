@@ -108,7 +108,6 @@ do_subst = sed \
 	-e "s;[@]DISTRO_ARCH[@];$${DISTRO_ARCH};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
 	-e "s;[@]DISTRO_EXTRA_APPEND[@];$${DISTRO_EXTRA_APPEND};g" \
-	-e "s;[@]DISTRO_EXTRA_GRUB[@];$${DISTRO_EXTRA_GRUB};g" \
 	-e "s;[@]DISTRO_EXTRA_URL[@];$${DISTRO_EXTRA_URL};g" \
 	-e "s;[@]DISTRO_LOCAL_APPEND[@];$${DISTRO_LOCAL_APPEND};g" \
 	-e "s;[@]DISTRO_LOCAL_GRUB[@];$${DISTRO_LOCAL_GRUB};g" \
