@@ -359,7 +359,7 @@ if [ "x@GRUB_RUNTIME_NOTICE@" == "xy" ]; then
    echo ""
    iperd_notice
 fi
-if [ "x@GRUB_RUNTIME_SETUP@" == "xy" ]; then
+if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
    set iperd_continue="n"
    while [ ${iperd_continue} == "n" ]; do
       echo ""

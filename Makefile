@@ -44,7 +44,6 @@ CLEANFILES		= boot/grub \
 			  dist/iperd
 
 
-GRUB_RUNTIME_SETUP	?= n
 GRUB_RUNTIME_NOTICE	?= n
 GRUB_SERIAL_DEV		?= 0
 GRUB_SERIAL_BAUD	?= 115200
@@ -58,6 +57,7 @@ GRUB_CFG_INCLUDES	=
 LINUX_CONSOLE		?= tty0
 
 
+IPERD_RUNTIME_SETUP	?= n
 IPERD_GIT_URL		?= https://github.com/syzdek/iperd.git
 IPERD_VERBOSE		?= y
 IPERD_DEBUG		?= n
@@ -88,6 +88,7 @@ endif
 do_subst = sed \
 	-e 's,[@]IPERD_DATE[@],$(IPERD_DATE),g' \
 	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
+	-e "s,[@]IPERD_RUNTIME_SETUP[@],$(IPERD_RUNTIME_SETUP),g" \
 	-e 's,[@]IPERD_VERBOSE[@],$(IPERD_VERBOSE),g' \
 	-e 's,[@]IPERD_DEBUG[@],$(IPERD_DEBUG),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
@@ -95,7 +96,6 @@ do_subst = sed \
 	\
 	-e "s;[@]LINUX_CONSOLE[@];$(LINUX_CONSOLE);g" \
 	\
-	-e "s,[@]GRUB_RUNTIME_SETUP[@],$(GRUB_RUNTIME_SETUP),g" \
 	-e "s,[@]GRUB_RUNTIME_NOTICE[@],$(GRUB_RUNTIME_NOTICE),g" \
 	-e "s,[@]GRUB_SERIAL_DEV[@],$(GRUB_SERIAL_DEV),g" \
 	-e "s,[@]GRUB_SERIAL_BAUD[@],$(GRUB_SERIAL_BAUD),g" \
@@ -303,7 +303,6 @@ defconfig:
 	@echo "# IP Engineering Rescue Disk Configuration"
 	@echo "#"
 	@echo "# GRUB options"
-	@echo "GRUB_RUNTIME_SETUP=y"
 	@echo "GRUB_RUNTIME_NOTICE=y"
 	@echo "GRUB_SERIAL_DEV=0"
 	@echo "GRUB_SERIAL_BAUD=115200"
@@ -316,6 +315,7 @@ defconfig:
 	@echo "LINUX_CONSOLE=tty0"
 	@echo "#"
 	@echo "# IPERD"
+	@echo "IPERD_RUNTIME_SETUP=y"
 	@echo "IPERD_PREFIX="
 	@echo "IPERD_NET_PREFIX=/httpboot"
 	@echo "IPERD_VERBOSE=y"
