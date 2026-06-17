@@ -139,6 +139,12 @@ function iperd_distro_ver_paths {
       #
       # variable values for images downloaded
       #
+      if [ "x${distro_download_repo}" == "x" ]; then
+         set distro_download_repo="${distro_repo}";
+      fi;
+      if [ "x${distro_download_append}" == "x" ]; then
+         set distro_download_append="${distro_append}";
+      fi;
       if [ "x${iperd_pxe}" == "xn" ]; then
          set distro_ver_loc="Local Media";
       else
@@ -152,6 +158,18 @@ function iperd_distro_ver_paths {
       #
       # variable values for images on local mirrors
       #
+      if [ "x${distro_local_url}" == "x" ]; then
+         set distro_local_url="${distro_url}";
+      fi;
+      if [ "x${distro_local_repo}" == "x" ]; then
+         set distro_local_repo="${distro_repo}";
+      fi;
+      if [ "x${distro_local_grub}" == "x" ]; then
+         set distro_local_grub="${distro_grub}";
+      fi;
+      if [ "x${distro_local_append}" == "x" ]; then
+         set distro_local_append="${distro_append}";
+      fi;
       set distro_ver_loc="Local Mirror";
       set distro_ver_url="${distro_local_url}";
       set distro_ver_repo="${distro_local_repo}";
