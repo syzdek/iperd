@@ -195,7 +195,10 @@ function iperd_prompt_bool {
          fi
       done
    fi
-   set iperd_prompt_abort="n"
+   unset iperd_prompt_abort
+   unset iperd_prompt_continue
+   unset iperd_prompt_dflt
+   unset iperd_prompt_str
 }
 
 
@@ -217,6 +220,9 @@ function iperd_prompt_str {
          set iperd_prompt_input=""
       fi
    fi
+   unset iperd_prompt_continue
+   unset iperd_prompt_dflt
+   unset iperd_prompt_str
 }
 
 
@@ -526,6 +532,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
 
       fi
    done
+   unset iperd_continue
    echo ""
    echo ""
 else
