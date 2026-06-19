@@ -331,6 +331,8 @@ insmod usb
 insmod usbms
 insmod serial
 insmod regexp
+insmod test
+insmod read
 
 
 if [ ${grub_platform} == "efi" ]; then
@@ -623,5 +625,12 @@ fi
 
 set pager=0
 export pager
+
+
+#
+# attempt to load extra configurations
+#
+set iperd_source_file="(${root})/local/extra.cfg"
+iperd_source
 
 

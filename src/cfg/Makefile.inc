@@ -36,12 +36,21 @@ local/extra.cfg:
 	@echo "  GEN      $(@)"
 	@mkdir -p "$(@D)"
 	@echo "#" >> $(@)
-	@echo "# This file is for adding custom GRUB configuration options." >> $(@)
+	@echo "# User defined custom GRUB configuration include." >> $(@)
 	@echo "#" >> $(@)
 	@touch $(@)
 
 
-boot/grub/grub.cfg: src/cfg/grub-header.cfg.in local/extra.cfg $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
+local/variables.cfg:
+	@echo "  GEN      $(@)"
+	@mkdir -p "$(@D)"
+	@echo "#" >> $(@)
+	@echo "# User defined variable values." >> $(@)
+	@echo "#" >> $(@)
+	@touch $(@)
+
+
+boot/grub/grub.cfg: src/cfg/grub-header.cfg.in $(GRUB_CFG_INCLUDES) src/cfg/grub-footer.cfg.in
 	@$(do_subst_files_dt)
 	@touch "$(@)"
 

@@ -111,6 +111,8 @@ IPERD_DEPS		:= .config \
 			   .version \
 			   boot/grub/.iperd \
 			   boot/grub/grub.cfg \
+			   local/extra.cfg \
+			   local/variables.cfg \
 			   Makefile \
 			   VERSION.md
 
