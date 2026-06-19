@@ -31,6 +31,9 @@
 #   Generated on:  @DATE@
 #
 
+#
+# configure serial console early to display warnings/errors
+#
 serial --unit @GRUB_SERIAL_DEV@ --speed @GRUB_SERIAL_BAUD@
 terminal_input  serial console
 terminal_output serial console
@@ -228,6 +231,9 @@ function iperd_str_bool {
 }
 
 
+#
+# load common modules
+#
 insmod all_video
 
 insmod net
@@ -293,7 +299,8 @@ export iperd_linux_console
 
 
 #
-# attempt to load host specific defaults
+# attempt to load config include with host specific defaults
+#
 set iperd_loaded_host_cfg="n";
 if [ "x${net_default_mac}" != "x" ]; then
 
