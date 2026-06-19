@@ -98,7 +98,7 @@ function iperd_boolean_prompt {
 }
 
 
-function iperd_str_prompt {
+function iperd_prompt_str {
    if [ "x${iperd_prompt_str}" != "x" ]; then
       if [ "x${iperd_prompt_dflt}" != "x" ]; then
          echo -n "${iperd_prompt_str} [${iperd_prompt_dflt}]: "
@@ -456,19 +456,19 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          # Linux Console
          set iperd_prompt_dflt="${iperd_linux_console}"
          set iperd_prompt_str="Linux Console"
-         iperd_str_prompt
+         iperd_prompt_str
          set iperd_linux_console="${iperd_prompt_input}"
 
          # IPERD GRUB Prefix
          set iperd_prompt_dflt="${iperd_grub}"
          set iperd_prompt_str="IPERD GRUB Prefix"
-         iperd_str_prompt
+         iperd_prompt_str
          set iperd_grub="${iperd_prompt_input}"
 
          # IPERD Boot URL
          set iperd_prompt_dflt="${iperd_url}"
          set iperd_prompt_str="IPERD Boot URL"
-         iperd_str_prompt
+         iperd_prompt_str
          set iperd_url="${iperd_prompt_input}"
 
          # IPERD Verbose Messages
@@ -498,7 +498,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
                if [ ${iperd_net} == "y" ]; then
                   set iperd_prompt_dflt="${iperd_net_card}"
                   set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
-                  iperd_str_prompt
+                  iperd_prompt_str
                   set iperd_net_card="${iperd_prompt_input}"
                fi
 
@@ -514,13 +514,13 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          # GRUB Serial Term Type
          set iperd_prompt_dflt="${iperd_term_type}"
          set iperd_prompt_str="GRUB Serial Term Type"
-         iperd_str_prompt
+         iperd_prompt_str
          set iperd_term_type="${iperd_prompt_input}"
 
          # GRUB Serial Term Geometry
          set iperd_prompt_dflt="${iperd_term_geometry}"
          set iperd_prompt_str="GRUB Serial Term Geometry"
-         iperd_str_prompt
+         iperd_prompt_str
          set iperd_term_geometry="${iperd_prompt_input}"
 
          # GRUB Serial Term UTF-8
