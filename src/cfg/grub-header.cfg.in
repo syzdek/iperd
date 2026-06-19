@@ -49,89 +49,6 @@ function iperd_notice {
 }
 
 
-function iperd_prompt_bool {
-   if [ "x${iperd_prompt_str}" != "x" ]; then
-      set iperd_prompt_continue="n"
-      while [ "x${iperd_prompt_continue}" == "xn" ]; do
-         if [ "x${iperd_prompt_dflt}" != "x" ]; then
-            if [ "${iperd_prompt_dflt}" == "y" ]; then
-               set iperd_prompt_dflt="yes"
-            elif [ ${iperd_prompt_dflt} == "n" ]; then
-               set iperd_prompt_dflt="no"
-            fi
-            if [ "x${iperd_prompt_abort}" == "xy" ]; then
-               echo -n "${iperd_prompt_str} (yes/no/abort) [${iperd_prompt_dflt}]: "
-            else
-               echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
-            fi
-         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
-            echo -n "${iperd_prompt_str} (yes/no/abort): "
-         else
-            echo -n "${iperd_prompt_str} (yes/no): "
-         fi
-         read iperd_prompt_input
-         echo ""
-         if [ "x${iperd_prompt_input}" == "x" ]; then
-            if [ "x${iperd_prompt_dflt}" != "x" ]; then
-               set iperd_prompt_input="${iperd_prompt_dflt}"
-            fi
-         fi
-         if [ "x${iperd_prompt_input}" == "xy" ]; then
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xyes" ]; then
-            set iperd_prompt_input="y"
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xn" ]; then
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xno" ]; then
-            set iperd_prompt_input="n"
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
-            if [ "x${iperd_prompt_input}" == "xa" ]; then
-               set iperd_prompt_continue="y"
-            elif [ "x${iperd_prompt_input}" == "xabort" ]; then
-               set iperd_prompt_input="a"
-               set iperd_prompt_continue="y"
-            fi
-         fi
-      done
-   fi
-   set iperd_prompt_abort="n"
-}
-
-
-function iperd_prompt_str {
-   if [ "x${iperd_prompt_str}" != "x" ]; then
-      if [ "x${iperd_prompt_dflt}" != "x" ]; then
-         echo -n "${iperd_prompt_str} [${iperd_prompt_dflt}]: "
-      else
-         echo -n "${iperd_prompt_str}: "
-      fi
-      read iperd_prompt_input
-      echo ""
-      if [ "x${iperd_prompt_input}" == "x" ]; then
-         if [ "x${iperd_prompt_dflt}" != "x" ]; then
-            set iperd_prompt_input="${iperd_prompt_dflt}"
-         fi
-      fi
-      if [ "x${iperd_prompt_input}" == "x " ]; then
-         set iperd_prompt_input=""
-      fi
-   fi
-}
-
-
-function iperd_str_bool {
-   if [ "x${iperd_str}" == "x" ]; then
-      set iperd_str="n/a"
-   elif [ ${iperd_str} == "y" ]; then
-      set iperd_str="yes"
-   elif [ ${iperd_str} == "n" ]; then
-      set iperd_str="no"
-   fi
-}
-
-
 function iperd_distro_ver_calc {
    if [ "x${distro_ver_opt}" == "xd" ]; then
       #
@@ -225,6 +142,88 @@ function iperd_distro_ver_info {
          read -s
          echo ""
       fi
+   fi
+}
+
+function iperd_prompt_bool {
+   if [ "x${iperd_prompt_str}" != "x" ]; then
+      set iperd_prompt_continue="n"
+      while [ "x${iperd_prompt_continue}" == "xn" ]; do
+         if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            if [ "${iperd_prompt_dflt}" == "y" ]; then
+               set iperd_prompt_dflt="yes"
+            elif [ ${iperd_prompt_dflt} == "n" ]; then
+               set iperd_prompt_dflt="no"
+            fi
+            if [ "x${iperd_prompt_abort}" == "xy" ]; then
+               echo -n "${iperd_prompt_str} (yes/no/abort) [${iperd_prompt_dflt}]: "
+            else
+               echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
+            fi
+         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+            echo -n "${iperd_prompt_str} (yes/no/abort): "
+         else
+            echo -n "${iperd_prompt_str} (yes/no): "
+         fi
+         read iperd_prompt_input
+         echo ""
+         if [ "x${iperd_prompt_input}" == "x" ]; then
+            if [ "x${iperd_prompt_dflt}" != "x" ]; then
+               set iperd_prompt_input="${iperd_prompt_dflt}"
+            fi
+         fi
+         if [ "x${iperd_prompt_input}" == "xy" ]; then
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xyes" ]; then
+            set iperd_prompt_input="y"
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xn" ]; then
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xno" ]; then
+            set iperd_prompt_input="n"
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+            if [ "x${iperd_prompt_input}" == "xa" ]; then
+               set iperd_prompt_continue="y"
+            elif [ "x${iperd_prompt_input}" == "xabort" ]; then
+               set iperd_prompt_input="a"
+               set iperd_prompt_continue="y"
+            fi
+         fi
+      done
+   fi
+   set iperd_prompt_abort="n"
+}
+
+
+function iperd_prompt_str {
+   if [ "x${iperd_prompt_str}" != "x" ]; then
+      if [ "x${iperd_prompt_dflt}" != "x" ]; then
+         echo -n "${iperd_prompt_str} [${iperd_prompt_dflt}]: "
+      else
+         echo -n "${iperd_prompt_str}: "
+      fi
+      read iperd_prompt_input
+      echo ""
+      if [ "x${iperd_prompt_input}" == "x" ]; then
+         if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            set iperd_prompt_input="${iperd_prompt_dflt}"
+         fi
+      fi
+      if [ "x${iperd_prompt_input}" == "x " ]; then
+         set iperd_prompt_input=""
+      fi
+   fi
+}
+
+
+function iperd_str_bool {
+   if [ "x${iperd_str}" == "x" ]; then
+      set iperd_str="n/a"
+   elif [ ${iperd_str} == "y" ]; then
+      set iperd_str="yes"
+   elif [ ${iperd_str} == "n" ]; then
+      set iperd_str="no"
    fi
 }
 
