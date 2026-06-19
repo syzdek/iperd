@@ -47,7 +47,7 @@ function iperd_boolean {
 }
 
 
-function iperd_boolean_prompt {
+function iperd_prompt_bool {
    if [ "x${iperd_prompt_str}" != "x" ]; then
       set iperd_prompt_continue="n"
       while [ "x${iperd_prompt_continue}" == "xn" ]; do
@@ -443,7 +443,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       set iperd_prompt_abort='y'
       set iperd_prompt_dflt=""
       set iperd_prompt_str="Is the above correct"
-      iperd_boolean_prompt
+      iperd_prompt_bool
       if [ "x${iperd_prompt_input}" == "xy" ]; then
          set iperd_continue="y"
       elif [ "x${iperd_prompt_input}" == "xa" ]; then
@@ -474,14 +474,14 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          # IPERD Verbose Messages
          set iperd_prompt_dflt="${iperd_verbose}"
          set iperd_prompt_str="IPERD Verbose Messages"
-         iperd_boolean_prompt
+         iperd_prompt_bool
          set iperd_verbose="${iperd_prompt_input}"
 
          # IPERD Debug Messages
          if [ "${iperd_verbose}" == "y" ]; then
             set iperd_prompt_dflt="${iperd_debug}"
             set iperd_prompt_str="IPERD Debug Messages"
-            iperd_boolean_prompt
+            iperd_prompt_bool
             set iperd_debug="${iperd_prompt_input}"
          fi
 
@@ -491,7 +491,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
                # GRUB Initialize Network
                set iperd_prompt_dflt="${iperd_net}"
                set iperd_prompt_str="GRUB Initialize Network"
-               iperd_boolean_prompt
+               iperd_prompt_bool
                set iperd_net="${iperd_prompt_input}"
 
                # GRUB Network Interface
@@ -508,7 +508,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          # GRUB Graphics Terminal
          set iperd_prompt_dflt="${iperd_use_gfxterm}"
          set iperd_prompt_str="GRUB Graphics Terminal"
-         iperd_boolean_prompt
+         iperd_prompt_bool
          set iperd_use_gfxterm="${iperd_prompt_input}"
 
          # GRUB Serial Term Type
@@ -526,7 +526,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          # GRUB Serial Term UTF-8
          set iperd_prompt_dflt="${iperd_term_utf8}"
          set iperd_prompt_str="GRUB Serial Term UTF-8"
-         iperd_boolean_prompt
+         iperd_prompt_bool
          set iperd_term_utf8="${iperd_prompt_input}"
 
       fi
