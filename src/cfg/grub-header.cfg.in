@@ -138,7 +138,7 @@ function iperd_distro_ver_desc {
 }
 
 
-function iperd_distro_ver_paths {
+function iperd_distro_ver_calc {
    if [ "x${distro_ver_opt}" == "xd" ]; then
       #
       # variable values for images downloaded

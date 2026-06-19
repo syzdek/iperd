@@ -10,7 +10,7 @@
       set distro_grub="@DISTRO_GRUB@";
       set distro_url="@DISTRO_URL@";
 
-      iperd_distro_ver_paths;
+      iperd_distro_ver_calc;
 
       set distro_ver_suffix="dists/@DISTRO_VERSION@/main/installer-@DISTRO_VER_ARCH@/current/legacy-images";
       set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";

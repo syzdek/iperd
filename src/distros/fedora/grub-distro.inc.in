@@ -10,7 +10,7 @@
       set distro_grub="@DISTRO_GRUB@";
       set distro_url="@DISTRO_URL@";
 
-      iperd_distro_ver_paths;
+      iperd_distro_ver_calc;
 
       set distro_ver_suffix="@DISTRO_VERSION@/Everything/@DISTRO_VER_ARCH@";
       set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
