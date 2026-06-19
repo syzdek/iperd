@@ -36,7 +36,7 @@ terminal_input  serial console
 terminal_output serial console
 
 
-function iperd_boolean {
+function iperd_str_bool {
    if [ "x${iperd_str}" == "x" ]; then
       set iperd_str="n/a"
    elif [ ${iperd_str} == "y" ]; then
@@ -413,17 +413,17 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       echo "   IPERD GRUB Prefix:         ${iperd_grub}"
       echo "   IPERD Boot URL:            ${iperd_url}"
       set iperd_str="${iperd_verbose}"
-      iperd_boolean
+      iperd_str_bool
       echo "   IPERD Verbose Messages:    ${iperd_str}"
       if [ "${iperd_verbose}" == "y" ]; then
          set iperd_str="${iperd_debug}"
-         iperd_boolean
+         iperd_str_bool
          echo "   IPERD Debug Messages:      ${iperd_str}"
       fi
       if [ "x${iperd_pxe}" == "xn" ]; then
          if [ ${grub_platform} == "efi" ]; then
             set iperd_str="${iperd_net}"
-            iperd_boolean
+            iperd_str_bool
             echo "   GRUB Initialize Network:   ${iperd_str}"
             if [ ${iperd_net} == "y" ]; then
                echo "   GRUB Network Interface:    ${iperd_net_card}"
@@ -431,12 +431,12 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          fi
       fi
       set iperd_str="${iperd_use_gfxterm}"
-      iperd_boolean
+      iperd_str_bool
       echo "   GRUB Graphics Terminal:    ${iperd_str}"
       echo "   GRUB Serial Term Type:     ${iperd_term_type}"
       echo "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
       set iperd_str="${iperd_term_utf8}"
-      iperd_boolean
+      iperd_str_bool
       echo "   GRUB Serial Term UTF-8:    ${iperd_str}"
       echo ""
 
