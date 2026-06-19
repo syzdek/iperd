@@ -31,39 +31,41 @@
 
 V			?= 0
 NUMJOBS			?= 1
-DATE			:= $(shell date +%Y-%m-%d)
+IPERD_GIT_URL		?= https://github.com/syzdek/iperd.git
 
 
-DISTCLEANFILES		= boot \
-			  dist \
-			  build
-CLEANFILES		= boot/grub \
-			  tools \
-			  build/*/*.new \
-			  build/distros/*/*.inc \
-			  dist/iperd
-
-
+#
+# Grub Keywords
+#
 GRUB_SERIAL_DEV		?= 0
 GRUB_SERIAL_BAUD	?= 115200
 GRUB_USE_GFXTERM	?= n
 GRUB_TERM		?= vt100-color
 GRUB_TERM_GEOMETRY	?= 80x24
 GRUB_TERM_UTF8		?= y
-GRUB_CFG_INCLUDES	=
-
-
+#
 LINUX_CONSOLE		?= tty0
-
-
+#
 IPERD_RUNTIME_SETUP	?= n
 IPERD_RUNTIME_NOTICE	?= n
-IPERD_GIT_URL		?= https://github.com/syzdek/iperd.git
 IPERD_VERBOSE		?= y
 IPERD_DEBUG		?= n
 IPERD_NET		?= y
 IPERD_NET_CARD		?= any
-IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
+
+#
+# Lists
+#
+DISTCLEANFILES		:= boot \
+			   dist \
+			   build
+CLEANFILES		:= boot/grub \
+			   tools \
+			   build/*/*.new \
+			   build/distros/*/*.inc \
+			   dist/iperd
+GRUB_CFG_INCLUDES	:=
 IPERD_DOWNLOADS		:=
 IPERD_MIRRORS		:=
 IPERD_PRUNE		:=
@@ -78,8 +80,14 @@ IPERD_DEPS		:= .config \
 			   boot/grub/.iperd \
 			   boot/grub/grub.cfg \
 			   Makefile \
-			   VERSION.md \
-			   $(IPERD_DOWNLOADS)
+			   VERSION.md
+
+
+#
+# Generated Variables
+#
+DATE			:= $(shell date +%Y-%m-%d)
+IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 IPERD_GIT_REF		:= $(shell git rev-parse --abbrev-ref HEAD 2> /dev/null)
 IPERD_VERSION_DEPS	:=
 ifdef IPERD_GIT_REF
