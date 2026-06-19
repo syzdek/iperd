@@ -123,21 +123,6 @@ function iperd_str_bool {
 }
 
 
-function iperd_distro_ver_desc {
-   if [ "${distro_ver_opt}x" == "dx" ]; then
-      if [ "x${iperd_pxe}" == "xn" ]; then
-         set distro_ver_loc="Local Media";
-      else
-         set distro_ver_loc="Netboot Server";
-      fi
-   elif [ "${distro_ver_opt}x" == "lx" ]; then
-      set distro_ver_loc="Local Mirror";
-   else
-      set distro_ver_loc="Internet";
-   fi;
-}
-
-
 function iperd_distro_ver_calc {
    if [ "x${distro_ver_opt}" == "xd" ]; then
       #
