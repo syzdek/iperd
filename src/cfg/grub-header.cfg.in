@@ -36,16 +36,9 @@ terminal_input  serial console
 terminal_output serial console
 
 
-function iperd_str_bool {
-   if [ "x${iperd_str}" == "x" ]; then
-      set iperd_str="n/a"
-   elif [ ${iperd_str} == "y" ]; then
-      set iperd_str="yes"
-   elif [ ${iperd_str} == "n" ]; then
-      set iperd_str="no"
-   fi
-}
-
+#
+# IPERD GRUB Functions
+#
 
 function iperd_prompt_bool {
    if [ "x${iperd_prompt_str}" != "x" ]; then
@@ -115,6 +108,17 @@ function iperd_prompt_str {
       if [ "x${iperd_prompt_input}" == "x " ]; then
          set iperd_prompt_input=""
       fi
+   fi
+}
+
+
+function iperd_str_bool {
+   if [ "x${iperd_str}" == "x" ]; then
+      set iperd_str="n/a"
+   elif [ ${iperd_str} == "y" ]; then
+      set iperd_str="yes"
+   elif [ ${iperd_str} == "n" ]; then
+      set iperd_str="no"
    fi
 }
 
