@@ -372,7 +372,7 @@ fi
 #
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 set iperd_net="n"
-set iperd_net_card="any"
+set iperd_net_card="@IPERD_NET_CARD@"
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_grub="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
    set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
@@ -383,7 +383,7 @@ else
    set iperd_pxe="n"
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
-         set iperd_net="y"
+         set iperd_net="@IPERD_NET@"
       fi
    fi
 fi

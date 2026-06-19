@@ -61,6 +61,8 @@ IPERD_RUNTIME_NOTICE	?= n
 IPERD_GIT_URL		?= https://github.com/syzdek/iperd.git
 IPERD_VERBOSE		?= y
 IPERD_DEBUG		?= n
+IPERD_NET		?= y
+IPERD_NET_CARD		?= any
 IPERD_ROOT		:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 IPERD_DOWNLOADS		:=
 IPERD_MIRRORS		:=
@@ -93,6 +95,8 @@ do_subst = sed \
 	-e 's,[@]IPERD_VERBOSE[@],$(IPERD_VERBOSE),g' \
 	-e 's,[@]IPERD_DEBUG[@],$(IPERD_DEBUG),g' \
 	-e "s;[@]IPERD_PREFIX[@];$(IPERD_PREFIX);g" \
+	-e "s;[@]IPERD_NET[@];$(IPERD_NET);g" \
+	-e "s;[@]IPERD_NET_CARD[@];$(IPERD_NET_CARD);g" \
 	-e "s;[@]IPERD_NET_PREFIX[@];$(IPERD_NET_PREFIX);g" \
 	\
 	-e "s;[@]LINUX_CONSOLE[@];$(LINUX_CONSOLE);g" \
@@ -320,6 +324,8 @@ defconfig:
 	@echo "IPERD_RUNTIME_SETUP=y"
 	@echo "IPERD_RUNTIME_NOTICE=y"
 	@echo "IPERD_PREFIX="
+	@echo "IPERD_NET=y"
+	@echo "IPERD_NET_CARD=any"
 	@echo "IPERD_NET_PREFIX=/httpboot"
 	@echo "IPERD_VERBOSE=y"
 	@echo "IPERD_DEBUG=n"
