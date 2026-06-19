@@ -40,6 +40,15 @@ terminal_output serial console
 # IPERD GRUB Functions
 #
 
+function iperd_notice {
+   echo "                     IP Engineering Rescue Disk"
+   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
+   echo "      bootloader to boot utilities, installers, and operating"
+   echo "      systems. The IPERD boot menu will not modify the system,"
+   echo "      however images booted by IPERD may modify the system."
+}
+
+
 function iperd_prompt_bool {
    if [ "x${iperd_prompt_str}" != "x" ]; then
       set iperd_prompt_continue="n"
@@ -217,15 +226,6 @@ function iperd_distro_ver_info {
          echo ""
       fi
    fi
-}
-
-
-function iperd_notice {
-   echo "                     IP Engineering Rescue Disk"
-   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
-   echo "      bootloader to boot utilities, installers, and operating"
-   echo "      systems. The IPERD boot menu will not modify the system,"
-   echo "      however images booted by IPERD may modify the system."
 }
 
 
