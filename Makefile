@@ -122,12 +122,12 @@ endif
 do_subst = sed \
 	-e 's,[@]IPERD_DATE[@],$(IPERD_DATE),g' \
 	-e 's,[@]IPERD_VERSION[@],$(IPERD_VERSION),g' \
+	-e "s;[@]IPERD_DIR_DISK[@];$(IPERD_DIR_DISK);g" \
+	-e "s;[@]IPERD_DIR_NET[@];$(IPERD_DIR_NET);g" \
 	-e "s,[@]IPERD_RUNTIME_SETUP[@],$(IPERD_RUNTIME_SETUP),g" \
 	-e "s,[@]IPERD_RUNTIME_NOTICE[@],$(IPERD_RUNTIME_NOTICE),g" \
 	-e 's,[@]IPERD_VERBOSE[@],$(IPERD_VERBOSE),g' \
 	-e 's,[@]IPERD_DEBUG[@],$(IPERD_DEBUG),g' \
-	-e "s;[@]IPERD_DIR_DISK[@];$(IPERD_DIR_DISK);g" \
-	-e "s;[@]IPERD_DIR_NET[@];$(IPERD_DIR_NET);g" \
 	-e "s;[@]IPERD_NET[@];$(IPERD_NET);g" \
 	-e "s;[@]IPERD_NET_CARD[@];$(IPERD_NET_CARD);g" \
 	\
