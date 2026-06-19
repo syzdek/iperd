@@ -371,8 +371,8 @@ fi
 # check PXE status and set initial network preferences
 #
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
-set iperd_network="n"
-set iperd_network_card="any"
+set iperd_net="n"
+set iperd_net_card="any"
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_grub="(http,${iperd_tftp_ip})@IPERD_NET_PREFIX@"
    set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
@@ -383,7 +383,7 @@ else
    set iperd_pxe="n"
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
-         set iperd_network="y"
+         set iperd_net="y"
       fi
    fi
 fi
@@ -422,11 +422,11 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       fi
       if [ "x${iperd_pxe}" == "xn" ]; then
          if [ ${grub_platform} == "efi" ]; then
-            set iperd_str="${iperd_network}"
+            set iperd_str="${iperd_net}"
             iperd_boolean
             echo "   GRUB Initialize Network:   ${iperd_str}"
-            if [ ${iperd_network} == "y" ]; then
-               echo "   GRUB Network Interface:    ${iperd_network_card}"
+            if [ ${iperd_net} == "y" ]; then
+               echo "   GRUB Network Interface:    ${iperd_net_card}"
             fi
          fi
       fi
@@ -489,17 +489,17 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
             if [ ${grub_platform} == "efi" ]; then
 
                # GRUB Initialize Network
-               set iperd_prompt_dflt="${iperd_network}"
+               set iperd_prompt_dflt="${iperd_net}"
                set iperd_prompt_str="GRUB Initialize Network"
                iperd_boolean_prompt
-               set iperd_network="${iperd_prompt_input}"
+               set iperd_net="${iperd_prompt_input}"
 
                # GRUB Network Interface
-               if [ ${iperd_network} == "y" ]; then
-                  set iperd_prompt_dflt="${iperd_network_card}"
+               if [ ${iperd_net} == "y" ]; then
+                  set iperd_prompt_dflt="${iperd_net_card}"
                   set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
                   iperd_str_prompt
-                  set iperd_network_card="${iperd_prompt_input}"
+                  set iperd_net_card="${iperd_prompt_input}"
                fi
 
             fi
@@ -575,18 +575,18 @@ fi
 #
 # configure network using DHCP
 #
-if [ ${iperd_network} == "y" ]; then
+if [ ${iperd_net} == "y" ]; then
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
          echo "configuring network using DHCP ..."
          echo ""
          echo ""
-         if [ ${iperd_network_card} == "any" ]; then
+         if [ ${iperd_net_card} == "any" ]; then
             net_dhcp
-         elif [ "x${iperd_network_card}" == "x" ]; then
+         elif [ "x${iperd_net_card}" == "x" ]; then
             net_dhcp
          else
-            net_dhcp "${iperd_network_card}"
+            net_dhcp "${iperd_net_card}"
          fi
          echo ""
          echo ""
