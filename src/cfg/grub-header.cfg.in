@@ -374,12 +374,12 @@ regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 set iperd_net="n"
 set iperd_net_card="@IPERD_NET_CARD@"
 if [ ${iperd_tftp_ip} != "" ]; then
-   set iperd_grub="(http,${iperd_tftp_ip})@IPERD_PREFIX_NET@"
-   set iperd_url="http://${iperd_tftp_ip}@IPERD_PREFIX_NET@"
+   set iperd_grub="(http,${iperd_tftp_ip})@IPERD_DIR_NET@"
+   set iperd_url="http://${iperd_tftp_ip}@IPERD_DIR_NET@"
    set iperd_pxe="y"
 else
-   set iperd_grub="(${root})@IPERD_PREFIX_DISK@"
-   set iperd_url="@IPERD_PREFIX_DISK@"
+   set iperd_grub="(${root})@IPERD_DIR_DISK@"
+   set iperd_url="@IPERD_DIR_DISK@"
    set iperd_pxe="n"
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
