@@ -378,8 +378,8 @@ if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_url="http://${iperd_tftp_ip}@IPERD_NET_PREFIX@"
    set iperd_pxe="y"
 else
-   set iperd_grub="(${root})@IPERD_PREFIX@"
-   set iperd_url="@IPERD_PREFIX@"
+   set iperd_grub="(${root})@IPERD_PREFIX_DISK@"
+   set iperd_url="@IPERD_PREFIX_DISK@"
    set iperd_pxe="n"
    if [ "x${net_default_interface}" == "x" ]; then
       if [ ${grub_platform} == "efi" ]; then
