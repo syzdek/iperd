@@ -25,7 +25,7 @@
       export iperd_verbose_str
 
       menuentry "Install or upgrade an existing system" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 console=${iperd_linux_console} \
@@ -35,7 +35,7 @@
          echo   'booting system ...'
       }
       menuentry "Install system with basic video driver" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset \
@@ -46,7 +46,7 @@
          echo   'booting system ...'
       }
       menuentry "Install system from kickstart over network" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 net.ifnames=0 \
@@ -62,7 +62,7 @@
          echo   'booting system ...'
       }
       menuentry "Install system from network" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 ip=dhcp net.ifnames=0 \
@@ -75,7 +75,7 @@
          echo   'booting system ...'
       }
       menuentry "Rescue installed system" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 rescue \

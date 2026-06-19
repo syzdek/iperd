@@ -24,7 +24,7 @@
       set iperd_verbose_str='Alpine Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
-      iperd_print_distro_verbose
+      iperd_distro_ver_info
       echo   'loading vmlinuz-lts ...'
       linux  ${distro_ver_grub}/releases/@DISTRO_VER_ARCH@/netboot/vmlinuz-lts \
              modloop=${distro_ver_url}/releases/@DISTRO_VER_ARCH@/netboot/modloop-lts \

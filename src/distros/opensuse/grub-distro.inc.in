@@ -24,7 +24,7 @@
       set iperd_verbose_str='openSUSE @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
       export iperd_verbose_str
 
-      iperd_print_distro_verbose
+      iperd_distro_ver_info
       echo   'loading linux ...'
       linux  ${distro_ver_grub}/boot/x86_64/loader/linux \
              splash=silent showopts \

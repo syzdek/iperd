@@ -25,7 +25,7 @@
       export iperd_verbose_str
 
       menuentry "Install Fedora @DISTRO_VERSION@" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 ramdisk_size=100000 ip=dhcp net.ifnames=0 \
@@ -38,7 +38,7 @@
          echo   'booting system ...'
       }
       menuentry "Install Fedora @DISTRO_VERSION@ in basic graphics mode" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 nomodeset ramdisk_size=100000 ip=dhcp net.ifnames=0 \
@@ -51,7 +51,7 @@
          echo   'booting system ...'
       }
       menuentry "Rescue a Fedora system" {
-         iperd_print_distro_verbose
+         iperd_distro_ver_info
          echo   'loading vmlinuz ...'
          linux  ${distro_ver_grub}/os/images/pxeboot/vmlinuz \
                 ramdisk_size=100000 ip=dhcp net.ifnames=0 \

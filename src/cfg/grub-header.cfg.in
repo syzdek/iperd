@@ -192,7 +192,7 @@ function iperd_distro_ver_paths {
 }
 
 
-function iperd_print_distro_verbose {
+function iperd_distro_ver_info {
    if [ "x${iperd_verbose_str}" != "x" ]; then
       echo "${iperd_verbose_str} [${distro_ver_loc}]"
    fi
