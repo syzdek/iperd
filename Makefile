@@ -54,6 +54,10 @@ DFLT_VERBOSE		:= y
 DFLT_DEBUG		:= n
 DFLT_NET		:= y
 DFLT_NET_CARD		:= any
+DFLT_NET_IP		:= dhcp
+DFLT_NET_CIDR		:= 24
+DFLT_NET_GW		:=
+DFLT_NET_DNS		:=
 
 
 #
@@ -76,6 +80,10 @@ IPERD_VERBOSE		?= $(DFLT_VERBOSE)
 IPERD_DEBUG		?= $(DFLT_DEBUG)
 IPERD_NET		?= $(DFLT_NET)
 IPERD_NET_CARD		?= $(DFLT_NET_CARD)
+IPERD_NET_IP		?= $(DFLT_NET_IP)
+IPERD_NET_CIDR		?= $(DFLT_NET_CIDR)
+IPERD_NET_GW		?= $(DFLT_NET_GW)
+IPERD_NET_DNS		?= $(DFLT_NET_DNS)
 
 
 #
@@ -130,6 +138,10 @@ do_subst = sed \
 	-e 's,[@]IPERD_DEBUG[@],$(IPERD_DEBUG),g' \
 	-e "s;[@]IPERD_NET[@];$(IPERD_NET);g" \
 	-e "s;[@]IPERD_NET_CARD[@];$(IPERD_NET_CARD);g" \
+	-e "s;[@]IPERD_NET_IP[@];$(IPERD_NET_IP);g" \
+	-e "s;[@]IPERD_NET_CIDR[@];$(IPERD_NET_CIDR);g" \
+	-e "s;[@]IPERD_NET_GW[@];$(IPERD_NET_GW);g" \
+	-e "s;[@]IPERD_NET_DNS[@];$(IPERD_NET_DNS);g" \
 	\
 	-e "s;[@]LINUX_CONSOLE[@];$(LINUX_CONSOLE);g" \
 	\
@@ -361,6 +373,10 @@ defconfig:
 	@echo "IPERD_DEBUG=$(DFLT_DEBUG)"
 	@echo "IPERD_NET=$(DFLT_NET)"
 	@echo "IPERD_NET_CARD=$(DFLT_NET_CARD)"
+	@echo "IPERD_NET_IP=$(DFLT_NET_IP)"
+	@echo "IPERD_NET_CIDR=$(DFLT_NET_CIDR)"
+	@echo "IPERD_NET_GW=$(DFLT_NET_GW)"
+	@echo "IPERD_NET_DNS=$(DFLT_NET_DNS)"
 	@for CFG in $(IPERD_DEFCONFIGS); do \
 	   $(MAKE) -s \
 	           -f src/distros/$${CFG}/Makefile.inc \
