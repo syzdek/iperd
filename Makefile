@@ -158,7 +158,7 @@ do_subst = sed \
 	-e "s,[@]GRUB_TERM_UTF8[@],$(GRUB_TERM_UTF8),g" \
 	-e "s,[@]GRUB_VERSION[@],$(GRUB_VERSION),g" \
 	\
-	-e "s;[@]DISTRO_URL[@];$${DISTRO_URL};g" \
+	-e "s;[@]DISTRO_PUB_URL[@];$${DISTRO_PUB_URL};g" \
 	-e "s;[@]DISTRO_REPO[@];$${DISTRO_REPO};g" \
 	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \

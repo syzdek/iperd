@@ -93,7 +93,7 @@ function iperd_distro_ver_calc {
       # variable values for images on local mirrors
       #
       if [ "x${distro_local_url}" == "x" ]; then
-         set distro_local_url="${distro_url}";
+         set distro_local_url="${distro_pub_url}";
       fi;
       if [ "x${distro_local_repo}" == "x" ]; then
          set distro_local_repo="${distro_repo}";
@@ -114,7 +114,7 @@ function iperd_distro_ver_calc {
       # variable values for images on Internet
       #
       set distro_ver_loc="Internet";
-      set distro_ver_url="${distro_url}";
+      set distro_ver_url="${distro_pub_url}";
       set distro_ver_repo="${distro_repo}";
       set distro_ver_grub="${distro_grub}";
       set distro_ver_append="${distro_append}";
@@ -145,7 +145,7 @@ function iperd_distro_ver_info {
             echo "      distro_local_grub:       ${distro_local_grub}"
             echo "      distro_local_append:     ${distro_local_append}"
          else
-            echo "      distro_url:              ${distro_url}"
+            echo "      distro_pub_url:          ${distro_pub_url}"
             echo "      distro_repo:             ${distro_repo}"
             echo "      distro_grub:             ${distro_grub}"
             echo "      distro_append:           ${distro_append}"
