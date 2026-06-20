@@ -54,17 +54,23 @@ function iperd_notice {
 
 
 function iperd_distro_opt_desc {
-   if [ "x${2}" == "xd" ]; then
+   set tmp_attr="${1}";
+   set tmp_ver_opt="${2}";
+
+   if [ "x${tmp_ver_opt}" == "xd" ]; then
       if [ "x${iperd_pxe}" == "xn" ]; then
-         set ${1}="Local Media";
+         set ${tmp_attr}="Local Media";
       else
-         set ${1}="Netboot Server";
+         set ${tmp_attr}="Netboot Server";
       fi;
-   elif [ "x${2}" == "xl" ]; then
-      set ${1}="Local Mirror";
+   elif [ "x${tmp_ver_opt}" == "xl" ]; then
+      set ${tmp_attr}="Local Mirror";
    else
-      set ${1}="Internet";
+      set ${tmp_attr}="Internet";
    fi
+
+   unset tmp_attr;
+   unset tmp_ver_opt;
 }
 
 
