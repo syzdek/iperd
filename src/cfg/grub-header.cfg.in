@@ -99,7 +99,7 @@ function iperd_distro_ver_calc {
          set distro_local_repo="${distro_repo}";
       fi;
       if [ "x${distro_local_grub}" == "x" ]; then
-         set distro_local_grub="${distro_grub}";
+         set distro_local_grub="${distro_pub_grub}";
       fi;
       if [ "x${distro_local_append}" == "x" ]; then
          set distro_local_append="${distro_append}";
@@ -116,7 +116,7 @@ function iperd_distro_ver_calc {
       set distro_ver_loc="Internet";
       set distro_ver_url="${distro_pub_url}";
       set distro_ver_repo="${distro_repo}";
-      set distro_ver_grub="${distro_grub}";
+      set distro_ver_grub="${distro_pub_grub}";
       set distro_ver_append="${distro_append}";
    fi;
 }
@@ -147,7 +147,7 @@ function iperd_distro_ver_info {
          else
             echo "      distro_pub_url:          ${distro_pub_url}"
             echo "      distro_repo:             ${distro_repo}"
-            echo "      distro_grub:             ${distro_grub}"
+            echo "      distro_pub_grub:         ${distro_pub_grub}"
             echo "      distro_append:           ${distro_append}"
          fi
          echo "      distro_ver_opt:          ${distro_ver_opt}"

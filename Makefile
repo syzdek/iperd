@@ -160,7 +160,7 @@ do_subst = sed \
 	\
 	-e "s;[@]DISTRO_PUB_URL[@];$${DISTRO_PUB_URL};g" \
 	-e "s;[@]DISTRO_REPO[@];$${DISTRO_REPO};g" \
-	-e "s;[@]DISTRO_GRUB[@];$${DISTRO_GRUB};g" \
+	-e "s;[@]DISTRO_PUB_GRUB[@];$${DISTRO_PUB_GRUB};g" \
 	-e "s;[@]DISTRO_APPEND[@];$${DISTRO_APPEND};g" \
 	-e "s;[@]DISTRO_DOWNLOAD_REPO[@];$${DISTRO_DOWNLOAD_REPO};g" \
 	-e "s;[@]DISTRO_DOWNLOAD_APPEND[@];$${DISTRO_DOWNLOAD_APPEND};g" \
