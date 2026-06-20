@@ -74,7 +74,7 @@ function iperd_distro_ver_calc {
       # variable values for images downloaded
       #
       if [ "x${distro_download_repo}" == "x" ]; then
-         set distro_download_repo="${distro_repo}";
+         set distro_download_repo="${distro_pub_repo}";
       fi;
       if [ "x${distro_download_append}" == "x" ]; then
          set distro_download_append="${distro_pub_append}";
@@ -96,7 +96,7 @@ function iperd_distro_ver_calc {
          set distro_local_url="${distro_pub_url}";
       fi;
       if [ "x${distro_local_repo}" == "x" ]; then
-         set distro_local_repo="${distro_repo}";
+         set distro_local_repo="${distro_pub_repo}";
       fi;
       if [ "x${distro_local_grub}" == "x" ]; then
          set distro_local_grub="${distro_pub_grub}";
@@ -115,7 +115,7 @@ function iperd_distro_ver_calc {
       #
       set distro_ver_loc="Internet";
       set distro_ver_url="${distro_pub_url}";
-      set distro_ver_repo="${distro_repo}";
+      set distro_ver_repo="${distro_pub_repo}";
       set distro_ver_grub="${distro_pub_grub}";
       set distro_ver_append="${distro_pub_append}";
    fi;
@@ -146,7 +146,7 @@ function iperd_distro_ver_info {
             echo "      distro_local_append:     ${distro_local_append}"
          else
             echo "      distro_pub_url:          ${distro_pub_url}"
-            echo "      distro_repo:             ${distro_repo}"
+            echo "      distro_pub_repo:         ${distro_pub_repo}"
             echo "      distro_pub_grub:         ${distro_pub_grub}"
             echo "      distro_pub_append:       ${distro_pub_append}"
          fi
