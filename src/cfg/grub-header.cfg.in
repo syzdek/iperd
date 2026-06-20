@@ -77,7 +77,7 @@ function iperd_distro_ver_calc {
          set distro_download_repo="${distro_repo}";
       fi;
       if [ "x${distro_download_append}" == "x" ]; then
-         set distro_download_append="${distro_append}";
+         set distro_download_append="${distro_pub_append}";
       fi;
       if [ "x${iperd_pxe}" == "xn" ]; then
          set distro_ver_loc="Local Media";
@@ -102,7 +102,7 @@ function iperd_distro_ver_calc {
          set distro_local_grub="${distro_pub_grub}";
       fi;
       if [ "x${distro_local_append}" == "x" ]; then
-         set distro_local_append="${distro_append}";
+         set distro_local_append="${distro_pub_append}";
       fi;
       set distro_ver_loc="Local Mirror";
       set distro_ver_url="${distro_local_url}";
@@ -117,7 +117,7 @@ function iperd_distro_ver_calc {
       set distro_ver_url="${distro_pub_url}";
       set distro_ver_repo="${distro_repo}";
       set distro_ver_grub="${distro_pub_grub}";
-      set distro_ver_append="${distro_append}";
+      set distro_ver_append="${distro_pub_append}";
    fi;
 }
 
@@ -148,7 +148,7 @@ function iperd_distro_ver_info {
             echo "      distro_pub_url:          ${distro_pub_url}"
             echo "      distro_repo:             ${distro_repo}"
             echo "      distro_pub_grub:         ${distro_pub_grub}"
-            echo "      distro_append:           ${distro_append}"
+            echo "      distro_pub_append:       ${distro_pub_append}"
          fi
          echo "      distro_ver_opt:          ${distro_ver_opt}"
          echo "      distro_ver_suffix:       ${distro_ver_suffix}"
