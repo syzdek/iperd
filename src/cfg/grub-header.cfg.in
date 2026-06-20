@@ -227,82 +227,75 @@ function iperd_prompt_str {
 
 
 function iperd_source {
-   regexp --set 1:iperd_source_ext  '^.*([.]cfg)$'    ${iperd_source_file}
-   if [ "x${iperd_source_ext}" == "x" ]; then
-      set iperd_source_base="${iperd_source_file}"
-   else
-      regexp --set 1:iperd_source_base '^(.*)[.]cfg$' ${iperd_source_file}
-   fi
-
    set iperd_source_loaded="n";
-   if [ "x${net_default_mac}" != "x" ]; then
+   if [ "x${feature_net_search_cfg}" != "xn" ]; then
+      if [ "x${net_default_mac}" != "x" ]; then
 
-      # generate regex
-      set iperd_regex="^";
-      for iperd_count in "1" "2" "3" "4" "5"; do
-         set iperd_regex="${iperd_regex}([[:xdigit:]])([[:xdigit:]]):";
-      done
-      set iperd_regex="${iperd_regex}([[:xdigit:]])([[:xdigit:]])\$";
-      unset iperd_count
+         # generate regex
+         set iperd_regex="^";
+         for iperd_count in "1" "2" "3" "4" "5"; do
+            set iperd_regex="${iperd_regex}([[:xdigit:]])([[:xdigit:]]):";
+         done
+         set iperd_regex="${iperd_regex}([[:xdigit:]])([[:xdigit:]])\$";
+         unset iperd_count
 
-      regexp --set  1:iperd_mac1  "${iperd_regex}" ${net_default_mac}
-      regexp --set  2:iperd_mac2  "${iperd_regex}" ${net_default_mac}
-      regexp --set  3:iperd_mac3  "${iperd_regex}" ${net_default_mac}
-      regexp --set  4:iperd_mac4  "${iperd_regex}" ${net_default_mac}
-      regexp --set  5:iperd_mac5  "${iperd_regex}" ${net_default_mac}
-      regexp --set  6:iperd_mac6  "${iperd_regex}" ${net_default_mac}
-      regexp --set  7:iperd_mac7  "${iperd_regex}" ${net_default_mac}
-      regexp --set  8:iperd_mac8  "${iperd_regex}" ${net_default_mac}
-      regexp --set  9:iperd_mac9  "${iperd_regex}" ${net_default_mac}
-      regexp --set 10:iperd_mac10 "${iperd_regex}" ${net_default_mac}
-      regexp --set 11:iperd_mac11 "${iperd_regex}" ${net_default_mac}
-      regexp --set 12:iperd_mac12 "${iperd_regex}" ${net_default_mac}
-      unset iperd_regex
+         regexp --set  1:iperd_str1  "${iperd_regex}" ${net_default_mac}
+         regexp --set  2:iperd_str2  "${iperd_regex}" ${net_default_mac}
+         regexp --set  3:iperd_str3  "${iperd_regex}" ${net_default_mac}
+         regexp --set  4:iperd_str4  "${iperd_regex}" ${net_default_mac}
+         regexp --set  5:iperd_str5  "${iperd_regex}" ${net_default_mac}
+         regexp --set  6:iperd_str6  "${iperd_regex}" ${net_default_mac}
+         regexp --set  7:iperd_str7  "${iperd_regex}" ${net_default_mac}
+         regexp --set  8:iperd_str8  "${iperd_regex}" ${net_default_mac}
+         regexp --set  9:iperd_str9  "${iperd_regex}" ${net_default_mac}
+         regexp --set 10:iperd_str10 "${iperd_regex}" ${net_default_mac}
+         regexp --set 11:iperd_str11 "${iperd_regex}" ${net_default_mac}
+         regexp --set 12:iperd_str12 "${iperd_regex}" ${net_default_mac}
+         unset iperd_regex
 
-      set iperd_mac0="";
-      set iperd_mac1="${iperd_mac0}${iperd_mac1}";
-      set iperd_mac2="${iperd_mac1}${iperd_mac2}";
-      set iperd_mac3="${iperd_mac2}-${iperd_mac3}";
-      set iperd_mac4="${iperd_mac3}${iperd_mac4}";
-      set iperd_mac5="${iperd_mac4}-${iperd_mac5}";
-      set iperd_mac6="${iperd_mac5}${iperd_mac6}";
-      set iperd_mac7="${iperd_mac6}-${iperd_mac7}";
-      set iperd_mac8="${iperd_mac7}${iperd_mac8}";
-      set iperd_mac9="${iperd_mac8}-${iperd_mac9}";
-      set iperd_mac10="${iperd_mac9}${iperd_mac10}";
-      set iperd_mac11="${iperd_mac10}-${iperd_mac11}";
-      set iperd_mac12="${iperd_mac11}${iperd_mac12}";
+         set iperd_str0="";
+         set iperd_str1="${iperd_str0}${iperd_str1}";
+         set iperd_str2="${iperd_str1}${iperd_str2}";
+         set iperd_str3="${iperd_str2}-${iperd_str3}";
+         set iperd_str4="${iperd_str3}${iperd_str4}";
+         set iperd_str5="${iperd_str4}-${iperd_str5}";
+         set iperd_str6="${iperd_str5}${iperd_str6}";
+         set iperd_str7="${iperd_str6}-${iperd_str7}";
+         set iperd_str8="${iperd_str7}${iperd_str8}";
+         set iperd_str9="${iperd_str8}-${iperd_str9}";
+         set iperd_str10="${iperd_str9}${iperd_str10}";
+         set iperd_str11="${iperd_str10}-${iperd_str11}";
+         set iperd_str12="${iperd_str11}${iperd_str12}";
 
-      for iperd_mac in ${iperd_mac12} ${iperd_mac11} ${iperd_mac10} ${iperd_mac9} ${iperd_mac8} ${iperd_mac7} ${iperd_mac6} ${iperd_mac5} ${iperd_mac4} ${iperd_mac3} ${iperd_mac2} ${iperd_mac1}; do
-         if [ "x${iperd_source_loaded}" == "xn" ] ; then
-            source ${iperd_source_base}-${iperd_mac}${iperd_source_ext}
-         fi
-      done
+         for iperd_str in ${iperd_str12} ${iperd_str11} ${iperd_str10} ${iperd_str9} ${iperd_str8} ${iperd_str7} ${iperd_str6} ${iperd_str5} ${iperd_str4} ${iperd_str3} ${iperd_str2} ${iperd_str1}; do
+            if [ "x${iperd_source_loaded}" == "xn" ] ; then
+               source ${iperd_source_file}-${iperd_str}
+            fi
+         done
 
-      unset iperd_mac
-      unset iperd_mac0
-      unset iperd_mac1
-      unset iperd_mac2
-      unset iperd_mac3
-      unset iperd_mac4
-      unset iperd_mac5
-      unset iperd_mac6
-      unset iperd_mac7
-      unset iperd_mac8
-      unset iperd_mac9
-      unset iperd_mac10
-      unset iperd_mac11
-      unset iperd_mac12
+         unset iperd_str
+         unset iperd_str0
+         unset iperd_str1
+         unset iperd_str2
+         unset iperd_str3
+         unset iperd_str4
+         unset iperd_str5
+         unset iperd_str6
+         unset iperd_str7
+         unset iperd_str8
+         unset iperd_str9
+         unset iperd_str10
+         unset iperd_str11
+         unset iperd_str12
+      fi
    fi
 
    if [ "x${iperd_source_loaded}" == "xn" ] ; then
-      source ${iperd_source_base}${iperd_source_ext}
+      source ${iperd_source_file}
    fi
 
    unset iperd_source_loaded
    unset iperd_source_file
-   unset iperd_source_base
-   unset iperd_source_ext
 }
 
 
