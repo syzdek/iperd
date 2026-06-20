@@ -53,6 +53,21 @@ function iperd_notice {
 }
 
 
+function iperd_distro_opt_desc {
+   if [ "x${2}" == "xd" ]; then
+      if [ "x${iperd_pxe}" == "xn" ]; then
+         set ${1}="Local Media";
+      else
+         set ${1}="Netboot Server";
+      fi;
+   elif [ "x${2}" == "xl" ]; then
+      set ${1}="Local Mirror";
+   else
+      set ${1}="Internet";
+   fi
+}
+
+
 function iperd_distro_ver_calc {
    if [ "x${distro_ver_opt}" == "xd" ]; then
       #
