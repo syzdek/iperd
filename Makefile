@@ -158,6 +158,7 @@ do_subst = sed \
 	-e "s,[@]GRUB_TERM_UTF8[@],$(GRUB_TERM_UTF8),g" \
 	-e "s,[@]GRUB_VERSION[@],$(GRUB_VERSION),g" \
 	\
+	-e "s;[@]DISTRO_ALIAS[@];$${DISTRO_ALIAS};g" \
 	-e "s;[@]DISTRO_PUB_URL[@];$${DISTRO_PUB_URL};g" \
 	-e "s;[@]DISTRO_PUB_REPO[@];$${DISTRO_PUB_REPO};g" \
 	-e "s;[@]DISTRO_PUB_GRUB[@];$${DISTRO_PUB_GRUB};g" \
