@@ -74,10 +74,16 @@ function iperd_distro_opt_desc {
 }
 
 
-function iperd_distro_ver_calc {
-   if [ "x${distro_ver_opt}" == "xd" ]; then
+function iperd_distro_ver_logic {
+   set tmp_ver_opt="${1}";
+
+   if [ "x${distro_pub_repo}" == "x" ]; then
+      set distro_pub_repo="${distro_pub_url}";
+   fi
+
+   if [ "x${tmp_ver_opt}" == "xd" ]; then
       #
-      # variable values for images downloaded
+      # variable values for downloaded images
       #
       if [ "x${distro_download_repo}" == "x" ]; then
          set distro_download_repo="${distro_pub_repo}";
@@ -85,16 +91,11 @@ function iperd_distro_ver_calc {
       if [ "x${distro_download_append}" == "x" ]; then
          set distro_download_append="${distro_pub_append}";
       fi;
-      if [ "x${iperd_pxe}" == "xn" ]; then
-         set distro_ver_loc="Local Media";
-      else
-         set distro_ver_loc="Netboot Server";
-      fi;
       set distro_ver_url="${iperd_url}/boot/${distro_alias}";
       set distro_ver_repo="${distro_download_repo}";
       set distro_ver_grub="${iperd_grub}/boot/${distro_alias}";
       set distro_ver_append="${distro_download_append}";
-   elif [ "x${distro_ver_opt}" == "xl" ]; then
+   elif [ "x${tmp_ver_opt}" == "xl" ]; then
       #
       # variable values for images on local mirrors
       #
@@ -102,7 +103,7 @@ function iperd_distro_ver_calc {
          set distro_local_url="${distro_pub_url}";
       fi;
       if [ "x${distro_local_repo}" == "x" ]; then
-         set distro_local_repo="${distro_pub_repo}";
+         set distro_local_repo="${distro_local_url}";
       fi;
       if [ "x${distro_local_grub}" == "x" ]; then
          set distro_local_grub="${distro_pub_grub}";
@@ -110,7 +111,6 @@ function iperd_distro_ver_calc {
       if [ "x${distro_local_append}" == "x" ]; then
          set distro_local_append="${distro_pub_append}";
       fi;
-      set distro_ver_loc="Local Mirror";
       set distro_ver_url="${distro_local_url}";
       set distro_ver_repo="${distro_local_repo}";
       set distro_ver_grub="${distro_local_grub}";
@@ -119,12 +119,22 @@ function iperd_distro_ver_calc {
       #
       # variable values for images on Internet
       #
-      set distro_ver_loc="Internet";
       set distro_ver_url="${distro_pub_url}";
       set distro_ver_repo="${distro_pub_repo}";
       set distro_ver_grub="${distro_pub_grub}";
       set distro_ver_append="${distro_pub_append}";
    fi;
+
+   set distro_ver_url="${distro_ver_url}${distro_ver_path}"
+   set distro_ver_repo="${distro_ver_repo}${distro_ver_path}"
+   set distro_ver_grub="${distro_ver_grub}${distro_ver_path}"
+
+   export distro_ver_url
+   export distro_ver_repo
+   export distro_ver_grub
+   export distro_ver_append
+
+   unset tmp_ver_opt;
 }
 
 
