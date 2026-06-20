@@ -84,9 +84,9 @@ function iperd_distro_ver_calc {
       else
          set distro_ver_loc="Netboot Server";
       fi;
-      set distro_ver_url="${iperd_url}/boot/${distro_name}";
+      set distro_ver_url="${iperd_url}/boot/${distro_alias}";
       set distro_ver_repo="${distro_download_repo}";
-      set distro_ver_grub="${iperd_grub}/boot/${distro_name}";
+      set distro_ver_grub="${iperd_grub}/boot/${distro_alias}";
       set distro_ver_append="${distro_download_append}";
    elif [ "x${distro_ver_opt}" == "xl" ]; then
       #
@@ -135,7 +135,7 @@ function iperd_distro_ver_info {
          echo "      iperd_linux_console:     ${iperd_linux_console}"
          echo "      iperd_url:               ${iperd_url}"
          echo "      iperd_grub:              ${iperd_grub}"
-         echo "      distro_name:             ${distro_name}"
+         echo "      distro_alias:            ${distro_alias}"
          if [ "x${distro_ver_opt}" == "xd" ]; then
             echo "      distro_download_repo:    ${distro_download_repo}"
             echo "      distro_download_append:  ${distro_download_append}"
