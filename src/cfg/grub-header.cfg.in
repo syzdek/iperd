@@ -138,10 +138,17 @@ function iperd_distro_ver_logic {
 }
 
 
-function iperd_distro_ver_info {
-   if [ "x${iperd_verbose_str}" != "x" ]; then
-      echo "${iperd_verbose_str} [${distro_ver_loc}]"
+function iperd_distro_ver_metadata {
+
+   set distro_ver_title="${1}";
+   set distro_ver_opt="${2}";
+
+   iperd_distro_opt_desc distro_ver_optstr ${distro_ver_opt};
+
+   if [ "x${distro_ver_title}" != "x" ]; then
+      echo "${1} [${distro_ver_optstr}]"
    fi
+
    if [ ${iperd_verbose} == "y" ]; then
       if [ ${iperd_debug} == "n" ]; then
          echo "   GRUB Path:  ${distro_ver_grub}"
@@ -167,7 +174,7 @@ function iperd_distro_ver_info {
             echo "      distro_pub_append:       ${distro_pub_append}"
          fi
          echo "      distro_ver_opt:          ${distro_ver_opt}"
-         echo "      distro_ver_suffix:       ${distro_ver_suffix}"
+         echo "      distro_ver_path:         ${distro_ver_path}"
          echo "      distro_ver_url:          ${distro_ver_url}"
          echo "      distro_ver_repo:         ${distro_ver_repo}"
          echo "      distro_ver_grub:         ${distro_ver_grub}"
@@ -178,6 +185,10 @@ function iperd_distro_ver_info {
          echo ""
       fi
    fi
+
+   unset distro_ver_title;
+   unset distro_ver_opt;
+   unset distro_ver_optstr;
 }
 
 
