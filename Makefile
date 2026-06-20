@@ -224,6 +224,19 @@ do_subst_files_fn	= $(do_subst_files); chmod 0755 "$(@)"
 do_subst_files_dt	= $(do_subst_files); chmod 0644 "$(@)"
 
 
+do_include		= echo "  SED      $${SED_FILE}"; \
+			  rm -f "$(@)" "$(@).new" || exit 1; \
+			  mkdir -p "$(@D)" || exit 1; \
+			  sed \
+			     -e "/$${SED_KEYWORD}/ { s/${SED_KEYWORD}//g" \
+			     -e "r $${SED_INCLUDE}" \
+			     -e '}' \
+			     $${SED_FILE} \
+			     > "$(@).new" || exit 1; \
+			  mv "$(@).new" "$(@)" || exit 1; \
+			  touch "$(@)"
+
+
 do_gzip			= if test "x$(V)" == "x0";then \
 			     echo "  GZIP     $${GZIP_FILE}"; \
 			  else \
