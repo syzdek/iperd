@@ -367,16 +367,20 @@ export menu_color_normal
 export menu_color_highlight
 
 
+#
+# default values
+#
 set iperd_verbose="@IPERD_VERBOSE@"
 set iperd_debug="@IPERD_DEBUG@"
+set iperd_net_card="@IPERD_NET_CARD@"
+set iperd_net_ip="@IPERD_NET_IP@"
+set iperd_net_cidr="@IPERD_NET_CIDR@"
+set iperd_net_gw="@IPERD_NET_GW@"
+set iperd_net_dns="@IPERD_NET_DNS@"
+set iperd_linux_console="@LINUX_CONSOLE@"
+set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
 export iperd_verbose
 export iperd_debug
-
-
-set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
-
-
-set iperd_linux_console="@LINUX_CONSOLE@"
 export iperd_linux_console
 
 
@@ -385,24 +389,29 @@ export iperd_linux_console
 #
 regexp --set iperd_tftp_ip "tftp,(.+)" ${root}
 set iperd_net="n"
-set iperd_net_card="@IPERD_NET_CARD@"
 if [ ${iperd_tftp_ip} != "" ]; then
    set iperd_grub="(http,${iperd_tftp_ip})@IPERD_DIR_NET@"
    set iperd_url="http://${iperd_tftp_ip}@IPERD_DIR_NET@"
    set iperd_pxe="y"
+   set iperd_net="n"
+   set iperd_feature_networking='y'
 else
    set iperd_grub="(${root})@IPERD_DIR_DISK@"
    set iperd_url="@IPERD_DIR_DISK@"
    set iperd_pxe="n"
-   if [ "x${net_default_interface}" == "x" ]; then
-      if [ ${grub_platform} == "efi" ]; then
-         set iperd_net="@IPERD_NET@"
-      fi
+   if [ "x${net_default_interface}" != "x" ]; then
+      set iperd_net="@IPERD_NET@"
+      set iperd_feature_networking='y'
+   elif [ ${grub_platform} == "efi" ]; then
+      set iperd_net="@IPERD_NET@"
+      set iperd_feature_networking='y'
    fi
 fi
 export iperd_grub
 export iperd_url
 export iperd_pxe
+export iperd_net
+export iperd_feature_networking
 
 
 #
