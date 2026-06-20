@@ -149,66 +149,62 @@ function iperd_distro_ver_info {
    fi
 }
 
-function iperd_prompt_bool {
-   if [ "x${iperd_prompt_str}" != "x" ]; then
-      set iperd_prompt_continue="n"
-      while [ "x${iperd_prompt_continue}" == "xn" ]; do
-         if [ "x${iperd_prompt_dflt}" != "x" ]; then
-            if [ "${iperd_prompt_dflt}" == "y" ]; then
-               set iperd_prompt_dflt="yes"
-            elif [ ${iperd_prompt_dflt} == "n" ]; then
-               set iperd_prompt_dflt="no"
-            fi
-            if [ "x${iperd_prompt_abort}" == "xy" ]; then
-               echo -n "${iperd_prompt_str} (yes/no/abort) [${iperd_prompt_dflt}]: "
-            else
-               echo -n "${iperd_prompt_str} (yes/no) [${iperd_prompt_dflt}]: "
-            fi
-         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
-            echo -n "${iperd_prompt_str} (yes/no/abort): "
-         else
-            echo -n "${iperd_prompt_str} (yes/no): "
-         fi
-         read iperd_prompt_input
-         echo ""
-         if [ "x${iperd_prompt_input}" == "x" ]; then
-            if [ "x${iperd_prompt_dflt}" != "x" ]; then
-               set iperd_prompt_input="${iperd_prompt_dflt}"
-            fi
-         fi
-         if [ "x${iperd_prompt_input}" == "xy" ]; then
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xyes" ]; then
-            set iperd_prompt_input="y"
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xn" ]; then
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_input}" == "xno" ]; then
-            set iperd_prompt_input="n"
-            set iperd_prompt_continue="y"
-         elif [ "x${iperd_prompt_abort}" == "xy" ]; then
-            if [ "x${iperd_prompt_input}" == "xa" ]; then
-               set iperd_prompt_continue="y"
-            elif [ "x${iperd_prompt_input}" == "xabort" ]; then
-               set iperd_prompt_input="a"
-               set iperd_prompt_continue="y"
-            fi
-         fi
-      done
+
+function iperd_network_calc {
+   set tmp_attr="${1}"
+   set tmp_net1="${2}"
+   set tmp_net2="${3}"
+   set tmp_str="${4}"
+
+   regexp --set tmp_val1 '^(([0-9]{1,3}.){3})' "${tmp_net1}"
+   regexp --set tmp_val2 '^(([0-9]{1,3}.){3})' "${tmp_net2}"
+
+   if [ ${tmp_attr} != "" ]; then
+      if [ "${tmp_val1}" != "${tmp_val2}" ]; then
+         set ${tmp_attr}="${tmp_val1}${tmp_str}";
+      fi
    fi
-   unset iperd_prompt_abort
-   unset iperd_prompt_continue
-   unset iperd_prompt_dflt
-   unset iperd_prompt_str
+
+   unset tmp_attr
+   unset tmp_net1
+   unset tmp_net2
+   unset tmp_str
 }
 
 
-function iperd_prompt_str {
-   if [ "x${iperd_prompt_str}" != "x" ]; then
+function iperd_print_verbose {
+   if [ ${iperd_verbose} == "y" ]; then
+      echo "${1}"
+   fi
+}
+
+
+function iperd_prompt_bool {
+   set iperd_prompt_attr="${1}";
+   set iperd_prompt_title="${2}";
+   set iperd_prompt_dflt="${3}";
+   set iperd_prompt_abort="${4}";
+
+   set iperd_prompt_continue='n';
+
+   while [ "x${iperd_prompt_continue}" == "xn" ]; do
       if [ "x${iperd_prompt_dflt}" != "x" ]; then
-         echo -n "${iperd_prompt_str} [${iperd_prompt_dflt}]: "
+         if [ "${iperd_prompt_dflt}" == "y" ]; then
+            set iperd_prompt_dflt="yes"
+         elif [ ${iperd_prompt_dflt} == "n" ]; then
+            set iperd_prompt_dflt="no"
+         elif [ ${iperd_prompt_dflt} == "a" ]; then
+            set iperd_prompt_dflt="abort"
+         fi
+         if [ "x${iperd_prompt_abort}" == "xy" ]; then
+            echo -n "${iperd_prompt_title} (yes/no/abort) [${iperd_prompt_dflt}]: "
+         else
+            echo -n "${iperd_prompt_title} (yes/no) [${iperd_prompt_dflt}]: "
+         fi
+      elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+         echo -n "${iperd_prompt_title} (yes/no/abort): "
       else
-         echo -n "${iperd_prompt_str}: "
+         echo -n "${iperd_prompt_title} (yes/no): "
       fi
       read iperd_prompt_input
       echo ""
@@ -217,13 +213,88 @@ function iperd_prompt_str {
             set iperd_prompt_input="${iperd_prompt_dflt}"
          fi
       fi
-      if [ "x${iperd_prompt_input}" == "x " ]; then
+      if [ "x${iperd_prompt_input}" == "xy" ]; then
+         set iperd_prompt_continue="y"
+      elif [ "x${iperd_prompt_input}" == "xyes" ]; then
+         set iperd_prompt_input="y"
+         set iperd_prompt_continue="y"
+      elif [ "x${iperd_prompt_input}" == "xn" ]; then
+         set iperd_prompt_continue="y"
+      elif [ "x${iperd_prompt_input}" == "xno" ]; then
+         set iperd_prompt_input="n"
+         set iperd_prompt_continue="y"
+      elif [ "x${iperd_prompt_abort}" == "xy" ]; then
+         if [ "x${iperd_prompt_input}" == "xa" ]; then
+            set iperd_prompt_continue="y"
+         elif [ "x${iperd_prompt_input}" == "xabort" ]; then
+            set iperd_prompt_input="a"
+               set iperd_prompt_continue="y"
+         fi
+      fi
+   done
+
+   if [ ${iperd_prompt_attr} != "" ]; then
+      set ${iperd_prompt_attr}="${iperd_prompt_input}";
+   fi
+
+   unset iperd_prompt_attr;
+   unset iperd_prompt_title;
+   unset iperd_prompt_dflt;
+   unset iperd_prompt_abort;
+   unset iperd_prompt_continue;
+   unset iperd_prompt_input;
+}
+
+
+function iperd_prompt_str {
+   set iperd_prompt_attr="${1}";
+   set iperd_prompt_title="${2}";
+   set iperd_prompt_dflt="${3}";
+   set iperd_prompt_regex="${4}";
+
+   set iperd_prompt_continue=n;
+
+   if [ ${iperd_prompt_regex} == "" ]; then
+      set iperd_prompt_regex='^.*$';
+   fi
+
+   while [ "x${iperd_prompt_continue}" == "xn" ]; do
+      if [ "x${iperd_prompt_dflt}" != "x" ]; then
+         echo -n "${iperd_prompt_title} [${iperd_prompt_dflt}]: "
+      else
+         echo -n "${iperd_prompt_title}: "
+      fi
+      read iperd_prompt_input
+      echo ""
+      if [ "x${iperd_prompt_input}" == "x" ]; then
+         if [ "x${iperd_prompt_dflt}" != "x" ]; then
+            set iperd_prompt_input="${iperd_prompt_dflt}"
+         fi
+      elif [ "x${iperd_prompt_input}" == "x " ]; then
          set iperd_prompt_input=""
       fi
+      if [ ${iperd_prompt_regex} != "" ]; then
+         regexp ${iperd_prompt_regex} ${iperd_prompt_input}
+         if [ ${?} == "0" ]; then
+            set iperd_prompt_continue=y
+         fi
+      else
+         set iperd_prompt_continue=y
+      fi
+   done
+
+   if [ ${iperd_prompt_attr} != "" ]; then
+      set ${iperd_prompt_attr}="${iperd_prompt_input}";
    fi
-   unset iperd_prompt_continue
-   unset iperd_prompt_dflt
-   unset iperd_prompt_str
+
+   unset iperd_prompt_attr;
+   unset iperd_prompt_title;
+   unset iperd_prompt_regex;
+   unset iperd_prompt_dflt;
+   unset iperd_prompt_continue;
+   unset iperd_prompt_input;
+
+   return 0;
 }
 
 
@@ -300,14 +371,23 @@ function iperd_source {
 }
 
 
-function iperd_str_bool {
-   if [ "x${iperd_str}" == "x" ]; then
-      set iperd_str="n/a"
-   elif [ ${iperd_str} == "y" ]; then
-      set iperd_str="yes"
-   elif [ ${iperd_str} == "n" ]; then
-      set iperd_str="no"
+function echo_bool {
+   set echo_bool_title="${1}";
+   set echo_bool_val="${2}";
+   if [ "x${echo_bool_val}" == "x" ]; then
+      set echo_bool_val="n/a"
+   elif [ ${echo_bool_val} == "y" ]; then
+      set echo_bool_val="yes"
+   elif [ ${echo_bool_val} == "n" ]; then
+      set echo_bool_val="no"
+   elif [ ${echo_bool_val} == "a" ]; then
+      set echo_bool_val="abort"
+   else
+      set echo_bool_val="unknown"
    fi
+   echo "${echo_bool_title}${echo_bool_val}";
+   unset echo_bool_title
+   unset echo_bool_val
 }
 
 
@@ -374,8 +454,9 @@ set iperd_verbose="@IPERD_VERBOSE@"
 set iperd_debug="@IPERD_DEBUG@"
 set iperd_net_card="@IPERD_NET_CARD@"
 set iperd_net_ip="@IPERD_NET_IP@"
-set iperd_net_cidr="@IPERD_NET_CIDR@"
+set iperd_net_network="@IPERD_NET_NETWORK@"
 set iperd_net_gw="@IPERD_NET_GW@"
+set iperd_net_vlan="@IPERD_NET_VLAN@"
 set iperd_net_dns="@IPERD_NET_DNS@"
 set iperd_linux_console="@LINUX_CONSOLE@"
 set iperd_use_gfxterm="@GRUB_USE_GFXTERM@"
@@ -432,131 +513,148 @@ fi
 if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
    set iperd_continue="n"
    while [ ${iperd_continue} == "n" ]; do
-      echo ""
-      echo ""
-      echo "      IP Engineering Rescue Disk @IPERD_VERSION@"
-      echo ""
-      echo "Review Configuration:"
-      echo "   GNU GRUB Version:          @GRUB_VERSION@"
-      echo "   Linux Console:             ${iperd_linux_console}"
-      echo "   IPERD GRUB Prefix:         ${iperd_grub}"
-      echo "   IPERD Boot URL:            ${iperd_url}"
-      set iperd_str="${iperd_verbose}"
-      iperd_str_bool
-      echo "   IPERD Verbose Messages:    ${iperd_str}"
+      echo      ""
+      echo      ""
+      echo      "      IP Engineering Rescue Disk @IPERD_VERSION@"
+      echo      ""
+      echo      "Review Configuration:"
+      echo      "   Linux Console:             ${iperd_linux_console}"
+      echo      "   IPERD GRUB Prefix:         ${iperd_grub}"
+      echo      "   IPERD Boot URL:            ${iperd_url}"
+      echo_bool "   IPERD Verbose Messages:    " "${iperd_verbose}"
       if [ "${iperd_verbose}" == "y" ]; then
-         set iperd_str="${iperd_debug}"
-         iperd_str_bool
-         echo "   IPERD Debug Messages:      ${iperd_str}"
+         echo_bool "   IPERD Debug Messages:      " "${iperd_debug}";
       fi
-      if [ "x${iperd_pxe}" == "xn" ]; then
-         if [ ${grub_platform} == "efi" ]; then
-            set iperd_str="${iperd_net}"
-            iperd_str_bool
-            echo "   GRUB Initialize Network:   ${iperd_str}"
-            if [ ${iperd_net} == "y" ]; then
-               echo "   GRUB Network Interface:    ${iperd_net_card}"
+      if [ "x${iperd_feature_networking}" == "xy" ]; then
+         echo_bool "   Manual Network Setup:      " "${iperd_net}"
+         if [ ${iperd_net} == "y" ]; then
+            echo "      Network Card:           ${iperd_net_card}"
+            if [ ${iperd_net_card} == "any" ]; then
+               echo "      IP Address:             dhcp";
+            elif [ ${iperd_net_ip} != "dhcp" ]; then
+               echo "      IP Address:             ${iperd_net_ip}"
+               echo "      Network:                ${iperd_net_network}"
+               echo "      Network VLAN:           ${iperd_net_vlan}"
+               echo "      Default Gateway:        ${iperd_net_gw}"
+               echo "      DNS Server:             ${iperd_net_dns}"
+            else
+               echo "      IP Address:             ${iperd_net_ip}"
             fi
          fi
       fi
-      set iperd_str="${iperd_use_gfxterm}"
-      iperd_str_bool
-      echo "   GRUB Graphics Terminal:    ${iperd_str}"
-      echo "   GRUB Serial Term Type:     ${iperd_term_type}"
-      echo "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
-      set iperd_str="${iperd_term_utf8}"
-      iperd_str_bool
-      echo "   GRUB Serial Term UTF-8:    ${iperd_str}"
-      echo ""
+      echo_bool "   GRUB Graphics Terminal:    " "${iperd_use_gfxterm}"
+      echo      "   GRUB Serial Term Type:     ${iperd_term_type}"
+      echo      "   GRUB Serial Term Geometry: ${iperd_term_geometry}"
+      echo_bool "   GRUB Serial Term UTF-8:    " "${iperd_term_utf8}"
+      echo      ""
 
-      set iperd_prompt_abort='y'
-      set iperd_prompt_dflt=""
-      set iperd_prompt_str="Is the above correct"
-      iperd_prompt_bool
-      if [ "x${iperd_prompt_input}" == "xy" ]; then
-         set iperd_continue="y"
-      elif [ "x${iperd_prompt_input}" == "xa" ]; then
+      iperd_prompt_bool iperd_continue "Is the above correct";
+      if [ "x${iperd_continue}" == "xa" ]; then
          echo "exiting IPERD/GRUB ..."
          exit
       fi
 
       if [ ${iperd_continue} == "n" ]; then
-
-         # Linux Console
-         set iperd_prompt_dflt="${iperd_linux_console}"
-         set iperd_prompt_str="Linux Console"
-         iperd_prompt_str
-         set iperd_linux_console="${iperd_prompt_input}"
-
-         # IPERD GRUB Prefix
-         set iperd_prompt_dflt="${iperd_grub}"
-         set iperd_prompt_str="IPERD GRUB Prefix"
-         iperd_prompt_str
-         set iperd_grub="${iperd_prompt_input}"
-
-         # IPERD Boot URL
-         set iperd_prompt_dflt="${iperd_url}"
-         set iperd_prompt_str="IPERD Boot URL"
-         iperd_prompt_str
-         set iperd_url="${iperd_prompt_input}"
-
-         # IPERD Verbose Messages
-         set iperd_prompt_dflt="${iperd_verbose}"
-         set iperd_prompt_str="IPERD Verbose Messages"
-         iperd_prompt_bool
-         set iperd_verbose="${iperd_prompt_input}"
+         iperd_prompt_str  iperd_linux_console "Linux Console"          "${iperd_linux_console}" '^.+$'
+         iperd_prompt_str  iperd_grub          "IPERD GRUB Prefix"      "${iperd_grub}"          '^.+$'
+         iperd_prompt_str  iperd_url           "IPERD Boot URL"         "${iperd_url}"           '^.+$'
+         iperd_prompt_bool iperd_verbose       "IPERD Verbose Messages" "${iperd_verbose}"
 
          # IPERD Debug Messages
          if [ "${iperd_verbose}" == "y" ]; then
-            set iperd_prompt_dflt="${iperd_debug}"
-            set iperd_prompt_str="IPERD Debug Messages"
-            iperd_prompt_bool
-            set iperd_debug="${iperd_prompt_input}"
+            iperd_prompt_bool iperd_debug "IPERD Debug Messages" "${iperd_debug}"
          fi
 
-         if [ "x${iperd_pxe}" == "xn" ]; then
-            if [ ${grub_platform} == "efi" ]; then
+         if [ "x${iperd_feature_networking}" == "xy" ]; then
 
-               # GRUB Initialize Network
-               set iperd_prompt_dflt="${iperd_net}"
-               set iperd_prompt_str="GRUB Initialize Network"
-               iperd_prompt_bool
-               set iperd_net="${iperd_prompt_input}"
+            set iperd_net_continue='y';
 
-               # GRUB Network Interface
-               if [ ${iperd_net} == "y" ]; then
-                  set iperd_prompt_dflt="${iperd_net_card}"
-                  set iperd_prompt_str="GRUB Network Interface (e.g. efinet0, any, etc)"
-                  iperd_prompt_str
-                  set iperd_net_card="${iperd_prompt_input}"
-               fi
-
+            # GRUB Configure Network
+            iperd_prompt_bool iperd_net "Manual Network Setup" "${iperd_net}";
+            if [ ${iperd_net} != 'y' ]; then
+               set iperd_net_continue='n';
             fi
+
+            # Network Interface
+            if [ ${iperd_net_continue} == "y" ]; then
+               echo ""
+               echo "Available Network Cards:"
+               net_ls_cards
+               echo ""
+               iperd_prompt_str \
+                  iperd_net_card \
+                  "Network Card (e.g. efinet0, any, etc)" \
+                  "${iperd_net_card}" \
+                  '^[-.:a-zA-Z0-9]+$';
+               if [ ${iperd_net_card} == 'any' ]; then
+                  set iperd_net_continue='n';
+               fi
+            fi
+
+            # IP Address
+            if [ ${iperd_net_continue} == "y" ]; then
+               iperd_prompt_str \
+                  iperd_net_ip \
+                  "IP Address" \
+                  "${iperd_net_ip}" \
+                  '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
+               if [ ${iperd_net_ip} == 'dhcp' ]; then
+                  set iperd_net_continue='n';
+               fi
+            fi
+
+            # Network
+            if [ ${iperd_net_continue} == "y" ]; then
+                iperd_network_calc \
+                   iperd_net_network \
+                   "${iperd_net_ip}" \
+                   "${iperd_net_network}" \
+                   "0/24";
+                iperd_prompt_str \
+                   iperd_net_network \
+                   "Network" \
+                   "${iperd_net_network}" \
+                   '^([0-9]{1,3}.){3}[0-9]{1,3}/([0-9]|[12][0-9]|30)$';
+            fi
+
+            # VLAN
+            if [ ${iperd_net_continue} == "y" ]; then
+                iperd_prompt_str \
+                   iperd_net_vlan \
+                   "Network VLAN" \
+                   "${iperd_net_vlan}" \
+                   '^([1-3]{0,1}[0-9]{1,3}|40[0-8][0-9]|409[0-5])$';
+            fi
+
+            # Default Gateway
+            if [ ${iperd_net_continue} == "y" ]; then
+                iperd_network_calc \
+                   iperd_net_gw \
+                   "${iperd_net_ip}" \
+                   "${iperd_net_gw}" \
+                   "1";
+               iperd_prompt_str \
+                  iperd_net_gw \
+                  "Default Gateway" \
+                  "${iperd_net_gw}" \
+                  '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
+            fi
+
+            # DNS Server
+            if [ ${iperd_net_continue} == "y" ]; then
+               iperd_prompt_str \
+                  iperd_net_dns \
+                  "DNS Server" \
+                  "${iperd_net_dns}" \
+                  '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
+            fi
+
          fi
 
-         # GRUB Graphics Terminal
-         set iperd_prompt_dflt="${iperd_use_gfxterm}"
-         set iperd_prompt_str="GRUB Graphics Terminal"
-         iperd_prompt_bool
-         set iperd_use_gfxterm="${iperd_prompt_input}"
-
-         # GRUB Serial Term Type
-         set iperd_prompt_dflt="${iperd_term_type}"
-         set iperd_prompt_str="GRUB Serial Term Type"
-         iperd_prompt_str
-         set iperd_term_type="${iperd_prompt_input}"
-
-         # GRUB Serial Term Geometry
-         set iperd_prompt_dflt="${iperd_term_geometry}"
-         set iperd_prompt_str="GRUB Serial Term Geometry"
-         iperd_prompt_str
-         set iperd_term_geometry="${iperd_prompt_input}"
-
-         # GRUB Serial Term UTF-8
-         set iperd_prompt_dflt="${iperd_term_utf8}"
-         set iperd_prompt_str="GRUB Serial Term UTF-8"
-         iperd_prompt_bool
-         set iperd_term_utf8="${iperd_prompt_input}"
+         iperd_prompt_bool iperd_use_gfxterm   "GRUB Graphics Terminal"    "${iperd_use_gfxterm}";
+         iperd_prompt_str  iperd_term_type     "GRUB Serial Term Type"     "${iperd_term_type}"     '^.+$';
+         iperd_prompt_str  iperd_term_geometry "GRUB Serial Term Geometry" "${iperd_term_geometry}" '^[0-9]+x[0-9]+$'
+         iperd_prompt_bool iperd_term_utf8     "GRUB Serial Term UTF-8"    "${iperd_term_utf8}"
 
       fi
    done
@@ -570,17 +668,20 @@ else
    echo ""
    echo ""
 fi
+unset iperd_net_continue
 
 
 #
 # configure terminal
 #
+iperd_print_verbose "configuring terminal ..."
 if [ ${iperd_term_utf8} == 'y' ]; then
    terminfo --utf8 -g ${iperd_term_geometry} serial ${iperd_term_type}
 else
    terminfo --ascii -g ${iperd_term_geometry} serial ${iperd_term_type}
 fi
 if [ ${iperd_use_gfxterm} == "y" ]; then
+   iperd_print_verbose "configuring gfxterm ..."
    insmod png
    insmod jpeg
    insmod gfxterm
@@ -603,24 +704,53 @@ fi
 
 
 #
-# configure network using DHCP
+# configure network
 #
 if [ ${iperd_net} == "y" ]; then
-   if [ "x${net_default_interface}" == "x" ]; then
-      if [ ${grub_platform} == "efi" ]; then
-         echo "configuring network using DHCP ..."
-         echo ""
-         echo ""
-         if [ ${iperd_net_card} == "any" ]; then
-            net_dhcp
-         elif [ "x${iperd_net_card}" == "x" ]; then
-            net_dhcp
-         else
-            net_dhcp "${iperd_net_card}"
-         fi
-         echo ""
-         echo ""
+   if [ "x${net_default_interface}" != "x" ]; then
+      iperd_print_verbose "clearing existing network ..."
+      net_del_addr  ${net_default_interface}
+      net_del_route ${net_default_interface}:default
+      net_del_route ${net_default_interface}:local
+      if [ ${net_default_dns} != "" ]; then
+         net_del_dns ${net_default_dns}
+      fi
+      unset net_default_ip
+      unset net_default_mac
+      unset net_default_server
+   fi
+   if [ ${iperd_net_card} == "any" ]; then
+      echo "configuring network using DHCP ..."
+      echo ""
+      echo ""
+      net_dhcp
+   elif [ ${iperd_net_ip} == 'dhcp' ]; then
+      set net_default_interface="${iperd_net_card}:dhcp"
+      echo "configuring network using DHCP on ${iperd_net_card} ..."
+      echo ""
+      echo ""
+      net_dhcp
+   else
+      echo "configuring network ..."
+      echo ""
+      echo ""
+      set net_default_interface="${iperd_net_card}"
+      net_add_addr ${iperd_net_card} ${iperd_net_card} ${iperd_net_ip}
+      net_set_vlan ${iperd_net_card} ${iperd_net_vlan}
+      if [ ${iperd_net_network} != "" ]; then
+         net_del_route ${iperd_net_card}:local
+         net_add_route ${iperd_net_card}:local ${iperd_net_network} ${iperd_net_card}
+      fi
+      if [ ${iperd_net_gw} != "" ]; then
+         net_add_route ${iperd_net_card}:default 0.0.0.0/0 gw ${iperd_net_gw}
+      fi
+      if [ ${iperd_net_dns} != "" ]; then
+         net_add_dns ${iperd_net_dns}
+      fi
+      if [ ${iperd_verbose} == 'y' ]; then
          net_ls_addr
+         net_ls_routes
+         net_ls_dns
       fi
    fi
 fi
