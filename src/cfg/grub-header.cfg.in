@@ -37,6 +37,7 @@
 serial --unit @GRUB_SERIAL_DEV@ --speed @GRUB_SERIAL_BAUD@
 terminal_input  serial console
 terminal_output serial console
+clear
 
 
 #
