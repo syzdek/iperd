@@ -14,7 +14,7 @@ else ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), l)
 endif
 
 
-build/distros/rocky/rocky-@DISTRO_VERSION@.inc.in: src/distros/rocky/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/rocky/rocky-@DISTRO_VERSION@.inc.in: src/distros/rocky/grub-version.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
