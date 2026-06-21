@@ -14,7 +14,7 @@ else ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), l)
 endif
 
 
-build/distros/slackware/slackware-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/slackware/slackware-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-version.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
@@ -45,7 +45,7 @@ else ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), l)
 endif
 
 
-build/distros/slackware/slackware64-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/slackware/slackware64-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-version.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
