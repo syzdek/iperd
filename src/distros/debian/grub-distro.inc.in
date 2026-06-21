@@ -1,31 +1,13 @@
 
-   set distro_ver_opt="@DISTRO_VER_OPT@";
-   iperd_distro_ver_calc
-   submenu "Debian Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_loc}] ..." {
+   iperd_distro_opt_desc distro_ver_opt "@DISTRO_VER_OPT@";
+   submenu "Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_opt}] ..." {
 
-      set distro_alias="debian";
-      set distro_ver_opt="@DISTRO_VER_OPT@";
-      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
-      set distro_local_url="@DISTRO_LOCAL_URL@";
-      set distro_pub_grub="@DISTRO_PUB_GRUB@";
-      set distro_pub_url="@DISTRO_PUB_URL@";
-
-      iperd_distro_ver_calc;
-
-      set distro_ver_suffix="dists/@DISTRO_VERSION@/main/installer-@DISTRO_VER_ARCH@/current/images";
-      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
-      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
-
-      export distro_ver_grub;
-      export distro_ver_url;
-      export distro_ver_append;
-      export distro_ver_loc;
-
-      set iperd_verbose_str='Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
-      export iperd_verbose_str
+      @DISTRO_VER_METADATA@
 
       menuentry 'Install' {
-         iperd_distro_ver_info
+         iperd_distro_ver_metadata \
+                'Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+                '@DISTRO_VER_OPT@';
          echo   'loading linux ...'
          linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 quiet \
@@ -36,7 +18,9 @@
          echo   'booting system ...'
       }
       menuentry 'Expert Install' {
-         iperd_distro_ver_info
+         iperd_distro_ver_metadata \
+                'Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+                '@DISTRO_VER_OPT@';
          echo   'loading linux ...'
          linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 priority=low \
@@ -47,7 +31,9 @@
          echo   'booting system ...'
       }
       menuentry 'Rescue Mode' {
-         iperd_distro_ver_info
+         iperd_distro_ver_metadata \
+                'Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+                '@DISTRO_VER_OPT@';
          echo   'loading linux ...'
          linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 rescue/enable=true quiet \
@@ -58,7 +44,9 @@
          echo   'booting system ...'
       }
       menuentry 'Automated Install' {
-         iperd_distro_ver_info
+         iperd_distro_ver_metadata \
+                'Debian Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+                '@DISTRO_VER_OPT@';
          echo   'loading linux ...'
          linux  ${distro_ver_grub}/netboot/debian-installer/@DISTRO_VER_ARCH@/linux \
                 auto=true priority=critical quiet \

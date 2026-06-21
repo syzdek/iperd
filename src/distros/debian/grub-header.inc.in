@@ -1,6 +1,2 @@
 submenu 'Distro: Debian Linux ...' {
-   set distro_pub_append='@DISTRO_PUB_APPEND@'
-   set distro_local_append='@DISTRO_LOCAL_APPEND@'
-   export distro_pub_append
-   export distro_local_append
 
