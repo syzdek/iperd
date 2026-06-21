@@ -5,10 +5,25 @@ IP Engineering Rescue Disk
 Overview
 --------
 
-The IP Egineering Rescue Disk is not a disk or set of disks, but rather
-a framework which allows an administrator to download collections of boot
-images for packaging into either bootable ISO images, bootable USB pen drives,
-or network shares for PXE booting.
+IP Engineering Rescue Disk (IPERD) is a framework for creating boot
+environments capable of booting the installers and utilities of multiple
+releases of multiple Linux distributions.  The primary goal of IPED is to ease
+the burden on system administrators and enthusiasts when they need to boot
+the installer or rescue tools for a Linux distribution which they run.
+
+The IPERD framework can be used to create a PXE boot environment or bootable
+ISO image.  The bootable ISO image can be either burned to a CDR or written to
+a USB thumb drive.
+
+The IP Engineering Rescue Disk is capable of booting multiple versions of the
+following Linux distributions:
+
+   * Alpine Linux
+   * Debian Linux
+   * Fedora Linux
+   * Rocky Linux
+   * Slackware Linux
+   * Ubuntu Linux
 
 
 Requirements
