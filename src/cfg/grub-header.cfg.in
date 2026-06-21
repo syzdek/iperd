@@ -494,6 +494,7 @@ export menu_color_highlight
 #
 set iperd_verbose="@IPERD_VERBOSE@"
 set iperd_debug="@IPERD_DEBUG@"
+set iperd_progress='@IPERD_PROGRESS@'
 set iperd_net_card="@IPERD_NET_CARD@"
 set iperd_net_ip="@IPERD_NET_IP@"
 set iperd_net_network="@IPERD_NET_NETWORK@"
@@ -563,6 +564,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       echo      "   Linux Console:             ${iperd_linux_console}"
       echo      "   IPERD GRUB Prefix:         ${iperd_grub}"
       echo      "   IPERD Boot URL:            ${iperd_url}"
+      echo_bool "   IPERD Show Progress:       " "${iperd_progress}"
       echo_bool "   IPERD Verbose Messages:    " "${iperd_verbose}"
       if [ "${iperd_verbose}" == "y" ]; then
          echo_bool "   IPERD Debug Messages:      " "${iperd_debug}";
@@ -600,6 +602,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
          iperd_prompt_str  iperd_linux_console "Linux Console"          "${iperd_linux_console}" '^.+$'
          iperd_prompt_str  iperd_grub          "IPERD GRUB Prefix"      "${iperd_grub}"          '^.+$'
          iperd_prompt_str  iperd_url           "IPERD Boot URL"         "${iperd_url}"           '^.+$'
+         iperd_prompt_bool iperd_progress      "IPERD Show Progress"    "${iperd_progress}"
          iperd_prompt_bool iperd_verbose       "IPERD Verbose Messages" "${iperd_verbose}"
 
          # IPERD Debug Messages
@@ -800,6 +803,14 @@ fi
 
 set pager=0
 export pager
+
+
+#
+# load progress module
+#
+if [ ${iperd_progress} == 'y' ]; then
+   insmod progress
+fi
 
 
 #
