@@ -1,0 +1,17 @@
+      # Distro Metadata
+      set distro_alias="@DISTRO_ALIAS@";
+      set distro_pub_url="@DISTRO_PUB_URL@";
+      set distro_pub_repo="@DISTRO_PUB_REPO@";
+      set distro_pub_grub="@DISTRO_PUB_GRUB@";
+      set distro_pub_append="@DISTRO_PUB_APPEND@";
+      set distro_download_repo="@DISTRO_DOWNLOAD_REPO@";
+      set distro_download_append="@DISTRO_DOWNLOAD_APPEND@";
+      set distro_extra_url="@DISTRO_EXTRA_URL@"
+      set distro_extra_append="@DISTRO_EXTRA_APPEND@"
+      set distro_local_url="@DISTRO_LOCAL_URL@";
+      set distro_local_repo="@DISTRO_LOCAL_REPO@";
+      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
+      set distro_local_append="@DISTRO_LOCAL_APPEND@";
+      set distro_ver_path="@DISTRO_VER_PATH@";
+
+      iperd_distro_ver_logic '@DISTRO_VER_OPT@';
