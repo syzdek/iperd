@@ -1,7 +1,7 @@
 
+   # Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)
    iperd_distro_opt_desc distro_ver_opt "@DISTRO_VER_OPT@";
    submenu "Ubuntu Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_opt}] ..." {
-
       @DISTRO_VER_METADATA@
 
       menuentry 'Install' {
@@ -57,3 +57,4 @@
          echo   'booting system ...'
       }
    }
+
