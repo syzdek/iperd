@@ -1,12 +1,12 @@
 
+   # Alpine Linux  @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)
    iperd_distro_opt_desc distro_ver_opt "@DISTRO_VER_OPT@";
-   menuentry "Alpine Linux @DISTRO_VERSION@ Installers (@DISTRO_VER_ARCH@) [${distro_ver_opt}]" {
-
+   menuentry "Alpine Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_opt}]" {
       @DISTRO_VER_METADATA@
 
       iperd_distro_ver_metadata \
-         'Alpine Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
-         '@DISTRO_VER_OPT@';
+             'Alpine Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+             '@DISTRO_VER_OPT@';
 
       echo   'loading vmlinuz-lts ...'
       linux  ${distro_ver_grub}/releases/@DISTRO_VER_ARCH@/netboot/vmlinuz-lts \
@@ -20,3 +20,4 @@
       initrd ${distro_ver_grub}/releases/@DISTRO_VER_ARCH@/netboot/initramfs-lts
       echo   'booting system ...'
    }
+
