@@ -13,7 +13,7 @@ else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x86), l)
 endif
 
 
-build/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc.in: src/distros/alpine/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/alpine/alpine-@DISTRO_VERSION@-x86.inc.in: src/distros/alpine/grub-version.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
@@ -43,7 +43,7 @@ else ifneq ($(DISTRO_ALPINE_@DISTRO_TAG@_x8664), l)
 endif
 
 
-build/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc.in: src/distros/alpine/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/alpine/alpine-@DISTRO_VERSION@-x86_64.inc.in: src/distros/alpine/grub-version.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
