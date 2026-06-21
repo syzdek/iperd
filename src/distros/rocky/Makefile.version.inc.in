@@ -14,10 +14,18 @@ else ifneq ($(DISTRO_ROCKY_@DISTRO_VERSION@), l)
 endif
 
 
-build/distros/rocky/rocky-@DISTRO_VERSION@.inc: src/distros/rocky/grub-distro.inc.in .config
+build/distros/rocky/rocky-@DISTRO_VERSION@.inc.in: src/distros/rocky/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+	@SED_FILE="$(<)"; \
+		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
+		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
+		$(do_include);
+
+
+build/distros/rocky/rocky-@DISTRO_VERSION@.inc: build/distros/rocky/rocky-@DISTRO_VERSION@.inc.in .config
 	@$(DISTRO_ROCKY_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_VER_OPT=$(DISTRO_ROCKY_@DISTRO_VERSION@); \
 		DISTRO_VER_ARCH=x86_64; \
+		DISTRO_VER_PATH='/@DISTRO_VERSION@/BaseOS/x86_64'; \
 		$(do_subst_file_dt)
 
