@@ -1,4 +1,3 @@
-      # Distro Metadata
       set distro_alias="@DISTRO_ALIAS@";
       set distro_pub_url="@DISTRO_PUB_URL@";
       set distro_pub_repo="@DISTRO_PUB_REPO@";
@@ -14,4 +13,5 @@
       set distro_local_append="@DISTRO_LOCAL_APPEND@";
       set distro_ver_path="@DISTRO_VER_PATH@";
 
-      iperd_distro_ver_logic '@DISTRO_VER_OPT@';
+      iperd_distro_ver_logic \
+             '@DISTRO_VER_OPT@';
