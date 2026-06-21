@@ -1,30 +1,13 @@
 
-   set distro_ver_opt="@DISTRO_VER_OPT@";
-   iperd_distro_ver_calc
-   menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_loc}]" {
+   iperd_distro_opt_desc distro_ver_opt "@DISTRO_VER_OPT@";
+   menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_opt}]" {
 
-      set distro_alias="slackware";
-      set distro_ver_opt="@DISTRO_VER_OPT@";
-      set distro_local_grub="@DISTRO_LOCAL_GRUB@";
-      set distro_local_url="@DISTRO_LOCAL_URL@";
-      set distro_pub_grub="@DISTRO_PUB_GRUB@";
-      set distro_pub_url="@DISTRO_PUB_URL@";
+      @DISTRO_VER_METADATA@
 
-      iperd_distro_ver_calc;
+      iperd_distro_ver_metadata \
+         'Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+         '@DISTRO_VER_OPT@';
 
-      set distro_ver_suffix="slackware@DISTRO_VER_EXTRA@-@DISTRO_VERSION@";
-      set distro_ver_grub="${distro_ver_grub}/${distro_ver_suffix}";
-      set distro_ver_url="${distro_ver_url}/${distro_ver_suffix}";
-
-      export distro_ver_grub;
-      export distro_ver_url;
-      export distro_ver_append;
-      export distro_ver_loc;
-
-      set iperd_verbose_str='Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)'
-      export iperd_verbose_str
-
-      iperd_distro_ver_info
       echo   'loading bzImage ...'
       linux  ${distro_ver_grub}/kernels/huge.s/bzImage \
              load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0  nomodeset \

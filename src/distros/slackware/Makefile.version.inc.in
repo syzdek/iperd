@@ -14,12 +14,19 @@ else ifneq ($(DISTRO_SLACKWARE_@DISTRO_TAG@), l)
 endif
 
 
-build/distros/slackware/slackware-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in .config
+build/distros/slackware/slackware-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+	@SED_FILE="$(<)"; \
+		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
+		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
+		$(do_include);
+
+
+build/distros/slackware/slackware-@DISTRO_VERSION@.inc: build/distros/slackware/slackware-@DISTRO_VERSION@.inc.in .config
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_VER_OPT=$(DISTRO_SLACKWARE_@DISTRO_TAG@); \
 		DISTRO_VER_ARCH=x86; \
-		DISTRO_VER_EXTRA=; \
+		DISTRO_VER_PATH='/slackware-@DISTRO_VERSION@'; \
 		$(do_subst_file_dt)
 
 
@@ -38,11 +45,18 @@ else ifneq ($(DISTRO_SLACKWARE64_@DISTRO_TAG@), l)
 endif
 
 
-build/distros/slackware/slackware64-@DISTRO_VERSION@.inc: src/distros/slackware/grub-distro.inc.in .config
+build/distros/slackware/slackware64-@DISTRO_VERSION@.inc.in: src/distros/slackware/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+	@SED_FILE="$(<)"; \
+		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
+		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
+		$(do_include);
+
+
+build/distros/slackware/slackware64-@DISTRO_VERSION@.inc: build/distros/slackware/slackware64-@DISTRO_VERSION@.inc.in .config
 	@$(DISTRO_SLACKWARE_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_VER_OPT=$(DISTRO_SLACKWARE64_@DISTRO_TAG@); \
 		DISTRO_VER_ARCH=x86_64; \
-		DISTRO_VER_EXTRA=64; \
+		DISTRO_VER_PATH='/slackware64-@DISTRO_VERSION@'; \
 		$(do_subst_file_dt)
 
