@@ -1,2 +1,4 @@
+#
+# Slackware Linux Menu
+#
 submenu 'Distro: Slackware Linux ...' {
-

@@ -1,12 +1,12 @@
 
+   # Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)
    iperd_distro_opt_desc distro_ver_opt "@DISTRO_VER_OPT@";
    menuentry "Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@) [${distro_ver_opt}]" {
-
       @DISTRO_VER_METADATA@
 
       iperd_distro_ver_metadata \
-         'Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
-         '@DISTRO_VER_OPT@';
+             'Slackware Linux @DISTRO_VERSION@ (@DISTRO_VER_ARCH@)' \
+             '@DISTRO_VER_OPT@';
 
       echo   'loading bzImage ...'
       linux  ${distro_ver_grub}/kernels/huge.s/bzImage \
@@ -17,3 +17,4 @@
       initrd ${distro_ver_grub}/isolinux/initrd.img
       echo   'booting system ...'
    }
+
