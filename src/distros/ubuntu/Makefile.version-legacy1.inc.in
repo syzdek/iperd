@@ -13,7 +13,7 @@ else ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_I386), l)
 endif
 
 
-build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-I386.inc.in: src/distros/ubuntu/grub-distro-legacy1.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-I386.inc.in: src/distros/ubuntu/grub-version-legacy1.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
@@ -43,7 +43,7 @@ else ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64), l)
 endif
 
 
-build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc.in: src/distros/ubuntu/grub-distro-legacy1.inc.in src/cfg/grub-distro-keywords.cfg.in
+build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc.in: src/distros/ubuntu/grub-version-legacy1.inc.in src/cfg/grub-distro-keywords.cfg.in
 	@SED_FILE="$(<)"; \
 		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
 		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
