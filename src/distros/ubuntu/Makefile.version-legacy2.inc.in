@@ -13,10 +13,18 @@ else ifneq ($(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64), l)
 endif
 
 
-build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: src/distros/ubuntu/grub-distro-legacy2.inc.in .config
+build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc.in: src/distros/ubuntu/grub-distro-legacy2.inc.in src/cfg/grub-distro-keywords.cfg.in
+	@SED_FILE="$(<)"; \
+		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
+		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
+		$(do_include);
+
+
+build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc: build/distros/ubuntu/ubuntu-@DISTRO_VERSION@-amd64.inc.in .config
 	@$(DISTRO_UBUNTU_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_VER_OPT=$(DISTRO_UBUNTU_@DISTRO_VER_CODENAME@_AMD64); \
 		DISTRO_VER_ARCH=amd64; \
+		DISTRO_VER_PATH='/dists/@DISTRO_VERSION@/main/installer-amd64/current/legacy-images'; \
 		$(do_subst_file_dt)
 
