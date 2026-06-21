@@ -7,17 +7,25 @@ ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), n)
    DISTRO_FEDORA_CFG		+= build/distros/fedora/fedora-@DISTRO_VERSION@.inc
 endif
 ifeq ($(DISTRO_FEDORA_@DISTRO_VERSION@), d)
-   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Everything/x86_64/os/images/pxeboot/initrd.img
-   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Everything/x86_64/os/images/pxeboot/vmlinuz
+   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Server/x86_64/os/images/pxeboot/initrd.img
+   DISTRO_FEDORA_BOOT		+= boot/fedora/@DISTRO_VERSION@/Server/x86_64/os/images/pxeboot/vmlinuz
 else ifneq ($(DISTRO_FEDORA_@DISTRO_VERSION@), l)
    DISTRO_FEDORA_@DISTRO_VERSION@		:= y
 endif
 
 
-build/distros/fedora/fedora-@DISTRO_VERSION@.inc: src/distros/fedora/grub-distro.inc.in .config
+build/distros/fedora/fedora-@DISTRO_VERSION@.inc.in: src/distros/fedora/grub-distro.inc.in src/cfg/grub-distro-keywords.cfg.in
+	@SED_FILE="$(<)"; \
+		SED_INCLUDE="src/cfg/grub-distro-keywords.cfg.in"; \
+		SED_KEYWORD="[@]DISTRO_VER_METADATA[@]"; \
+		$(do_include);
+
+
+build/distros/fedora/fedora-@DISTRO_VERSION@.inc: build/distros/fedora/fedora-@DISTRO_VERSION@.inc.in .config
 	@$(DISTRO_FEDORA_KEYWORDS) \
 		DISTRO_VERSION=@DISTRO_VERSION@; \
 		DISTRO_VER_OPT=$(DISTRO_FEDORA_@DISTRO_VERSION@); \
 		DISTRO_VER_ARCH=x86_64; \
+		DISTRO_VER_PATH='/@DISTRO_VERSION@/Server/x86_64'; \
 		$(do_subst_file_dt)
 
