@@ -56,15 +56,6 @@ function iperd_continue {
 }
 
 
-function iperd_notice {
-   echo "                     IP Engineering Rescue Disk"
-   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
-   echo "      bootloader to boot utilities, installers, and operating"
-   echo "      systems. The IPERD boot menu will not modify the system,"
-   echo "      however images booted by IPERD may modify the system."
-}
-
-
 function iperd_distro_opt_desc {
    set tmp_attr="${1}";
    set tmp_ver_opt="${2}";
@@ -220,6 +211,15 @@ function iperd_network_calc {
    unset tmp_net1
    unset tmp_net2
    unset tmp_str
+}
+
+
+function iperd_notice {
+   echo "                     IP Engineering Rescue Disk"
+   echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
+   echo "      bootloader to boot utilities, installers, and operating"
+   echo "      systems. The IPERD boot menu will not modify the system,"
+   echo "      however images booted by IPERD may modify the system."
 }
 
 
