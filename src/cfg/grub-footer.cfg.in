@@ -3,9 +3,7 @@ submenu 'Documentation ...' {
       set pager=1
       export pager
       cat (${root})/COPYING.md
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "IPERD Notice" {
       set pager=0
@@ -14,25 +12,19 @@ submenu 'Documentation ...' {
       echo ""
       iperd_notice
       echo ""
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "Software Versions" {
       set pager=0
       export pager
       cat (${root})/VERSION.md
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "Networking Notes" {
       set pager=1
       export pager
       cat (${root})/doc/Networking.md
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
 }
 
@@ -42,18 +34,14 @@ submenu 'System Information ...' {
       set pager=1
       export pager
       lsacpi
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    if [ ${grub_platform} != "efi" ]; then
       menuentry "APM Information" {
          set pager=0
          export pager
          lsapm
-         echo ""
-         echo "press [enter] to return to menu"
-         read
+         iperd_continue "return to menu"
       }
    fi
    menuentry "Network Information" {
@@ -69,68 +57,52 @@ submenu 'System Information ...' {
       echo ""
       echo "Routes:"
       net_ls_routes
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
       set pager=1
    }
    menuentry "PCI Information" {
       set pager=1
       export pager
       lspci
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "Terminal  Information" {
       set pager=0
       export pager
       terminfo
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "USB Information" {
       set pager=1
       export pager
       usb
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    if [ ${grub_platform} != "efi" ]; then
       menuentry "VBE Information" {
          set pager=1
          export pager
          vbeinfo
-         echo ""
-         echo "press [enter] to return to menu"
-         read
+         iperd_continue "return to menu"
       }
    fi
    menuentry "Video Information" {
       set pager=1
       export pager
       videoinfo
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "Grub Variables" {
       set pager=1
       export pager
       set
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
    menuentry "Loaded Grub Modules" {
       set pager=1
       export pager
       lsmod
-      echo ""
-      echo "press [enter] to return to menu"
-      read
+      iperd_continue "return to menu"
    }
 }
 

@@ -44,6 +44,18 @@ clear
 # IPERD GRUB Functions
 #
 
+function iperd_continue {
+   echo "";
+   if [ "x${1}" == "x" ]; then
+      echo "press [enter] to continue";
+   else
+      echo "press [enter] to ${1}";
+   fi;
+   read -s;
+   echo "";
+}
+
+
 function iperd_notice {
    echo "                     IP Engineering Rescue Disk"
    echo "      The IP Engineering Rescue Disk (IPERD) uses the GNU GRUB"
@@ -179,10 +191,7 @@ function iperd_distro_ver_metadata {
          echo "      distro_ver_repo:         ${distro_ver_repo}"
          echo "      distro_ver_grub:         ${distro_ver_grub}"
          echo "      distro_ver_append:       ${distro_ver_append}"
-         echo ""
-         echo "press [enter] to continue booting"
-         read -s
-         echo ""
+         iperd_continue "continue bootings"
       fi
    fi
 
