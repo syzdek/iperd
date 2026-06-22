@@ -212,6 +212,203 @@ function iperd_distro_ver_metadata {
 }
 
 
+function iperd_net_calc {
+   set tmp_ipaddr_attr="${1}";
+   set tmp_netaddr_attr="${2}";
+   set tmp_cidr_attr="${3}";
+   set tmp_ipstr="${4}";
+
+   # parse IP string
+   regexp \
+      --set 1:tmp_oct1 \
+      --set 2:tmp_oct2 \
+      --set 3:tmp_oct3 \
+      --set 4:tmp_oct4 \
+      --set 5:tmp_cidr \
+      '^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})/([0-9]{1,2})$' \
+      "${tmp_ipstr}";
+
+   # check for syntax errors
+   if [ $? -ne 0 ]; then
+      regexp \
+         --set 1:tmp_oct1 \
+         --set 2:tmp_oct2 \
+         --set 3:tmp_oct3 \
+         --set 4:tmp_oct4 \
+         '^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$' \
+         "${tmp_ipstr}";
+      if [ $? -ne 0 ]; then
+         echo "invalid IP syntax (regex)";
+         return 1;
+      fi
+      set tmp_cidr=24;
+   fi
+   if [ ${tmp_oct1} -gt 255 ]; then echo "invalid IP syntax (octet 1: ${tmp_oct1})"; return 1; fi;
+   if [ ${tmp_oct2} -gt 255 ]; then echo "invalid IP syntax (octet 2: ${tmp_oct2})"; return 1; fi;
+   if [ ${tmp_oct3} -gt 255 ]; then echo "invalid IP syntax (octet 3: ${tmp_oct3})"; return 1; fi;
+   if [ ${tmp_oct4} -gt 255 ]; then echo "invalid IP syntax (octet 4: ${tmp_oct4})"; return 1; fi;
+   if [ ${tmp_cidr} -gt  31 ]; then echo "invalid IP syntax (cidr)"; return 1; fi;
+
+   # determine which octet and bit to use for calculations
+   if [ ${tmp_cidr} -ge 32 ]; then
+      set tmp_oct=${tmp_oct4};
+      set tmp_bits=0;
+   elif [ ${tmp_cidr} -ge 24 ]; then
+      set tmp_oct=${tmp_oct4};
+      if   [ ${tmp_cidr} -eq 24 ]; then set tmp_bits=0;
+      elif [ ${tmp_cidr} -eq 25 ]; then set tmp_bits=1;
+      elif [ ${tmp_cidr} -eq 26 ]; then set tmp_bits=2;
+      elif [ ${tmp_cidr} -eq 27 ]; then set tmp_bits=3;
+      elif [ ${tmp_cidr} -eq 28 ]; then set tmp_bits=4;
+      elif [ ${tmp_cidr} -eq 29 ]; then set tmp_bits=5;
+      elif [ ${tmp_cidr} -eq 30 ]; then set tmp_bits=6;
+      elif [ ${tmp_cidr} -eq 31 ]; then set tmp_bits=7;
+      fi
+   elif [ ${tmp_cidr} -ge 16 ]; then
+      set tmp_oct=${tmp_oct3};
+      if   [ ${tmp_cidr} -eq 16 ]; then set tmp_bits=0;
+      elif [ ${tmp_cidr} -eq 17 ]; then set tmp_bits=1;
+      elif [ ${tmp_cidr} -eq 18 ]; then set tmp_bits=2;
+      elif [ ${tmp_cidr} -eq 19 ]; then set tmp_bits=3;
+      elif [ ${tmp_cidr} -eq 20 ]; then set tmp_bits=4;
+      elif [ ${tmp_cidr} -eq 21 ]; then set tmp_bits=5;
+      elif [ ${tmp_cidr} -eq 32 ]; then set tmp_bits=6;
+      elif [ ${tmp_cidr} -eq 33 ]; then set tmp_bits=7;
+      fi
+   elif [ ${tmp_cidr} -ge  8 ]; then
+      set tmp_oct=${tmp_oct2};
+      if   [ ${tmp_cidr} -eq  8 ]; then set tmp_bits=0;
+      elif [ ${tmp_cidr} -eq  9 ]; then set tmp_bits=1;
+      elif [ ${tmp_cidr} -eq 10 ]; then set tmp_bits=2;
+      elif [ ${tmp_cidr} -eq 11 ]; then set tmp_bits=3;
+      elif [ ${tmp_cidr} -eq 12 ]; then set tmp_bits=4;
+      elif [ ${tmp_cidr} -eq 13 ]; then set tmp_bits=5;
+      elif [ ${tmp_cidr} -eq 14 ]; then set tmp_bits=6;
+      elif [ ${tmp_cidr} -eq 15 ]; then set tmp_bits=7;
+      fi
+   else
+      set tmp_oct=${tmp_oct1};
+      if   [ ${tmp_cidr} -eq  0 ]; then set tmp_bits=0;
+      elif [ ${tmp_cidr} -eq  1 ]; then set tmp_bits=1;
+      elif [ ${tmp_cidr} -eq  2 ]; then set tmp_bits=2;
+      elif [ ${tmp_cidr} -eq  3 ]; then set tmp_bits=3;
+      elif [ ${tmp_cidr} -eq  4 ]; then set tmp_bits=4;
+      elif [ ${tmp_cidr} -eq  5 ]; then set tmp_bits=5;
+      elif [ ${tmp_cidr} -eq  6 ]; then set tmp_bits=6;
+      elif [ ${tmp_cidr} -eq  7 ]; then set tmp_bits=7;
+      fi
+   fi;
+
+   # determine last significant octet of network address
+   if [ ${tmp_bits} -eq 0 ]; then
+      set tmp_result=0;
+   elif [ ${tmp_bits} -eq 1 ]; then
+      for tmp_num in   0 128; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 2 ]; then
+      for tmp_num in   0  64 128 192; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 3 ]; then
+      for tmp_num in   0  32  64  96 128 192 160 192 224; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 4 ]; then
+      for tmp_num in   0  16  32  48  64  80  96 112 \
+                     128 144 160 176 192 208 224 240; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 5 ]; then
+      for tmp_num in   0   8  16  24  32  40  48  56 \
+                      64  72  80  88  96 104 112 120 \
+                     128 136 144 152 160 168 176 184 \
+                     192 200 208 216 224 232 240 248; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 6 ]; then
+      for tmp_num in   0   4   8  12  16  20  24  28 \
+                      32  36  40  44  48  52  56  60 \
+                      64  68  72  76  80  84  88  92 \
+                      96 100 104 108 112 116 120 124 \
+                     128 132 136 140 144 148 152 156 \
+                     160 164 168 172 176 180 184 188 \
+                     192 196 200 204 208 212 216 220 \
+                     224 228 232 236 240 244 248 252; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   elif [ ${tmp_bits} -eq 7 ]; then
+      for tmp_num in   0   2   4   6   8  10  12  14 \
+                      16  18  20  22  24  26  28  30 \
+                      32  34  36  38  40  42  44  46 \
+                      48  50  52  54  56  58  60  62 \
+                      64  66  68  70  72  74  76  78 \
+                      80  82  84  86  88  90  92  94 \
+                      96  98 100 102 104 106 108 110 \
+                     112 114 116 118 120 122 124 126 \
+                     128 130 132 134 136 138 140 142 \
+                     144 146 148 150 152 154 156 158 \
+                     160 162 164 166 168 170 172 174 \
+                     176 178 180 182 184 186 188 190 \
+                     192 194 196 198 200 202 204 206 \
+                     208 210 212 214 216 218 220 222 \
+                     224 226 228 230 232 234 236 238 \
+                     240 242 244 246 248 250 252 254; do
+         if [ ${tmp_oct} -ge ${tmp_num} ]; then
+            set tmp_result=${tmp_num};
+         fi
+      done;
+   fi;
+
+   # save results
+   if [ "x${tmp_ipaddr_attr}" != "x" ]; then
+      set ${tmp_ipaddr_attr}="${tmp_oct1}.${tmp_oct2}.${tmp_oct3}.${tmp_oct4}";
+   fi
+   if [ "x${tmp_netaddr_attr}" != "x" ]; then
+      if [ ${tmp_cidr} -ge 24 ]; then
+         set ${tmp_netaddr_attr}="${tmp_oct1}.${tmp_oct2}.${tmp_oct3}.${tmp_result}";
+      elif [ ${tmp_cidr} -ge 16 ]; then
+         set ${tmp_netaddr_attr}="${tmp_oct1}.${tmp_oct2}.${tmp_result}.0";
+      elif [ ${tmp_cidr} -ge 8 ]; then
+         set ${tmp_netaddr_attr}="${tmp_oct1}.${tmp_result}.0.0";
+      else
+         set ${tmp_netaddr_attr}="${tmp_result}.0.0.0";
+      fi
+   fi
+   if [ "x${tmp_cidr_attr}" != "x" ]; then
+      set ${tmp_cidr_attr}=${tmp_cidr};
+   fi
+
+   unset tmp_bits;
+   unset tmp_cidr;
+   unset tmp_cidr_attr;
+   unset tmp_ipaddr_attr;
+   unset tmp_ipstr;
+   unset tmp_netaddr_attr;
+   unset tmp_num;
+   unset tmp_oct;
+   unset tmp_oct1;
+   unset tmp_oct2;
+   unset tmp_oct3;
+   unset tmp_oct4;
+   unset tmp_result;
+
+   return 0;
+}
+
+
 function iperd_network_calc {
    set tmp_attr="${1}"
    set tmp_net1="${2}"
