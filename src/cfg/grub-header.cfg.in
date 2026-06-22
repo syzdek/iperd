@@ -570,7 +570,7 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       echo      "      IP Engineering Rescue Disk @IPERD_VERSION@"
       echo      ""
       echo      "Review Configuration:"
-      echo      "   Linux Console:             ${iperd_linux_console}"
+      echo      "   Linux Console Device:      ${iperd_linux_console}"
       echo      "   IPERD GRUB Prefix:         ${iperd_grub}"
       echo      "   IPERD Boot URL:            ${iperd_url}"
       echo_bool "   IPERD Show Progress:       " "${iperd_progress}"
@@ -608,9 +608,24 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       fi
 
       if [ ${iperd_continue} == "n" ]; then
+         echo ""
+         echo "The following are common Linux console devices:"
+         echo ""
+         echo "   tty0          - physical video console, most commonly used"
+         echo "   ttyS0         - serial console on com1"
+         echo "   ttyS1         - serial console on com2"
+         echo "   ttyUSB0       - serial console on USB-to-serial converter"
+         echo ""
+         echo "The following are common values:"
+         echo ""
+         echo "   tty0         - most common configuration"
+         echo "   ttyS0,9600   - com1 using traditional baud rate"
+         echo "   ttyS0,115200 - com1 using baud rate common for modern systems"
+         echo "   ttyS1,115200 - com2 using baud rate common for IPMI"
+         echo ""
          iperd_prompt_str \
             iperd_linux_console \
-            "Linux Console" \
+            "Linux Console Device" \
             "${iperd_linux_console}" \
             '^.+$'
 
