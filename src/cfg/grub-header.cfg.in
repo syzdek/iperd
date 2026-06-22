@@ -44,6 +44,26 @@ clear
 # IPERD GRUB Functions
 #
 
+function echo_bool {
+   set echo_bool_title="${1}";
+   set echo_bool_val="${2}";
+   if [ "x${echo_bool_val}" == "x" ]; then
+      set echo_bool_val="n/a"
+   elif [ ${echo_bool_val} == "y" ]; then
+      set echo_bool_val="yes"
+   elif [ ${echo_bool_val} == "n" ]; then
+      set echo_bool_val="no"
+   elif [ ${echo_bool_val} == "a" ]; then
+      set echo_bool_val="abort"
+   else
+      set echo_bool_val="unknown"
+   fi
+   echo "${echo_bool_title}${echo_bool_val}";
+   unset echo_bool_title
+   unset echo_bool_val
+}
+
+
 function iperd_continue {
    echo "";
    if [ "x${1}" == "x" ]; then
@@ -419,26 +439,6 @@ function iperd_source {
 
    unset iperd_source_loaded
    unset iperd_source_file
-}
-
-
-function echo_bool {
-   set echo_bool_title="${1}";
-   set echo_bool_val="${2}";
-   if [ "x${echo_bool_val}" == "x" ]; then
-      set echo_bool_val="n/a"
-   elif [ ${echo_bool_val} == "y" ]; then
-      set echo_bool_val="yes"
-   elif [ ${echo_bool_val} == "n" ]; then
-      set echo_bool_val="no"
-   elif [ ${echo_bool_val} == "a" ]; then
-      set echo_bool_val="abort"
-   else
-      set echo_bool_val="unknown"
-   fi
-   echo "${echo_bool_title}${echo_bool_val}";
-   unset echo_bool_title
-   unset echo_bool_val
 }
 
 
