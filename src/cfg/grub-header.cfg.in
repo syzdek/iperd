@@ -737,6 +737,15 @@ else
       set iperd_feature_networking='y'
    fi
 fi
+if [ ${iperd_net} == 'y' ]; then
+   if [ ${iperd_net_ip} != 'dhcp' ]; then
+      iperd_net_calc \
+         iperd_net_ipaddr \
+         iperd_net_netaddr \
+         iperd_net_cidr \
+         "${iperd_net_ip}";
+   fi;
+fi;
 export iperd_grub
 export iperd_url
 export iperd_pxe
@@ -783,7 +792,6 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
                echo "      IP Address:             dhcp";
             elif [ ${iperd_net_ip} != "dhcp" ]; then
                echo "      IP Address:             ${iperd_net_ip}"
-               echo "      Network:                ${iperd_net_network}"
                echo "      Network VLAN:           ${iperd_net_vlan}"
                echo "      Default Gateway:        ${iperd_net_gw}"
                echo "      DNS Server:             ${iperd_net_dns}"
@@ -887,28 +895,31 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
 
             # IP Address
             if [ ${iperd_net_continue} == "y" ]; then
-               iperd_prompt_str \
-                  iperd_net_ip \
-                  "IP Address" \
-                  "${iperd_net_ip}" \
-                  '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
-               if [ ${iperd_net_ip} == 'dhcp' ]; then
-                  set iperd_net_continue='n';
-               fi
-            fi
-
-            # Network
-            if [ ${iperd_net_continue} == "y" ]; then
-                iperd_network_calc \
-                   iperd_net_network \
-                   "${iperd_net_ip}" \
-                   "${iperd_net_network}" \
-                   "0/24";
-                iperd_prompt_str \
-                   iperd_net_network \
-                   "Network" \
-                   "${iperd_net_network}" \
-                   '^([0-9]{1,3}.){3}[0-9]{1,3}/([0-9]|[12][0-9]|30)$';
+               set tmp_continue='n';
+               while [ ${tmp_continue} == "n" ]; do
+                  iperd_prompt_str \
+                     tmp_net_ip \
+                     "IP Address" \
+                     "${iperd_net_ip}" \
+                     '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3}(/[0-9]{1,2}){0,1})$';
+                  if [ ${tmp_net_ip} == 'dhcp' ]; then
+                     set iperd_net_continue='n';
+                     set tmp_continue='y';
+                     set iperd_net_ip="${tmp_net_ip}";
+                  else
+                     iperd_net_calc \
+                        iperd_net_ipaddr \
+                        iperd_net_netaddr \
+                        iperd_net_cidr \
+                        "${tmp_net_ip}";
+                     if [ ${?} -eq 0 ]; then
+                        set tmp_continue='y';
+                        set iperd_net_ip="${tmp_net_ip}";
+                     fi
+                  fi
+               done;
+               unset tmp_net_ip;
+               unset tmp_continue;
             fi
 
             # VLAN
@@ -922,16 +933,33 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
 
             # Default Gateway
             if [ ${iperd_net_continue} == "y" ]; then
-                iperd_network_calc \
-                   iperd_net_gw \
-                   "${iperd_net_ip}" \
-                   "${iperd_net_gw}" \
-                   "1";
-               iperd_prompt_str \
-                  iperd_net_gw \
-                  "Default Gateway" \
-                  "${iperd_net_gw}" \
-                  '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
+               set tmp_continue='n';
+               while [ ${tmp_continue} == "n" ]; do
+                  iperd_prompt_str \
+                     tmp_net_gw \
+                     "Default Gateway" \
+                     "${iperd_net_gw}" \
+                     '^(dhcp|([0-9]{1,3}.){3}[0-9]{1,3})$';
+                  iperd_net_calc \
+                     "tmp_net_ipaddr" \
+                     "tmp_net_netaddr" \
+                     "" \
+                     "${tmp_net_gw}/${iperd_net_cidr}";
+                  if [ ${?} -eq 0 ]; then
+                     if [ ${iperd_net_netaddr} != ${tmp_net_netaddr} ]; then
+                        echo "gateway must be within IP address network";
+                     elif [ ${tmp_net_gw} == ${iperd_net_ipaddr} ]; then
+                        echo "gateway cannot be the same as the IP address";
+                     else
+                        set tmp_continue='y';
+                        set iperd_net_gw="${tmp_net_gw}";
+                     fi;
+                  fi
+               done;
+               unset tmp_net_gw;
+               unset tmp_net_ipaddr;
+               unset tmp_net_netaddr;
+               unset tmp_continue;
             fi
 
             # DNS Server
@@ -1060,11 +1088,11 @@ if [ ${iperd_net} == "y" ]; then
       echo ""
       echo ""
       set net_default_interface="${iperd_net_card}"
-      net_add_addr ${iperd_net_card} ${iperd_net_card} ${iperd_net_ip}
+      net_add_addr ${iperd_net_card} ${iperd_net_card} ${iperd_net_ipaddr}
       net_set_vlan ${iperd_net_card} ${iperd_net_vlan}
       if [ ${iperd_net_network} != "" ]; then
          net_del_route ${iperd_net_card}:local
-         net_add_route ${iperd_net_card}:local ${iperd_net_network} ${iperd_net_card}
+         net_add_route ${iperd_net_card}:local ${iperd_net_netaddr}/${iperd_net_cidr} ${iperd_net_card}
       fi
       if [ ${iperd_net_gw} != "" ]; then
          net_add_route ${iperd_net_card}:default 0.0.0.0/0 gw ${iperd_net_gw}

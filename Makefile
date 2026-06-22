@@ -84,7 +84,6 @@ IPERD_DEBUG		?= $(DFLT_DEBUG)
 IPERD_NET		?= $(DFLT_NET)
 IPERD_NET_CARD		?= $(DFLT_NET_CARD)
 IPERD_NET_IP		?= $(DFLT_NET_IP)
-IPERD_NET_NETWORK	?= $(DFLT_NET_NETWORK)
 IPERD_NET_GW		?= $(DFLT_NET_GW)
 IPERD_NET_VLAN		?= $(DFLT_NET_VLAN)
 IPERD_NET_DNS		?= $(DFLT_NET_DNS)
@@ -146,7 +145,6 @@ do_subst = sed \
 	-e "s;[@]IPERD_NET[@];$(IPERD_NET);g" \
 	-e "s;[@]IPERD_NET_CARD[@];$(IPERD_NET_CARD);g" \
 	-e "s;[@]IPERD_NET_IP[@];$(IPERD_NET_IP);g" \
-	-e "s;[@]IPERD_NET_NETWORK[@];$(IPERD_NET_NETWORK);g" \
 	-e "s;[@]IPERD_NET_GW[@];$(IPERD_NET_GW);g" \
 	-e "s;[@]IPERD_NET_VLAN[@];$(IPERD_NET_VLAN);g" \
 	-e "s;[@]IPERD_NET_DNS[@];$(IPERD_NET_DNS);g" \
@@ -398,7 +396,6 @@ defconfig:
 	@echo "IPERD_NET=$(DFLT_NET)"
 	@echo "IPERD_NET_CARD=$(DFLT_NET_CARD)"
 	@echo "IPERD_NET_IP=$(DFLT_NET_IP)"
-	@echo "IPERD_NET_NETWORK=$(DFLT_NET_NETWORK)"
 	@echo "IPERD_NET_GW=$(DFLT_NET_GW)"
 	@echo "IPERD_NET_VLAN=$(DFLT_NET_VLAN)"
 	@echo "IPERD_NET_DNS=$(DFLT_NET_DNS)"
