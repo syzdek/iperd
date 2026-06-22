@@ -608,15 +608,40 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
       fi
 
       if [ ${iperd_continue} == "n" ]; then
-         iperd_prompt_str  iperd_linux_console "Linux Console"          "${iperd_linux_console}" '^.+$'
-         iperd_prompt_str  iperd_grub          "IPERD GRUB Prefix"      "${iperd_grub}"          '^.+$'
-         iperd_prompt_str  iperd_url           "IPERD Boot URL"         "${iperd_url}"           '^.+$'
-         iperd_prompt_bool iperd_progress      "IPERD Show Progress"    "${iperd_progress}"
-         iperd_prompt_bool iperd_verbose       "IPERD Verbose Messages" "${iperd_verbose}"
+         iperd_prompt_str \
+            iperd_linux_console \
+            "Linux Console" \
+            "${iperd_linux_console}" \
+            '^.+$'
+
+         iperd_prompt_str \
+            iperd_grub \
+            "IPERD GRUB Prefix" \
+            "${iperd_grub}" \
+            '^.+$'
+
+         iperd_prompt_str \
+            iperd_url \
+            "IPERD Boot URL" \
+            "${iperd_url}" \
+            '^.+$'
+
+         iperd_prompt_bool \
+            iperd_progress \
+            "IPERD Show Progress" \
+            "${iperd_progress}"
+
+         iperd_prompt_bool \
+            iperd_verbose \
+            "IPERD Verbose Messages" \
+            "${iperd_verbose}"
 
          # IPERD Debug Messages
          if [ "${iperd_verbose}" == "y" ]; then
-            iperd_prompt_bool iperd_debug "IPERD Debug Messages" "${iperd_debug}"
+            iperd_prompt_bool \
+               iperd_debug \
+               "IPERD Debug Messages" \
+               "${iperd_debug}"
          fi
 
          if [ "x${iperd_feature_networking}" == "xy" ]; then
@@ -624,7 +649,10 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
             set iperd_net_continue='y';
 
             # GRUB Configure Network
-            iperd_prompt_bool iperd_net "Manual Network Setup" "${iperd_net}";
+            iperd_prompt_bool \
+               iperd_net \
+               "Manual Network Setup" \
+               "${iperd_net}";
             if [ ${iperd_net} != 'y' ]; then
                set iperd_net_continue='n';
             fi
@@ -705,10 +733,27 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
 
          fi
 
-         iperd_prompt_bool iperd_use_gfxterm   "GRUB Graphics Terminal"    "${iperd_use_gfxterm}";
-         iperd_prompt_str  iperd_term_type     "GRUB Serial Term Type"     "${iperd_term_type}"     '^.+$';
-         iperd_prompt_str  iperd_term_geometry "GRUB Serial Term Geometry" "${iperd_term_geometry}" '^[0-9]+x[0-9]+$'
-         iperd_prompt_bool iperd_term_utf8     "GRUB Serial Term UTF-8"    "${iperd_term_utf8}"
+         iperd_prompt_bool \
+            iperd_use_gfxterm \
+            "GRUB Graphics Terminal" \
+            "${iperd_use_gfxterm}";
+
+         iperd_prompt_str \
+            iperd_term_type \
+            "GRUB Serial Term Type" \
+            "${iperd_term_type}" \
+            '^.+$';
+
+         iperd_prompt_str \
+            iperd_term_geometry \
+            "GRUB Serial Term Geometry" \
+            "${iperd_term_geometry}" \
+            '^[0-9]+x[0-9]+$'
+
+         iperd_prompt_bool \
+            iperd_term_utf8 \
+            "GRUB Serial Term UTF-8" \
+            "${iperd_term_utf8}"
 
       fi
    done
