@@ -753,12 +753,26 @@ if [ "x@IPERD_RUNTIME_SETUP@" == "xy" ]; then
             "GRUB Graphics Terminal" \
             "${iperd_use_gfxterm}";
 
+         echo ""
+         echo "GRUB supports the following serial terminal types:"
+         echo ""
+         echo "   vt100"
+         echo "   vt100-color"
+         echo "   ieee1275"
+         echo "   dumb"
+         echo ""
          iperd_prompt_str \
             iperd_term_type \
             "GRUB Serial Term Type" \
             "${iperd_term_type}" \
-            '^.+$';
+            '^(vt100|vt100-color|ieee1275|dumb)$';
 
+         echo ""
+         echo "The following are common terminal geometries:"
+         echo ""
+         echo "   80x24     - Linux virtual console default"
+         echo "   100x31    - common for BIOS/UEFI console redirection"
+         echo ""
          iperd_prompt_str \
             iperd_term_geometry \
             "GRUB Serial Term Geometry" \
