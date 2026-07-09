@@ -43,14 +43,14 @@ GRUB_SHA512			:= 5008e3b70072798d2b34301219fe174cc6bcfead40a9ab25fe32f30c62a392f
 GRUB_ROOT			:= $(IPERD_ROOT)/src/grub
 
 
-GRUB_BUILDDIR			:= build/grub/source/build
+GRUB_BUILDDIR			:= build/grub/build
 GRUB_DEPENDENCIES 		:= dist/grub/grub-$(GRUB_VERSION).tar.xz \
 				   build/dejavu/.iperd \
 				   build/unifont/.iperd
 GRUB_PLATFORMS			:= tools/iperd/grub_i386_pc \
 				   tools/iperd/grub_i386_efi \
 				   tools/iperd/grub_x86_64_efi
-GRUB_CONFIGURE			:= ../configure\
+GRUB_CONFIGURE			:= ../source/configure\
 				      --prefix="$(IPERD_ROOT)/tools" \
 				      --enable-grub-mkfont \
 				      --enable-grub-themes \
@@ -78,22 +78,22 @@ dist/grub/grub-$(GRUB_VERSION).tar.xz:
 		$(do_wget);
 
 
-build/grub/source/.iperd: $(GRUB_DEPENDENCIES)
+build/grub/.iperd-source: $(GRUB_DEPENDENCIES)
 	@TAR_FILE="dist/grub/grub-$(GRUB_VERSION).tar.xz"; \
-		TAR_DIR="$(@D)"; \
+		TAR_DIR="build/grub/source"; \
 		$(do_tar);
 	@touch $(@)
 	@PATCH_FILE="$(IPERD_ROOT)/src/grub/grub-title.patch"; \
-		PATCH_DIR="$(@D)"; \
+		PATCH_DIR="build/grub/source"; \
 		$(do_patch);
-	@CHMOD_DIR="$(@D)"; $(do_chmod);
+	@CHMOD_DIR="build/grub/source"; $(do_chmod);
 	@touch $(@)
 
 
 #
 # build for i386-pc
 #
-$(GRUB_BUILDDIR)_i386_pc/.iperd: build/grub/source/.iperd
+$(GRUB_BUILDDIR)_i386_pc/.iperd: build/grub/.iperd-source
 	@rm -Rf $(GRUB_BUILDDIR)_i386_pc
 	@mkdir   $(GRUB_BUILDDIR)_i386_pc
 	( cd    $(GRUB_BUILDDIR)_i386_pc && $(GRUB_CONFIGURE) --target=i386 --with-platform=pc )
@@ -111,7 +111,7 @@ tools/iperd/grub_i386_pc: $(GRUB_BUILDDIR)_i386_pc/.iperd
 #
 # build for i386-efi
 #
-$(GRUB_BUILDDIR)_i386_efi/.iperd: build/grub/source/.iperd
+$(GRUB_BUILDDIR)_i386_efi/.iperd: build/grub/.iperd-source
 	@rm -Rf $(GRUB_BUILDDIR)_i386_efi
 	@mkdir   $(GRUB_BUILDDIR)_i386_efi
 	( cd    $(GRUB_BUILDDIR)_i386_efi && $(GRUB_CONFIGURE) --target=i386 --with-platform=efi )
@@ -129,7 +129,7 @@ tools/iperd/grub_i386_efi: $(GRUB_BUILDDIR)_i386_efi/.iperd
 #
 # build for x86_64-efi
 #
-$(GRUB_BUILDDIR)_x86_64_efi/.iperd: build/grub/source/.iperd
+$(GRUB_BUILDDIR)_x86_64_efi/.iperd: build/grub/.iperd-source
 	@rm -Rf $(GRUB_BUILDDIR)_x86_64_efi
 	@mkdir   $(GRUB_BUILDDIR)_x86_64_efi
 	( cd    $(GRUB_BUILDDIR)_x86_64_efi && $(GRUB_CONFIGURE) --target=x86_64 --with-platform=efi )
