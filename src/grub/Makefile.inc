@@ -152,11 +152,11 @@ build/grub/.iperd: $(GRUB_PLATFORMS)
 
 
 grub-prune:
-	test -f build/grub/source/build_i386_efi/Makefile \
-		&& $(MAKE) -C build/grub/source/build_i386_efi clean
-	test -f build/grub/source/build_i386_pc/Makefile \
-		&& $(MAKE) -C build/grub/source/build_i386_pc clean
-	test -f build/grub/source/build_x86_64_efi/Makefile \
-		&& $(MAKE) -C build/grub/source/build_x86_64_efi clean
+	test -f build/grub/build_i386_efi/Makefile \
+		&& $(MAKE) -C build/grub/build_i386_efi clean
+	test -f build/grub/build_i386_pc/Makefile \
+		&& $(MAKE) -C build/grub/build_i386_pc clean
+	test -f build/grub/build_x86_64_efi/Makefile \
+		&& $(MAKE) -C build/grub/build_x86_64_efi clean
 
 # end of makefile
