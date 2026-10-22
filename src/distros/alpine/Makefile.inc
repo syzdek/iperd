@@ -49,7 +49,8 @@ DEFAULT_ALPINE_VERSIONS		:= 3.18 \
 				   3.20 \
 				   3.21 \
 				   3.22 \
-				   3.23
+				   3.23 \
+				   3.24
 
 
 DISTRO_ALPINE			?= $(DEFAULT_ALPINE)
